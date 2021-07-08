@@ -34,6 +34,7 @@ workflows:
           path: .
           region: AWS_REGION
           repo: tellalife
+          tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
           # tag: "$CIRCLE_SHA1"
 
 # workflows:
