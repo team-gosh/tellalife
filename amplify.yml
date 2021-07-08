@@ -3,6 +3,7 @@ frontend:
   phases:
     # IMPORTANT - Please verify your build commands
     build:
+    dockerfile: Dockerfile
       commands: 
         - docker build -t ap82projects/tellalife .
   artifacts:
