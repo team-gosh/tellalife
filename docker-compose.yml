@@ -6,7 +6,9 @@ services:
     volumes:
       - .:/tellalife
     ports:
-      - 5000:5000
+      - 3000:3000
     image: app:tellalife
     container_name: tellalife_container
     command:  npm start
+
+    # npm run build&&yarn global add serve&&serve -s build
