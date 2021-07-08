@@ -33,7 +33,7 @@ workflows:
           dockerfile: Dockerfile
           path: .
           region: AWS_REGION
-          repo: tellalife
+          # repo: tellalife
           # tag: "$CIRCLE_SHA1"
 
 # workflows:
