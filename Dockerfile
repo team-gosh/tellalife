@@ -3,5 +3,5 @@ WORKDIR /tellalife
 EXPOSE 3000
 ENV PATH="./node_modules/.bin:$PATH"
 COPY . .
-RUN npm run build
+RUN npm install&&npm run build
 CMD ["npm", "start"]
