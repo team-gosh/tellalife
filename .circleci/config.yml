@@ -1,6 +1,9 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. 
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+orbs:
+  # https://circleci.com/developer/orbs/orb/circleci/aws-ecr
+  aws-ecr: circleci/aws-ecr@6.15.0
 jobs:
  build:
    machine: true
@@ -15,3 +18,9 @@ jobs:
          
      # deploy the image
      - run: docker push ap82projects/tellalife
+  # Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
+  - ecr/build-and-push-image:
+    repo: tellalife
+    tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
+    dockerfile: Dockerfile
+    path: .
