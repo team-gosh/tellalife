@@ -1,49 +1,35 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. 
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-orbs:
-  # https://circleci.com/developer/orbs/orb/circleci/aws-ecr
-  aws-ecr: circleci/aws-ecr@6.15.0
-#   orbs:
-#   aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.0
+# orbs:
+#   # https://circleci.com/developer/orbs/orb/circleci/aws-ecr
+#   aws-ecr: circleci/aws-ecr@6.15.0
 
-# jobs:
-#  build:
-#    machine: true
-#    steps:
-#      - checkout
+jobs:
+ build:
+   machine: true
+   steps:
+     - checkout
 
-#      - run: npm install
-#      # build the application image
-#      - run: docker build -t ap82projects/tellalife .
+     - run: npm install
+     # build the application image
+     - run: docker build -t ap82projects/tellalife .
 
-#      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+     - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
          
-#      # deploy the image
-#      - run: docker push ap82projects/tellalife
-
-workflows:
-  build_and_push_image:
-    jobs:
-      - aws-ecr/build-and-push-image:
-          account-url: AWS_ECR_ACCOUNT_URL
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          dockerfile: Dockerfile
-          path: .
-          region: AWS_REGION
-          repo: tellalife
-          tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
-          # tag: "$CIRCLE_SHA1"
+     # deploy the image
+     - run: docker push ap82projects/tellalife
 
 # workflows:
-#   node-tests:
+#   build_and_push_image:
 #     jobs:
-#        - run: npm install
-#        # Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
-#        - aws-ecr/build-and-push-image:
-#           repo: tellalife
-#           tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
+#       - aws-ecr/build-and-push-image:
+#           account-url: AWS_ECR_ACCOUNT_URL
+#           aws-access-key-id: AWS_ACCESS_KEY_ID
+#           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+#           create-repo: true
 #           dockerfile: Dockerfile
 #           path: .
+#           region: AWS_REGION
+#           repo: tellalife
+#           tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
