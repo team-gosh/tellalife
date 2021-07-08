@@ -18,9 +18,13 @@ jobs:
          
      # deploy the image
      - run: docker push ap82projects/tellalife
-  # Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
-  - ecr/build-and-push-image:
-    repo: tellalife
-    tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
-    dockerfile: Dockerfile
-    path: .
+
+workflows:
+  node-tests:
+    jobs:
+       # Envs: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ECR_ACCOUNT_URL
+       - ecr/build-and-push-image:
+        repo: tellalife
+        tag: "latest,v0.1.${CIRCLE_BUILD_NUM}"
+        dockerfile: Dockerfile
+        path: .
