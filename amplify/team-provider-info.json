@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tellalife-dev-123854-authRole",
+      "UnauthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-dev-123854-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-dev-123854-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-tellalife-dev-123854-deployment",
+      "UnauthRoleName": "amplify-tellalife-dev-123854-unauthRole",
+      "StackName": "amplify-tellalife-dev-123854",
+      "StackId": "arn:aws:cloudformation:us-east-2:795712419446:stack/amplify-tellalife-dev-123854/31c6d660-e067-11eb-aee1-0ab7b6d25444",
+      "AmplifyAppId": "d1ion22ova4yop"
+    }
+  }
+}
