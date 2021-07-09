@@ -3,9 +3,11 @@ frontend:
   phases:
     # IMPORTANT - Please verify your build commands
     build:
-      dockerfile: Dockerfile
-      # commands: 
+      # dockerfile: Dockerfile
+      commands: 
         # - docker build -t ap82projects/tellalife .
+        - npm install
+        - npm start
   artifacts:
     baseDirectory: build
     files:
