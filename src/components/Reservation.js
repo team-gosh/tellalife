@@ -3,15 +3,21 @@ import axios from "axios";
 import { Button } from "reactstrap";
 
 function Reservation (props) {
-	const { user, data, status } = props;
-	const [ view, setView ] = useState("consumer");
+	const { user, data, status, view } = props;
 
 	return (
 		<div className="Reservation">
-			{view === "consumer" ? status === "approved" ? (
+			{/* consumer view */}
+			{view === "listener" ? status === "pending" ? (
 				<div>
 					<p>{data.title}</p>
-					<button>pay</button>
+					<button>Cancel</button>
+				</div>
+			) : status === "approved" ? (
+				<div>
+					<p>{data.title}</p>
+					<button>Pay via Stripe</button>
+					<button>Cancel</button>
 				</div>
 			) : status === "confirmed" ? (
 				<div>
@@ -23,8 +29,8 @@ function Reservation (props) {
 			) : status === "pending" ? (
 				<div>
 					<p>{data.title}</p>
-					<button>Approved</button>
-					<button>Denied</button>
+					<button>Accept</button>
+					<button>Reject</button>
 				</div>
 			) : status === "confirmed" ? (
 				<div>

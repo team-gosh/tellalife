@@ -46,7 +46,7 @@ function App () {
 	return (
 		<div className="App">
 			{/* < Stripe /> */}
-			<a href="#" class="stripe-connect">
+			<a href="#" className="stripe-connect">
 				<span>Connect with</span>
 			</a>
 			<button onClick={createAccount}>CreateAccount</button>
