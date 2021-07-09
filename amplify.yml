@@ -7,7 +7,7 @@ frontend:
       commands: 
         # - docker build -t ap82projects/tellalife .
         - npm install
-        - npm start
+        - npm run build
   artifacts:
     baseDirectory: build
     files:
