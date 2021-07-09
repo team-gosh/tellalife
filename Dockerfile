@@ -1,6 +1,8 @@
 FROM node:16.3-alpine
 WORKDIR /tellalife
+# WORKDIR /
+EXPOSE 3000
 ENV PATH="./node_modules/.bin:$PATH"
 COPY . .
-RUN npm run build
-# CMD ["npm", "start"]
+RUN npm install&&npm run build
+CMD ["npm", "start"]

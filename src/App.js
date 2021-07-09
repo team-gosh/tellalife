@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import VideoChat from "./components/VideoChat";
 import MainPage from "./components/MainPage";
 import axios from "axios";
 
-import React, { useEffect, useState } from "react";
 
 function App () {
   const [video, setVideo] = useState({
