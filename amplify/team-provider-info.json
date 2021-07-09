@@ -11,5 +11,23 @@
       "StackId": "arn:aws:cloudformation:us-east-2:795712419446:stack/amplify-tellalife-dev-123854/31c6d660-e067-11eb-aee1-0ab7b6d25444",
       "AmplifyAppId": "d1ion22ova4yop"
     }
+  },
+  "tellalife": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tellalife-tellalife-182233-authRole",
+      "UnauthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-tellalife-182233-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-tellalife-182233-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-tellalife-tellalife-182233-deployment",
+      "UnauthRoleName": "amplify-tellalife-tellalife-182233-unauthRole",
+      "StackName": "amplify-tellalife-tellalife-182233",
+      "StackId": "arn:aws:cloudformation:us-east-2:795712419446:stack/amplify-tellalife-tellalife-182233/3393a650-e097-11eb-997c-0aadfdbcbf52",
+      "AmplifyAppId": "d2cjj6gi271lmi"
+    },
+    "categories": {
+      "auth": {
+        "tellalifefc41e489": {}
+      }
+    }
   }
 }
