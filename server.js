@@ -16,9 +16,9 @@ app.listen(PORT, () => {
 	console.log(`Server is listening ${PORT}!!!`);
 });
 
-app.get("/api", async (req, res) => {
-	res.send("Connected with server!");
-});
+// app.get("/api", async (req, res) => {
+// 	res.send("Connected with server!");
+// });
 
 app.get("/secret", async (req, res) => {
 	const intent = await stripe.paymentIntents.create(
