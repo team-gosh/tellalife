@@ -1,7 +1,45 @@
 import React, { useState, useEffect } from "react";
 import Reservation from "./Reservation";
 
+//material ui
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		width: "100%",
+	},
+	heading: {
+		fontSize: theme.typography.pxToRem(15),
+		fontWeight: theme.typography.fontWeightRegular,
+	},
+	root: {
+		minWidth: 275,
+	},
+	bullet: {
+		display: "inline-block",
+		margin: "0 2px",
+		transform: "scale(0.8)",
+	},
+	title: {
+		fontSize: 14,
+	},
+	pos: {
+		marginBottom: 12,
+	},
+	column: {
+		display: "flex",
+		flexDirection: "row",
+	},
+}));
+
 function ReservationManagement (props) {
+	const classes = useStyles();
+
 	const { user } = props;
 	const [ view, setView ] = useState("teller");
 
@@ -16,7 +54,7 @@ function ReservationManagement (props) {
 		},
 		{
 			title: "US",
-			status: "finished",
+			status: "pending",
 		},
 		{
 			title: "China",
@@ -27,10 +65,6 @@ function ReservationManagement (props) {
 			status: "approved",
 		},
 	]);
-	// const [ pending, setPending ] = useState([]);
-	// const [ approved, setApproved ] = useState([]);
-	// const [ confirmed, setConfirmed ] = useState([]);
-	// const [ finished, setFinished ] = useState([]);
 
 	useEffect(async () => {
 		// const reservations = (await axios.get(.....)).data
@@ -47,9 +81,74 @@ function ReservationManagement (props) {
 
 	return (
 		<div>
+			<div className={classes.root}>
+				<Accordion>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel1a-content"
+						id="panel1a-header"
+					>
+						<Typography className={classes.heading}>Pending</Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+						<Typography>
+							<div className={classes.column}>{createReservation("pending")}</div>
+						</Typography>
+					</AccordionDetails>
+				</Accordion>
+
+				<Accordion>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel2a-content"
+						id="panel2a-header"
+					>
+						<Typography className={classes.heading}>Accepted</Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+						<Typography>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
+							amet blandit leo lobortis eget.
+						</Typography>
+					</AccordionDetails>
+				</Accordion>
+
+				<Accordion>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel2a-content"
+						id="panel2a-header"
+					>
+						<Typography className={classes.heading}>Confirmed</Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+						<Typography>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
+							amet blandit leo lobortis eget.
+						</Typography>
+					</AccordionDetails>
+				</Accordion>
+
+				<Accordion>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel2a-content"
+						id="panel2a-header"
+					>
+						<Typography className={classes.heading}>Finished</Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+						<Typography>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
+							amet blandit leo lobortis eget.
+						</Typography>
+					</AccordionDetails>
+				</Accordion>
+			</div>
+
 			<div>
 				{/* this h2 is just for testing purpose */}
-				<h2 >Current view is {view}</h2>
+				<h2>Current view is {view}</h2>
 				<button
 					onClick={() => {
 						setView("teller");

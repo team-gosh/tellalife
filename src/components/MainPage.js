@@ -19,15 +19,32 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+	root: {
+		flexGrow: 1,
+	},
+	menuButton: {
+		marginRight: theme.spacing(2),
+	},
+	title: {
+		flexGrow: 1,
+	},
 	list: {
 		width: 250,
 	},
 	fullList: {
 		width: "auto",
 	},
-});
+	iconButtonLabel: {
+		display: "flex",
+		flexDirection: "column",
+	},
+}));
 
 function MainPage (props) {
 	const {
@@ -35,7 +52,7 @@ function MainPage (props) {
 		setVideo,
 		// user authentication
 	} = props;
-	const [ display, setDisplay ] = useState("feed");
+	const [ display, setDisplay ] = useState("Feed");
 	const [ user, setUser ] = useState({});
 	const [ state, setState ] = React.useState(false);
 	const classes = useStyles();
@@ -50,7 +67,6 @@ function MainPage (props) {
 		if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
 			return;
 		}
-
 		setState({ ...state, [anchor]: open });
 	};
 
@@ -65,14 +81,14 @@ function MainPage (props) {
 		>
 			<List>
 				{[ "Reservation", "Feed", "Profile", "Something" ].map((text, index) => (
-					<ListItem button key={text}>
+					<ListItem button key={text} onClick={() => setDisplay(text)}>
 						<ListItemIcon>
 							{index === 0 ? (
-								<VideoCallIcon onClick={() => setDisplay("reservations")} />
+								<VideoCallIcon />
 							) : index === 1 ? (
-								<DescriptionIcon onClick={() => setDisplay("feed")} />
+								<DescriptionIcon />
 							) : index === 2 ? (
-								<AccountCircleIcon onClick={() => setDisplay("profile")} />
+								<AccountCircleIcon />
 							) : (
 								<ExitToAppIcon />
 							)}
@@ -97,18 +113,28 @@ function MainPage (props) {
 
 	return (
 		<div className="MainPage">
-			<Button onClick={toggleDrawer("left", true)}>{"left"}</Button>
-			<Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
-				{list("left")}
-			</Drawer>
-			<div className="header">
-				<button onClick={() => setDisplay("reservations")}>Reservations</button>
-				<button onClick={() => setDisplay("feed")}>Feed</button>
-				<button onClick={() => setDisplay("profile")}>Profile</button>
-			</div>
-			{display === "reservations" ? (
+			<AppBar position="static">
+				<Toolbar>
+					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
+						<MenuIcon />
+					</IconButton>
+					<Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
+						{list("left")}
+					</Drawer>
+					<Typography variant="h6" className={classes.title}>
+						TELLaLIFE
+					</Typography>
+				</Toolbar>
+			</AppBar>
+
+			{/* <div className="header">
+				<button onClick={() => setDisplay("Reservation")}>Reservations</button>
+				<button onClick={() => setDisplay("Feed")}>Feed</button>
+				<button onClick={() => setDisplay("Profile")}>Profile</button>
+			</div> */}
+			{display === "Reservation" ? (
 				<ReservationManagement user={user} />
-			) : display === "profile" ? (
+			) : display === "Profile" ? (
 				<Profile user={user} />
 			) : (
 				<Feed user={user} />
