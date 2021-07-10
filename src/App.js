@@ -71,9 +71,9 @@ function App () {
 		// authState === AuthState.SignedIn && userAuth ? (
 		<div className="App">
 			{/* < Stripe /> */}
-			<a href="#" className="stripe-connect">
+			{/* <a href="#" className="stripe-connect">
 				<span>Connect with</span>
-			</a>
+			</a> */}
 			<button onClick={createAccount}>CreateAccount</button>
 			<button onClick={setLink}>Link</button>
 			<button onClick={paymentIntent}>PaymentIntent</button>

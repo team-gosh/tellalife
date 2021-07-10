@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles((theme) => ({
 	root: {
 		minWidth: 275,
+		minHeight: 200,
+		margin: 5,
 	},
 	bullet: {
 		display: "inline-block",
@@ -37,22 +39,22 @@ function Reservation (props) {
 					<Card className={classes.root}>
 						<CardContent>
 							<Typography className={classes.title} color="textSecondary" gutterBottom>
-								Word of the Day
+								{data.teller}
 							</Typography>
 							<Typography variant="h5" component="h2">
-								be{bull}nev{bull}o{bull}lent
+								{data.title}
 							</Typography>
 							<Typography className={classes.pos} color="textSecondary">
 								adjective
 							</Typography>
 							<Typography variant="body2" component="p">
-								well meaning and kindly.
-								<br />
-								{'"a benevolent smile"'}
+								{data.description}
 							</Typography>
 						</CardContent>
 						<CardActions>
-							<Button size="small">Cancel</Button>
+							<Button size="small" variant="outlined" color="primary">
+								Cancel
+							</Button>
 						</CardActions>
 					</Card>
 				</div>

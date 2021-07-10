@@ -34,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
 	column: {
 		display: "flex",
 		flexDirection: "row",
+		flexWrap: "wrap",
+		justifyContent: "center",
 	},
 }));
 
@@ -41,12 +43,18 @@ function ReservationManagement (props) {
 	const classes = useStyles();
 
 	const { user } = props;
-	const [ view, setView ] = useState("teller");
+	const [ view, setView ] = useState("listener");
 
 	const [ reservations, setReservations ] = useState([
 		{
 			title: "Iceland",
 			status: "pending",
+			teller: "Miho",
+			listener: "Yoshi",
+			date: "2021/07/12",
+			time: "15:00",
+			description: "Talking about the uni life in Australia",
+			duration: "1:00",
 		},
 		{
 			title: "Iceland2",
@@ -58,11 +66,11 @@ function ReservationManagement (props) {
 		},
 		{
 			title: "China",
-			status: "confirmed",
+			status: "pending",
 		},
 		{
 			title: "Australia",
-			status: "approved",
+			status: "pending",
 		},
 	]);
 
@@ -103,7 +111,7 @@ function ReservationManagement (props) {
 						aria-controls="panel2a-content"
 						id="panel2a-header"
 					>
-						<Typography className={classes.heading}>Accepted</Typography>
+						<Typography className={classes.heading}>Approved</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<Typography>
