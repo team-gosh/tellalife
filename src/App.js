@@ -9,7 +9,10 @@ import { AmplifyAuthenticator, AmplifySignOut, AmplifySignUp, AmplifySignIn } fr
 // import awsconfig from "./aws-exports";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
+
+
 // Amplify.configure(awsconfig);
+
 
 function App () {
 	const [ video, setVideo ] = useState({
@@ -19,6 +22,7 @@ function App () {
 	});
 	const [ authState, setAuthState ] = useState();
 	const [ userAuth, setUserAuth ] = useState(); // Change name to avoid confusion
+
 
 	useEffect(() => {
 		return onAuthUIStateChange((nextAuthState, authData) => {
@@ -60,6 +64,9 @@ function App () {
 	console.log(userAuth);
 	console.log("Auth State Signed In");
 	console.log(authState ? authState.SignedIn : undefined);
+
+
+
 	return (
 		// authState === AuthState.SignedIn && userAuth ? (
 		<div className="App">
@@ -71,7 +78,9 @@ function App () {
 			<button onClick={setLink}>Link</button>
 			<button onClick={paymentIntent}>PaymentIntent</button>
 			<button onClick={getSecret}>Secret</button>
-			{/* <AmplifySignOut /> */}
+
+
+
 			{video.isActive ? (
 				<VideoChat guestName={video.username} guestRoom={video.roomName} />
 			) : (
