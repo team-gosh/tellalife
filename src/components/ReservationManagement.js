@@ -8,10 +8,31 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { makeStyles } from "@material-ui/core/styles";
+import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
+import HearingIcon from "@material-ui/icons/Hearing";
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import PhoneIcon from "@material-ui/icons/Phone";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import PersonPinIcon from "@material-ui/icons/PersonPin";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		width: "100%",
+	},
+	pending: {
+		backgroundColor: "green",
+	},
+	approved: {
+		backgroundColor: "red",
+	},
+	confirmed: {
+		backgroundColor: "blue",
+	},
+	finished: {
+		backgroundColor: "grey",
 	},
 	heading: {
 		fontSize: theme.typography.pxToRem(15),
@@ -37,6 +58,15 @@ const useStyles = makeStyles((theme) => ({
 		flexWrap: "wrap",
 		justifyContent: "center",
 	},
+	icon: {
+		color: "primary",
+		size: "5",
+		cursor: "initial",
+	},
+	paper_root: {
+		flexGrow: 1,
+		maxWidth: 500,
+	},
 }));
 
 function ReservationManagement (props) {
@@ -44,7 +74,7 @@ function ReservationManagement (props) {
 
 	const { user } = props;
 	const [ view, setView ] = useState("listener");
-
+	const [ value, setValue ] = React.useState(0);
 	const [ reservations, setReservations ] = useState([
 		{
 			title: "Iceland",
@@ -58,19 +88,24 @@ function ReservationManagement (props) {
 		},
 		{
 			title: "Iceland2",
-			status: "pending",
+			status: "approved",
+			teller: "Miho",
+			description: "Talking about the uni life in Australia",
 		},
 		{
 			title: "US",
-			status: "pending",
+			status: "finished",
+			teller: "Miho",
 		},
 		{
 			title: "China",
-			status: "pending",
+			status: "confirmed",
+			teller: "Miho",
 		},
 		{
 			title: "Australia",
 			status: "pending",
+			teller: "Miho",
 		},
 	]);
 
@@ -78,6 +113,10 @@ function ReservationManagement (props) {
 		// const reservations = (await axios.get(.....)).data
 		// setReservations(reservations);
 	}, []);
+
+	function handleChange (event, newValue) {
+		setValue(newValue);
+	}
 
 	function createReservation (status) {
 		return reservations.map((data) => {
@@ -90,13 +129,43 @@ function ReservationManagement (props) {
 	return (
 		<div>
 			<div className={classes.root}>
+				<div>
+					{/* this h2 is just for testing purpose */}
+					<Paper square className={classes.root}>
+						<Tabs
+							value={value}
+							onChange={handleChange}
+							variant="fullWidth"
+							indicatorColor="primary"
+							textColor="primary"
+							aria-label="icon label tabs example"
+						>
+							<Tab
+								icon={<HearingIcon />}
+								label="Listener"
+								onClick={() => {
+									setView("listener");
+								}}
+							/>
+							<Tab
+								icon={<RecordVoiceOverIcon />}
+								label="Teller"
+								onClick={() => {
+									setView("teller");
+								}}
+							/>
+						</Tabs>
+					</Paper>
+				</div>
+				<br />
 				<Accordion>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel1a-content"
 						id="panel1a-header"
+						className={classes.pending}
 					>
-						<Typography className={classes.heading}>Pending</Typography>
+						<Typography>Pending *color will be changed later</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<Typography>
@@ -110,14 +179,12 @@ function ReservationManagement (props) {
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel2a-content"
 						id="panel2a-header"
+						className={classes.approved}
 					>
 						<Typography className={classes.heading}>Approved</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
-							amet blandit leo lobortis eget.
-						</Typography>
+						<Typography>{createReservation("approved")}</Typography>
 					</AccordionDetails>
 				</Accordion>
 
@@ -126,14 +193,12 @@ function ReservationManagement (props) {
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel2a-content"
 						id="panel2a-header"
+						className={classes.confirmed}
 					>
 						<Typography className={classes.heading}>Confirmed</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
-							amet blandit leo lobortis eget.
-						</Typography>
+						<Typography>{createReservation("confirmed")}</Typography>
 					</AccordionDetails>
 				</Accordion>
 
@@ -142,44 +207,15 @@ function ReservationManagement (props) {
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel2a-content"
 						id="panel2a-header"
+						className={classes.finished}
 					>
 						<Typography className={classes.heading}>Finished</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit
-							amet blandit leo lobortis eget.
-						</Typography>
+						<Typography>{createReservation("finished")}</Typography>
 					</AccordionDetails>
 				</Accordion>
 			</div>
-
-			<div>
-				{/* this h2 is just for testing purpose */}
-				<h2>Current view is {view}</h2>
-				<button
-					onClick={() => {
-						setView("teller");
-					}}
-				>
-					Teller
-				</button>
-				<button
-					onClick={() => {
-						setView("listener");
-					}}
-				>
-					Listener
-				</button>
-			</div>
-			<h3>Pending</h3>
-			{createReservation("pending")}
-			<h3>Approved</h3>
-			{createReservation("approved")}
-			<h3>Confirmed</h3>
-			{createReservation("confirmed")}
-			<h3>Finished</h3>
-			{createReservation("finished")}
 		</div>
 	);
 }

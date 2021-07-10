@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles((theme) => ({
 	root: {
 		minWidth: 275,
+		maxWidth: 280,
 		minHeight: 200,
 		margin: 5,
 	},
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
 	pos: {
 		marginBottom: 12,
 	},
+	text: {
+		minHeight: 60,
+	},
 }));
 
 function Reservation (props) {
@@ -34,57 +38,79 @@ function Reservation (props) {
 	return (
 		<div className="Reservation">
 			{/* consumer view */}
-			{view === "listener" ? status === "pending" ? (
-				<div>
-					<Card className={classes.root}>
-						<CardContent>
-							<Typography className={classes.title} color="textSecondary" gutterBottom>
-								{data.teller}
-							</Typography>
-							<Typography variant="h5" component="h2">
-								{data.title}
-							</Typography>
-							<Typography className={classes.pos} color="textSecondary">
-								adjective
-							</Typography>
-							<Typography variant="body2" component="p">
-								{data.description}
-							</Typography>
-						</CardContent>
+			<Card className={classes.root}>
+				<CardContent>
+					<Typography className={classes.title} color="textSecondary" gutterBottom>
+						{data.teller}
+					</Typography>
+					<Typography variant="h5" component="h2">
+						{data.title}
+					</Typography>
+					<Typography variant="body2" component="p" className={classes.text}>
+						dsadfafsdasdfasdfasfd
+						{data.description}
+					</Typography>
+				</CardContent>
+				{view === "listener" ? status === "pending" ? (
+					<div>
 						<CardActions>
 							<Button size="small" variant="outlined" color="primary">
 								Cancel
 							</Button>
 						</CardActions>
-					</Card>
-				</div>
-			) : status === "approved" ? (
-				<div>
-					<p>{data.title}</p>
-					<button>Pay via Stripe</button>
-					<button>Cancel</button>
-				</div>
-			) : status === "confirmed" ? (
-				<div>
-					<p>{data.title}</p>
-					<button>Go to Video Chat</button>
-				</div>
-			) : (
-				<p>{data.title}</p>
-			) : status === "pending" ? (
-				<div>
-					<p>{data.title}</p>
-					<button>Accept</button>
-					<button>Reject</button>
-				</div>
-			) : status === "confirmed" ? (
-				<div>
-					<p>{data.title}</p>
-					<button>Go to Video Chat</button>
-				</div>
-			) : (
-				<p>{data.title}</p>
-			)}
+					</div>
+				) : status === "approved" ? (
+					<div>
+						<CardActions>
+							<Button size="small" variant="outlined" color="primary">
+								Cancel
+							</Button>
+						</CardActions>
+					</div>
+				) : status === "confirmed" ? (
+					<div>
+						<CardActions>
+							<Button size="small" variant="outlined" color="primary">
+								Go to video chat
+							</Button>
+						</CardActions>
+					</div>
+				) : (
+					<span />
+				) : status === "pending" ? (
+					<div>
+						<CardActions>
+							<Button size="small" variant="outlined" color="primary">
+								Accept
+							</Button>
+							<Button size="small" variant="outlined" color="secondary">
+								Reject
+							</Button>
+						</CardActions>
+					</div>
+				) : status === "approved" ? (
+					<div>
+						<CardActions>
+							<Typography size="small" className={classes.title} color="secondary" gutterBottom>
+								Waiting for the payment
+							</Typography>
+							<Button size="small" variant="outlined" color="primary">
+								Cancel
+							</Button>
+						</CardActions>
+					</div>
+				) : status === "confirmed" ? (
+					<div>
+						<CardActions>
+							<Button size="small" variant="outlined" color="primary">
+								Go to video chat
+							</Button>
+						</CardActions>
+					</div>
+				) : (
+					<span />
+				)}
+			</Card>
 		</div>
 	);
 }
