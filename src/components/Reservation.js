@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
 		maxWidth: 280,
 		minHeight: 200,
 		margin: 5,
+		alignSelf: "center",
 	},
 	bullet: {
 		display: "inline-block",
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	text: {
 		minHeight: 60,
+	},
+	accept: {
+		color: "#63B028",
 	},
 }));
 
@@ -54,7 +58,7 @@ function Reservation (props) {
 				{view === "listener" ? status === "pending" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="primary">
+							<Button size="small" variant="outlined" color="secondary">
 								Cancel
 							</Button>
 						</CardActions>
@@ -63,6 +67,9 @@ function Reservation (props) {
 					<div>
 						<CardActions>
 							<Button size="small" variant="outlined" color="primary">
+								Pay
+							</Button>
+							<Button size="small" variant="outlined" color="secondary">
 								Cancel
 							</Button>
 						</CardActions>
@@ -80,7 +87,7 @@ function Reservation (props) {
 				) : status === "pending" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="primary">
+							<Button size="small" variant="outlined" className={classes.accept}>
 								Accept
 							</Button>
 							<Button size="small" variant="outlined" color="secondary">
@@ -91,10 +98,10 @@ function Reservation (props) {
 				) : status === "approved" ? (
 					<div>
 						<CardActions>
-							<Typography size="small" className={classes.title} color="secondary" gutterBottom>
+							<Typography size="small" className={classes.title} color="textSecondary" gutterBottom>
 								Waiting for the payment
 							</Typography>
-							<Button size="small" variant="outlined" color="primary">
+							<Button size="small" variant="outlined" color="secondary">
 								Cancel
 							</Button>
 						</CardActions>

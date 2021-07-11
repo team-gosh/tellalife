@@ -33,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		flexGrow: 1,
+		color: "#DBE2EF",
+		fontSize: 40,
 	},
 	list: {
 		width: 250,
@@ -43,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
 	iconButtonLabel: {
 		display: "flex",
 		flexDirection: "column",
+	},
+	appbar: {
+		backgroundColor: "#112D4E",
 	},
 }));
 
@@ -113,7 +118,7 @@ function MainPage (props) {
 
 	return (
 		<div className="MainPage">
-			<AppBar position="static">
+			<AppBar position="static" className={classes.appbar}>
 				<Toolbar>
 					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
 						<MenuIcon />
