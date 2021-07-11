@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+
 import axios from "axios";
+import App from "../App";
+import CheckoutForm from "./CheckoutForm";
+
+import { useStripe } from "@stripe/react-stripe-js";
+
+// material ui
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -32,12 +46,26 @@ const useStyles = makeStyles((theme) => ({
 	accept: {
 		color: "#63B028",
 	},
+	container: {
+		display: "flex",
+		flexWrap: "wrap",
+	},
 }));
 
 function Reservation (props) {
+	const stripe = useStripe();
+
 	const classes = useStyles();
 	const bull = <span className={classes.bullet}>•</span>;
-	const { user, data, status, view } = props;
+	const { user, data, status, view, setVideo, video } = props;
+
+	const [ open, setOpen ] = React.useState(false);
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	return (
 		<div className="Reservation">
@@ -66,9 +94,29 @@ function Reservation (props) {
 				) : status === "approved" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="primary">
+							<Button size="small" variant="outlined" color="primary" onClick={handleClickOpen}>
 								Pay
 							</Button>
+
+							<Dialog
+								open={open}
+								onClose={handleClose}
+								aria-labelledby="form-dialog-title"
+								fullWidth="true"
+							>
+								<DialogTitle id="form-dialog-title">Payment</DialogTitle>
+								<DialogContent>
+									<div>
+										<CheckoutForm />
+									</div>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={handleClose} color="primary">
+										Close
+									</Button>
+								</DialogActions>
+							</Dialog>
+
 							<Button size="small" variant="outlined" color="secondary">
 								Cancel
 							</Button>
@@ -77,7 +125,14 @@ function Reservation (props) {
 				) : status === "confirmed" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="primary">
+							<Button
+								size="small"
+								variant="outlined"
+								color="primary"
+								onClick={() => {
+									setVideo(true);
+								}}
+							>
 								Go to video chat
 							</Button>
 						</CardActions>
@@ -109,7 +164,14 @@ function Reservation (props) {
 				) : status === "confirmed" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="primary">
+							<Button
+								size="small"
+								variant="outlined"
+								color="primary"
+								onClick={() => {
+									setVideo(true);
+								}}
+							>
 								Go to video chat
 							</Button>
 						</CardActions>

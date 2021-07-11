@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 function ReservationManagement (props) {
 	const classes = useStyles();
 
-	const { user } = props;
+	const { user, setVideo, video } = props;
 	const [ view, setView ] = useState("listener");
 	const [ value, setValue ] = React.useState(0);
 	const [ reservations, setReservations ] = useState([
@@ -101,7 +101,7 @@ function ReservationManagement (props) {
 		},
 		{
 			title: "China",
-			status: "approved",
+			status: "confirmed",
 			teller: "Miho",
 		},
 		{
@@ -126,9 +126,18 @@ function ReservationManagement (props) {
 	}
 
 	function createReservation (status) {
-		return reservations.map((data) => {
+		return reservations.map((data, index) => {
 			if (data.status === status) {
-				return <Reservation data={data} status={data.status} view={view} />;
+				return (
+					<Reservation
+						key={index}
+						data={data}
+						status={data.status}
+						view={view}
+						setVideo={setVideo}
+						video={video}
+					/>
+				);
 			}
 		});
 	}
@@ -143,7 +152,7 @@ function ReservationManagement (props) {
 							value={value}
 							onChange={handleChange}
 							variant="fullWidth"
-							indicatorColor="#F7DAD9"
+							indicatorColor="primary"
 							textColor="primary"
 							aria-label="icon label tabs example"
 						>
@@ -177,9 +186,9 @@ function ReservationManagement (props) {
 						</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
-						<Typography>
+						<div>
 							<div className={classes.column}>{createReservation("pending")}</div>
-						</Typography>
+						</div>
 					</AccordionDetails>
 				</Accordion>
 
@@ -190,9 +199,9 @@ function ReservationManagement (props) {
 						id="panel2a-header"
 						className={classes.approved}
 					>
-						<Typography>
+						<div>
 							<CheckCircleIcon className={classes.checkCircleIcon} fontSize="large" /> Approved
-						</Typography>
+						</div>
 					</AccordionSummary>
 					<AccordionDetails>
 						<div className={classes.column}>{createReservation("approved")}</div>
@@ -206,9 +215,9 @@ function ReservationManagement (props) {
 						id="panel2a-header"
 						className={classes.confirmed}
 					>
-						<Typography>
+						<div>
 							<MonetizationOnIcon color="error" fontSize="large" /> Payment Confirmed
-						</Typography>
+						</div>
 					</AccordionSummary>
 					<AccordionDetails>
 						<div className={classes.column}>{createReservation("confirmed")}</div>
@@ -222,9 +231,9 @@ function ReservationManagement (props) {
 						id="panel2a-header"
 						className={classes.finished}
 					>
-						<Typography className={classes.heading}>
+						<div>
 							<HistoryIcon color="action" fontSize="large" /> Finished
-						</Typography>
+						</div>
 					</AccordionSummary>
 					<AccordionDetails>
 						<div className={classes.column}>{createReservation("finished")}</div>

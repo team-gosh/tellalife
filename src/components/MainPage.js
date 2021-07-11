@@ -3,6 +3,8 @@ import axios from "axios";
 import Profile from "./Profile";
 import ReservationManagement from "./ReservationManagement";
 import Feed from "./Feed";
+import App from "../App";
+import CheckoutForm from "./CheckoutForm";
 
 //material ui
 import Drawer from "@material-ui/core/Drawer";
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		flexGrow: 1,
-		color: "#DBE2EF",
+		color: "#F9F7F7",
 		fontSize: 40,
 	},
 	list: {
@@ -47,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: "column",
 	},
 	appbar: {
-		backgroundColor: "#112D4E",
+		backgroundColor: "#3F72AF",
 	},
 }));
 
@@ -65,6 +67,7 @@ function MainPage (props) {
 	useEffect(async () => {
 		// const userData = (await axios.get(.......)).data
 		// setUser(userData)
+		console.log(video);
 	});
 
 	// material ui drawer
@@ -132,13 +135,8 @@ function MainPage (props) {
 				</Toolbar>
 			</AppBar>
 
-			{/* <div className="header">
-				<button onClick={() => setDisplay("Reservation")}>Reservations</button>
-				<button onClick={() => setDisplay("Feed")}>Feed</button>
-				<button onClick={() => setDisplay("Profile")}>Profile</button>
-			</div> */}
 			{display === "Reservation" ? (
-				<ReservationManagement user={user} />
+				<ReservationManagement user={user} setVideo={setVideo} video={video} />
 			) : display === "Profile" ? (
 				<Profile user={user} />
 			) : (

@@ -9,10 +9,10 @@ import { AmplifyAuthenticator, AmplifySignOut, AmplifySignUp, AmplifySignIn } fr
 // import awsconfig from "./aws-exports";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
-
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 // Amplify.configure(awsconfig);
-
 
 function App () {
 	const [ video, setVideo ] = useState({
@@ -23,6 +23,12 @@ function App () {
 	const [ authState, setAuthState ] = useState();
 	const [ userAuth, setUserAuth ] = useState(); // Change name to avoid confusion
 
+	const stripePromise = loadStripe(
+		"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
+		{
+			stripeAccount: "acct_1JAqYHRN8v3zy7ya",
+		}
+	);
 
 	useEffect(() => {
 		return onAuthUIStateChange((nextAuthState, authData) => {
@@ -65,8 +71,6 @@ function App () {
 	console.log("Auth State Signed In");
 	console.log(authState ? authState.SignedIn : undefined);
 
-
-
 	return (
 		// authState === AuthState.SignedIn && userAuth ? (
 		<div className="App">
@@ -79,12 +83,12 @@ function App () {
 			<button onClick={paymentIntent}>PaymentIntent</button>
 			<button onClick={getSecret}>Secret</button>
 
-
-
 			{video.isActive ? (
 				<VideoChat guestName={video.username} guestRoom={video.roomName} />
 			) : (
-				<MainPage video={video} setVideo={setVideo} />
+				<Elements stripe={stripePromise}>
+					<MainPage video={video} setVideo={setVideo} />
+				</Elements>
 			)}
 		</div>
 	);
