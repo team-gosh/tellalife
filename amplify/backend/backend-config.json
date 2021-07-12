@@ -1,11 +1,19 @@
 {
-  "auth": {
-    "tellalifefc41e489": {
-      "service": "Cognito",
+  "api": {
+    "tellalife": {
+      "service": "AppSync",
       "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authtellalifefc41e489"
+            }
+          },
+          "additionalAuthenticationProviders": []
+        }
+      }
     }
-  },
-  "api": {}
+  }
 }
