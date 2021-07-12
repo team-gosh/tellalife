@@ -30,30 +30,30 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-	},
-	title: {
-		flexGrow: 1,
-		color: "#F9F7F7",
-		fontSize: 40,
-	},
-	list: {
-		width: 250,
-	},
-	fullList: {
-		width: "auto",
-	},
-	iconButtonLabel: {
-		display: "flex",
-		flexDirection: "column",
-	},
-	appbar: {
-		backgroundColor: "#3F72AF",
-	},
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+    color: "#F9F7F7",
+    fontSize: 40,
+  },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: "auto",
+  },
+  iconButtonLabel: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  appbar: {
+    backgroundColor: "#3F72AF",
+  },
 }));
 
 function MainPage(props) {
@@ -129,55 +129,55 @@ function MainPage(props) {
     // }
   }, []);
 
-	// material ui drawer
-	const toggleDrawer = (anchor, open) => (event) => {
-		if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-			return;
-		}
-		setState({ ...state, [anchor]: open });
-	};
+  // material ui drawer
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+      return;
+    }
+    setState({ ...state, [anchor]: open });
+  };
 
-	const list = (anchor) => (
-		<div
-			className={clsx(classes.list, {
-				[classes.fullList]: anchor === "top" || anchor === "bottom",
-			})}
-			role="presentation"
-			onClick={toggleDrawer(anchor, false)}
-			onKeyDown={toggleDrawer(anchor, false)}
-		>
-			<List>
-				{[ "Reservation", "Feed", "Profile", "Something" ].map((text, index) => (
-					<ListItem button key={text} onClick={() => setDisplay(text)}>
-						<ListItemIcon>
-							{index === 0 ? (
-								<VideoCallIcon />
-							) : index === 1 ? (
-								<DescriptionIcon />
-							) : index === 2 ? (
-								<AccountCircleIcon />
-							) : (
-								<ExitToAppIcon />
-							)}
-						</ListItemIcon>
-						<ListItemText primary={text} />
-					</ListItem>
-				))}
-			</List>
-			<Divider />
-			<List>
-				{[ "Logout" ].map((text, index) => (
-					<ListItem button key={text}>
-						<ListItemIcon>
-							<ExitToAppIcon />
-							<AmplifySignOut />
-						</ListItemIcon>
-						<ListItemText primary={text} />
-					</ListItem>
-				))}
-			</List>
-		</div>
-	);
+  const list = (anchor) => (
+    <div
+      className={clsx(classes.list, {
+        [classes.fullList]: anchor === "top" || anchor === "bottom",
+      })}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+        {["Reservation", "Feed", "Profile", "Something"].map((text, index) => (
+          <ListItem button key={text} onClick={() => setDisplay(text)}>
+            <ListItemIcon>
+              {index === 0 ? (
+                <VideoCallIcon />
+              ) : index === 1 ? (
+                <DescriptionIcon />
+              ) : index === 2 ? (
+                <AccountCircleIcon />
+              ) : (
+                <ExitToAppIcon />
+              )}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {["Logout"].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+              <AmplifySignOut />
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
 
   return (
     <div className="MainPage">
@@ -197,15 +197,21 @@ function MainPage(props) {
         </Toolbar>
       </AppBar>
 
-			{display === "Reservation" ? (
-				<ReservationManagement user={user} setVideo={setVideo} video={video} />
-			) : display === "Profile" ? (
-				<Profile user={user} />
-			) : (
-				<Feed user={user} />
-			)}
-		</div>
-	);
+      {display === "Reservation" ? (
+        <ReservationManagement user={user} setVideo={setVideo} video={video} />
+      ) : display === "Profile" ? (
+        <Profile
+          user={user}
+          setUser={setUser}
+          API={API}
+          queries={queries}
+          mutations={mutations}
+        />
+      ) : (
+        <Feed user={user} />
+      )}
+    </div>
+  );
 }
 
 export default MainPage;

@@ -14,6 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
+import { API } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -75,13 +76,19 @@ const cities = {
 
 function Profile (props) {
 	const classes = useStyles();
-	const { user } = props;
+	const {
+    user,
+    setUser,
+    API,
+    queries,
+    mutations
+  } = props;
 
 	// Connect with DB
 	const [ nickName, setNickName ] = React.useState(user.name);
-	const [ home, setHome ] = React.useState(user.home_country);
-	const [ country, setCountry ] = React.useState(user.current_country);
-	const [ city, setCity ] = React.useState("Tokyo");
+	const [ home, setHome ] = React.useState();
+	const [ country, setCountry ] = React.useState();
+	const [ city, setCity ] = React.useState();
 	const [ value, setValue ] = React.useState(0);
 	const [ nameEditing, setNameEdit ] = React.useState(false);
 	const [ registration, setRegistration ] = React.useState(false);
@@ -144,6 +151,23 @@ function Profile (props) {
 	const handleNameChange = (event) => {
 		setNickName(event.target.value);
 	};
+
+  const updateUser = async () => {
+    const newData = {
+      id: user.id,
+      name: user.name,
+      home_country: home,
+      current_country: country,
+      current_city: city,
+      price: value,
+      stripeAccount: "stripe Account data",
+      isTeller: isTeller
+    }
+    const response = (await API.graphql({
+      query: mutations.updateUser,
+      variables: { input: newData }
+    })).data
+  }
 
 	// stripe
 	// create express account
@@ -255,13 +279,13 @@ function Profile (props) {
 								value={city}
 								onChange={handleCurrentCityChange}
 							>
-								{country
-                  ? cities[country].map((option) => (
-									  <MenuItem key={option} value={option}>
-									  	{option}
-									  </MenuItem>
-								  ))
-                  : <MenuItem />
+								{country 
+                ? cities[country].map((option) => (
+									<MenuItem key={option} value={option}>
+										{option}
+									</MenuItem>
+								 ))
+                : <MenuItem />
                 }
 							</TextField>
 						</div>
@@ -300,6 +324,7 @@ function Profile (props) {
 								value !== 0 ? (
 									() => {
 										console.log("go to stripe");
+                    updateUser()
 									}
 								) : (
 									() => {
