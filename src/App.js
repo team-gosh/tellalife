@@ -70,12 +70,12 @@ function App() {
     console.log(clientSecret);
   };
 
-  console.log("Auth State");
-  console.log(authState);
-  console.log("User Auth");
-  console.log(userAuth);
-  console.log("Auth State Signed In");
-  console.log(authState ? authState.SignedIn : undefined);
+  // console.log("Auth State");
+  // console.log(authState);
+  // console.log("User Auth");
+  // console.log(userAuth);
+  // console.log("Auth State Signed In");
+  // console.log(authState ? authState.SignedIn : undefined);
 
   return (
     authState === AuthState.SignedIn && userAuth ? (
@@ -93,7 +93,15 @@ function App() {
           <VideoChat guestName={video.username} guestRoom={video.roomName} />
         ) : (
           <Elements stripe={stripePromise}>
-            <MainPage video={video} setVideo={setVideo} AmplifySignOut={AmplifySignOut} Auth={Auth} Amplify={Amplify} />
+            <MainPage 
+              video={video} 
+              setVideo={setVideo} 
+              userAuth={userAuth}
+              AmplifySignOut={AmplifySignOut} 
+              Auth={Auth} 
+              Amplify={Amplify} 
+              graphqlOperation={graphqlOperation}
+            />
           </Elements>
         )}
       </div>
@@ -114,16 +122,16 @@ function App() {
             },
             {
               type: "username",
-              label: "Username",
+              label: "E-Mail",
               inputProps: { required: true, autocomplete: "username" },
               // placeholder: "Custom phone placeholder",
             },
-            {
-              type: "email",
-              label: "E-Mail",
-              // placeholder: "Custom email placeholder",
-              inputProps: { required: true },
-            },
+            // {
+            //   type: "email",
+            //   label: "E-Mail",
+            //   // placeholder: "Custom email placeholder",
+            //   inputProps: { required: true },
+            // },
             {
               type: "password",
               label: "Password",

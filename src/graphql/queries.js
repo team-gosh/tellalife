@@ -258,8 +258,8 @@ export const listReservations = /* GraphQL */ `
     }
   }
 `;
-export const getUserByUsername = /* GraphQL */ `
-  query GetUserByUsername(
+export const getUserByEmail = /* GraphQL */ `
+  query GetUserByEmail(
     $username: String
     $id: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
@@ -267,7 +267,7 @@ export const getUserByUsername = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    getUserByUsername(
+    getUserByEmail(
       username: $username
       id: $id
       sortDirection: $sortDirection
