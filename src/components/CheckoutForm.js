@@ -1,129 +1,55 @@
 import React from "react";
-import {
-  CardElement,
-  injectStripe,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCVCElement,
-  Elements
-} from "react-stripe-elements";
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormFeedback
-} from "reactstrap";
-import { Formik } from "formik";
-import * as Yup from "yup";
+import Button from "@material-ui/core/Button";
 
-class CheckoutForm extends React.Component {
-  handlePayment = async (values) => {
-    // alert(JSON.stringify(values));
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
-    const headers = new Headers();
-    headers.set("Content-type", "application/json");
-    // headers.set('Access-Control-Allow-Origin', '*');
+import CardSection from "./CardSection";
 
-    //paymentIntentの作成を（ローカルサーバ経由で）リクエスト
-    const createRes = await fetch("http://localhost:9000/createPaymentIntent", {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify({ amount: values.amount, username: values.username })
-    });
+export default function CheckoutForm () {
+	const stripe = useStripe();
+	const elements = useElements();
 
-    //レスポンスからclient_secretを取得
-    const responseJson = await createRes.json();
-    const client_secret = responseJson.client_secret;
+	const handleSubmit = async (event) => {
+		// We don't want to let default form submission happen here,
+		// which would refresh the page.
+		event.preventDefault();
 
-    //client_secretを利用して（確認情報をStripeに投げて）決済を完了させる
-    const confirmRes = await this.props.stripe.confirmCardPayment(
-      client_secret,
-      {
-        payment_method: {
-          // card: this.props.elements.getElement('card'),
-          card: this.props.elements.getElement("cardNumber"),
-          billing_details: {
-            name: values.username
-          }
-        }
-      }
-    );
+		if (!stripe || !elements) {
+			// Stripe.js has not yet loaded.
+			// Make sure to disable form submission until Stripe.js has loaded.
+			return;
+		}
 
-    if (confirmRes.paymentIntent.status === "succeeded") {
-      alert("決済完了");
-    }
-  };
+		const result = await stripe.confirmCardPayment("{CLIENT_SECRET}", {
+			payment_method: {
+				card: elements.getElement(CardElement),
+				billing_details: {
+					name: "Jenny Rosen",
+				},
+			},
+		});
 
-  render() {
-    console.log(this.props.stripe);
-    return (
-      <div className="col-8">
-        <p>決済情報の入力</p>
-        <Formik
-          initialValues={{ amount: 100, username: "TARO YAMADA" }}
-          onSubmit={(values) => this.handlePayment(values)}
-          validationSchema={Yup.object().shape({
-            amount: Yup.number().min(1).max(1000)
-          })}
-        >
-          {({
-            handleChange,
-            handleSubmit,
-            handleBlur,
-            values,
-            errors,
-            touched
-          }) => (
-            <Form onSubmit={handleSubmit}>
-              <FormGroup>
-                <Label>金額</Label>
-                <Input
-                  type="text"
-                  name="amount"
-                  value={values.amount}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  invalid={Boolean(touched.amount && errors.amount)}
-                />
-                <FormFeedback>{errors.amount}</FormFeedback>
-              </FormGroup>
-              <FormGroup>
-                <Label>利用者名</Label>
-                <Input
-                  type="text"
-                  name="username"
-                  value={values.username}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  invalid={Boolean(touched.username && errors.username)}
-                />
-                <FormFeedback>{errors.username}</FormFeedback>
-              </FormGroup>
-              {/* <CardElement
-                                    className="bg-light p-3"
-                                    hidePostalCode={true}
-                                /> */}
-              <legend className="col-form-label">カード番号</legend>
-              <CardNumberElement
-                ref={this.cardNumberRef}
-                className="p-2 bg-light"
-              />
-              <legend className="col-form-label">有効期限</legend>
-              <CardExpiryElement className="p-2 bg-light" />
-              <legend className="col-form-label">セキュリティーコード</legend>
-              <CardCVCElement className="p-2 bg-light" />
+		if (result.error) {
+			// Show error to your customer (e.g., insufficient funds)
+			console.log(result.error.message);
+		} else {
+			// The payment has been processed!
+			if (result.paymentIntent.status === "succeeded") {
+				// Show a success message to your customer
+				// There's a risk of the customer closing the window before callback
+				// execution. Set up a webhook or plugin to listen for the
+				// payment_intent.succeeded event that handles any business critical
+				// post-payment actions.
+			}
+		}
+	};
 
-              <Button onClick={this.submit} className="my-3" color="primary">
-                購入
-              </Button>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    );
-  }
+	return (
+		<form onSubmit={handleSubmit}>
+			<CardSection />
+			<Button disabled={!stripe} color="primary">
+				Confirm order
+			</Button>
+		</form>
+	);
 }
-
-export default injectStripe(CheckoutForm);

@@ -8,7 +8,7 @@
 .StripeElement {
 	height: 40px;
 	padding: 10px 12px;
-	width: 100%;
+	width: 30rem;
 	color: #32325d;
 	background-color: white;
 	border: 1px solid transparent;
@@ -16,6 +16,7 @@
 	box-shadow: 0 1px 3px 0 #e6ebf1;
 	-webkit-transition: box-shadow 150ms ease;
 	transition: box-shadow 150ms ease;
+	overflow-wrap: break-word;
 }
 .StripeElement--focus {
 	box-shadow: 0 1px 3px 0 #cfd7df;
