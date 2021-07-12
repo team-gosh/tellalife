@@ -2,9 +2,9 @@ version: 1
 frontend:
   phases:
     # IMPORTANT - Please verify your build commands
-    # preBuild:
-    #   commands:
-    #   - npm install
+    preBuild:
+      commands:
+      - npm install
     build:
       # dockerfile: Dockerfile
       commands: 
