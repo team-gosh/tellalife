@@ -25,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
 function MakeReservation(props) {
   const { user } = props;
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState("2021-07-29");
-  const [time, setTime] = useState("12:00");
+  const [date, setDate] = useState("");
 
   const classes = useStyles();
 
@@ -51,35 +50,28 @@ function MakeReservation(props) {
         <DialogTitle id="form-dialog-title">MakeReservation</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            If you wish to chat, please enter your name and room name below.
+            If you want to chat, please enter your preferred time
           </DialogContentText>
           <form className={classes.container} noValidate>
             <TextField
-              id="date"
-              label="Reservation Date"
-              type="date"
-              defaultValue="2021-07-29"
+              id="datetime-local"
+              label="Desired time"
+              type="datetime-local"
+              defaultValue=""
               className={classes.textField}
               InputLabelProps={{
                 shrink: true
               }}
-              onChange={(event) => setDate(event.target.value)}
-            />
-          </form>
-          <form className={classes.container} noValidate>
-            <TextField
-              id="time"
-              label="Alarm clock"
-              type="time"
-              defaultValue="12:00"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true
+              onChange={(event) => {
+                const millisecond = new Date(
+                  Number(event.target.value.slice(0, 4)),
+                  Number(event.target.value.slice(5, 7)),
+                  Number(event.target.value.slice(8, 10)),
+                  Number(event.target.value.slice(11, 13)),
+                  Number(event.target.value.slice(14))
+                ).getTime();
+                setDate(millisecond);
               }}
-              inputProps={{
-                step: 300 // 5 min
-              }}
-              onChange={(event) => setTime(event.target.value)}
             />
           </form>
         </DialogContent>
