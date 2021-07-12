@@ -10,7 +10,6 @@ import CheckoutForm from "./CheckoutForm";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -58,9 +57,9 @@ function MainPage (props) {
 	const {
 		video,
 		setVideo,
-    AmplifySignOut,
-    Auth,
-    Amplify,
+		AmplifySignOut,
+		Auth,
+		Amplify,
 		// user authentication
 	} = props;
 	const [ display, setDisplay ] = useState("Feed");
@@ -115,7 +114,7 @@ function MainPage (props) {
 					<ListItem button key={text}>
 						<ListItemIcon>
 							<ExitToAppIcon />
-              <AmplifySignOut />
+							<AmplifySignOut />
 						</ListItemIcon>
 						<ListItemText primary={text} />
 					</ListItem>

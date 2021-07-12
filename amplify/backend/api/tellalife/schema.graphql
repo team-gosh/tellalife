@@ -1,6 +1,6 @@
 # User table
 # type Blog @model { 
-type User @model @key(name: "byUserName", fields: ["username", "id"], queryField: "getUserByUsername") { 
+type User @model @key(name: "byUserName", fields: ["email", "id"], queryField: "getUserByEmail") { 
   id: ID!
   name: String!
   username: String!
