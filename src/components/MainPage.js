@@ -25,6 +25,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import Amplify from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -57,6 +58,9 @@ function MainPage (props) {
 	const {
 		video,
 		setVideo,
+    AmplifySignOut,
+    Auth,
+    Amplify,
 		// user authentication
 	} = props;
 	const [ display, setDisplay ] = useState("Feed");
@@ -111,6 +115,7 @@ function MainPage (props) {
 					<ListItem button key={text}>
 						<ListItemIcon>
 							<ExitToAppIcon />
+              <AmplifySignOut />
 						</ListItemIcon>
 						<ListItemText primary={text} />
 					</ListItem>

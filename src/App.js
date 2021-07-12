@@ -15,6 +15,7 @@ import { loadStripe } from "@stripe/stripe-js";
 console.log("awsconfig")
 console.log(awsconfig)
 Amplify.configure(awsconfig);
+
 // Auth.configure(awsconfig)
 function App() {
   // const [ video, setVideo ] = useState(false);
@@ -34,6 +35,8 @@ function App() {
   );
 
   useEffect(() => {
+    
+
     return onAuthUIStateChange((nextAuthState, authData) => {
       setAuthState(nextAuthState);
       setUserAuth(authData);
@@ -90,7 +93,7 @@ function App() {
           <VideoChat guestName={video.username} guestRoom={video.roomName} />
         ) : (
           <Elements stripe={stripePromise}>
-            <MainPage video={video} setVideo={setVideo} />
+            <MainPage video={video} setVideo={setVideo} AmplifySignOut={AmplifySignOut} Auth={Auth} Amplify={Amplify} />
           </Elements>
         )}
       </div>
