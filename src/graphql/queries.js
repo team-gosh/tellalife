@@ -10,9 +10,41 @@ export const getUser = /* GraphQL */ `
       email
       home_country
       reservations {
+        items {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          listenerIDs
+          tellerID
+          postID
+          content
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       posts {
+        items {
+          id
+          title
+          userID
+          dateTime
+          country
+          city
+          type
+          text
+          link
+          image
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       isTeller
@@ -38,6 +70,12 @@ export const listUsers = /* GraphQL */ `
         username
         email
         home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
         isTeller
         price
         stripeAccount
@@ -66,6 +104,12 @@ export const getPost = /* GraphQL */ `
         username
         email
         home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
         isTeller
         price
         stripeAccount
@@ -97,6 +141,20 @@ export const listPosts = /* GraphQL */ `
         country
         city
         type
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          createdAt
+          updatedAt
+        }
         text
         link
         image
@@ -131,6 +189,20 @@ export const getReservation = /* GraphQL */ `
         country
         city
         type
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          createdAt
+          updatedAt
+        }
         text
         link
         image
@@ -164,6 +236,20 @@ export const listReservations = /* GraphQL */ `
         listenerIDs
         tellerID
         postID
+        post {
+          id
+          title
+          userID
+          dateTime
+          country
+          city
+          type
+          text
+          link
+          image
+          createdAt
+          updatedAt
+        }
         content
         createdAt
         updatedAt
@@ -195,6 +281,12 @@ export const getUserByUsername = /* GraphQL */ `
         username
         email
         home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
         isTeller
         price
         stripeAccount

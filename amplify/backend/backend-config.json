@@ -8,7 +8,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authtellalifefc41e489"
+              "userPoolId": "authtellalife9ec5a95b"
             }
           },
           "additionalAuthenticationProviders": []
@@ -23,7 +23,7 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "tellalifefc41e489",
+          "resourceName": "tellalife9ec5a95b",
           "attributes": [
             "UserPoolId",
             "AppClientIDWeb",
@@ -35,6 +35,12 @@
     },
     "tellalifefc41e489": {
       "dependsOn": []
+    },
+    "tellalife9ec5a95b": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
     }
   }
 }

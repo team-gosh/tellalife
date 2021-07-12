@@ -1,23 +1,23 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
-        "authtellalifefc41e489UserPoolId": {
+        "authtellalife9ec5a95bUserPoolId": {
             "Type": "String",
-            "Default": "authtellalifefc41e489UserPoolId"
+            "Default": "authtellalife9ec5a95bUserPoolId"
         },
         
-        "authtellalifefc41e489IdentityPoolId": {
+        "authtellalife9ec5a95bIdentityPoolId": {
             "Type": "String",
-            "Default": "authtellalifefc41e489IdentityPoolId"
+            "Default": "authtellalife9ec5a95bIdentityPoolId"
         },
         
-        "authtellalifefc41e489AppClientID": {
+        "authtellalife9ec5a95bAppClientID": {
             "Type": "String",
-            "Default": "authtellalifefc41e489AppClientID"
+            "Default": "authtellalife9ec5a95bAppClientID"
         },
-        "authtellalifefc41e489AppClientIDWeb": {
+        "authtellalife9ec5a95bAppClientIDWeb": {
             "Type": "String",
-            "Default": "authtellalifefc41e489AppClientIDWeb"
+            "Default": "authtellalife9ec5a95bAppClientIDWeb"
         },
         "AuthRoleArn": {
             "Type": "String"
@@ -55,7 +55,7 @@
               },
               
               "UserPoolId" : {
-                "Ref": "authtellalifefc41e489UserPoolId"
+                "Ref": "authtellalife9ec5a95bUserPoolId"
               }
             }
         },
@@ -68,7 +68,7 @@
                         "",
                         [
                           {
-                            "Ref": "authtellalifefc41e489UserPoolId"
+                            "Ref": "authtellalife9ec5a95bUserPoolId"
                           },
                           "-tellalifepoolGroupRole"
                         ]
@@ -85,7 +85,7 @@
                             },
                             "Action": "sts:AssumeRoleWithWebIdentity",
                             "Condition": {
-                              "StringEquals": {"cognito-identity.amazonaws.com:aud": {"Ref":"authtellalifefc41e489IdentityPoolId"}},
+                              "StringEquals": {"cognito-identity.amazonaws.com:aud": {"Ref":"authtellalife9ec5a95bIdentityPoolId"}},
                               "ForAnyValue:StringLike": {"cognito-identity.amazonaws.com:amr": "authenticated"}
                             }
                         }
@@ -111,7 +111,7 @@
                                 "",
                                 [
 
-                                  "tellalifefc41e489",
+                                  "tellalife9ec5a95b",
                                   "-ExecutionRole-",
                                   {
                                     "Ref": "env"
@@ -272,16 +272,16 @@
                     "Ref": "UnauthRoleArn"
                 },
                 "identityPoolId": {
-                    "Ref": "authtellalifefc41e489IdentityPoolId"
+                    "Ref": "authtellalife9ec5a95bIdentityPoolId"
                 },
                 "userPoolId": {
-                    "Ref": "authtellalifefc41e489UserPoolId"
+                    "Ref": "authtellalife9ec5a95bUserPoolId"
                 },
                 "appClientIDWeb": {
-                    "Ref": "authtellalifefc41e489AppClientIDWeb"
+                    "Ref": "authtellalife9ec5a95bAppClientIDWeb"
                 },
                 "appClientID": {
-                    "Ref": "authtellalifefc41e489AppClientID"
+                    "Ref": "authtellalife9ec5a95bAppClientID"
                 },
                 "region": {
                     "Ref": "AWS::Region"

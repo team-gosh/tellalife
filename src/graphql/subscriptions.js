@@ -10,9 +10,41 @@ export const onCreateUser = /* GraphQL */ `
       email
       home_country
       reservations {
+        items {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          listenerIDs
+          tellerID
+          postID
+          content
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       posts {
+        items {
+          id
+          title
+          userID
+          dateTime
+          country
+          city
+          type
+          text
+          link
+          image
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       isTeller
@@ -34,9 +66,41 @@ export const onUpdateUser = /* GraphQL */ `
       email
       home_country
       reservations {
+        items {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          listenerIDs
+          tellerID
+          postID
+          content
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       posts {
+        items {
+          id
+          title
+          userID
+          dateTime
+          country
+          city
+          type
+          text
+          link
+          image
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       isTeller
@@ -58,9 +122,41 @@ export const onDeleteUser = /* GraphQL */ `
       email
       home_country
       reservations {
+        items {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          listenerIDs
+          tellerID
+          postID
+          content
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       posts {
+        items {
+          id
+          title
+          userID
+          dateTime
+          country
+          city
+          type
+          text
+          link
+          image
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       isTeller
@@ -89,6 +185,12 @@ export const onCreatePost = /* GraphQL */ `
         username
         email
         home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
         isTeller
         price
         stripeAccount
@@ -121,6 +223,12 @@ export const onUpdatePost = /* GraphQL */ `
         username
         email
         home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
         isTeller
         price
         stripeAccount
@@ -153,6 +261,12 @@ export const onDeletePost = /* GraphQL */ `
         username
         email
         home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
         isTeller
         price
         stripeAccount
@@ -193,6 +307,20 @@ export const onCreateReservation = /* GraphQL */ `
         country
         city
         type
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          createdAt
+          updatedAt
+        }
         text
         link
         image
@@ -229,6 +357,20 @@ export const onUpdateReservation = /* GraphQL */ `
         country
         city
         type
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          createdAt
+          updatedAt
+        }
         text
         link
         image
@@ -265,6 +407,20 @@ export const onDeleteReservation = /* GraphQL */ `
         country
         city
         type
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          createdAt
+          updatedAt
+        }
         text
         link
         image
