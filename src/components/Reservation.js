@@ -126,11 +126,14 @@ function Reservation (props) {
 					<div>
 						<CardActions>
 							<Button
+								id="1" // reservation.id
 								size="small"
 								variant="outlined"
 								color="primary"
-								onClick={() => {
-									setVideo(true);
+								onClick={(e) => {
+									const newVideo = {};
+									newVideo.isActive = true;
+									newVideo.username = newVideo.roomName = setVideo(newVideo); //user.username; //e.target.id
 								}}
 							>
 								Go to video chat
@@ -169,7 +172,8 @@ function Reservation (props) {
 								variant="outlined"
 								color="primary"
 								onClick={() => {
-									setVideo(true);
+									video.isActive = true;
+									setVideo(video);
 								}}
 							>
 								Go to video chat

@@ -15,6 +15,7 @@ import { loadStripe } from "@stripe/stripe-js";
 // Amplify.configure(awsconfig);
 
 function App () {
+	// const [ video, setVideo ] = useState(false);
 	const [ video, setVideo ] = useState({
 		isActive: false,
 		username: "",

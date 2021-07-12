@@ -67,7 +67,7 @@ function MainPage (props) {
 	useEffect(async () => {
 		// const userData = (await axios.get(.......)).data
 		// setUser(userData)
-		console.log(video);
+		// console.log(video);
 	});
 
 	// material ui drawer
