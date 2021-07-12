@@ -250,7 +250,7 @@
     "uuid" "^3.2.1"
     "zen-observable-ts" "0.8.19"
 
-"@aws-amplify/storage@3.x.x":
+"@aws-amplify/storage@^3.4.4", "@aws-amplify/storage@3.x.x":
   "integrity" "sha512-Qwh3G0e1UiqDTMnKgkxpM7BPoL9FozfGc2m1yWGT+VFbmVBZmuQyo1p3ENVgIbghQ/TqLpj447mg0Xfl4bZ3cQ=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/storage/-/storage-3.4.4.tgz"
   "version" "3.4.4"
