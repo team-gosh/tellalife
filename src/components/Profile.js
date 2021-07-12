@@ -78,9 +78,9 @@ function Profile (props) {
 	const { user } = props;
 
 	// Connect with DB
-	const [ nickName, setNickName ] = React.useState("Miho Ogura");
-	const [ home, setHome ] = React.useState("Japan");
-	const [ country, setCountry ] = React.useState("Japan");
+	const [ nickName, setNickName ] = React.useState(user.name);
+	const [ home, setHome ] = React.useState(user.home_country);
+	const [ country, setCountry ] = React.useState(user.current_country);
 	const [ city, setCity ] = React.useState("Tokyo");
 	const [ value, setValue ] = React.useState(0);
 	const [ nameEditing, setNameEdit ] = React.useState(false);
@@ -178,7 +178,7 @@ function Profile (props) {
 			<div className={classes.info}>
 				<div>
 					<Avatar alt="Miho Ogura" src="" className={classes.large} />
-					<Typography className={classes.username}>@pluto04@live.jp</Typography>
+					<Typography className={classes.username}>{user.email}</Typography>
 				</div>
 			</div>
 
@@ -255,11 +255,14 @@ function Profile (props) {
 								value={city}
 								onChange={handleCurrentCityChange}
 							>
-								{cities[country].map((option) => (
-									<MenuItem key={option} value={option}>
-										{option}
-									</MenuItem>
-								))}
+								{country
+                  ? cities[country].map((option) => (
+									  <MenuItem key={option} value={option}>
+									  	{option}
+									  </MenuItem>
+								  ))
+                  : <MenuItem />
+                }
 							</TextField>
 						</div>
 

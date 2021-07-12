@@ -179,7 +179,6 @@ function MainPage(props) {
 		</div>
 	);
 
-<<<<<<< HEAD
   return (
     <div className="MainPage">
       <h1>Hello {user ? user.name : ""}!</h1>
@@ -197,24 +196,6 @@ function MainPage(props) {
           </Typography>
         </Toolbar>
       </AppBar>
-=======
-	return (
-		<div className="MainPage">
-			<h1>{JSON.stringify(user)}</h1>
-			<AppBar position="static" className={classes.appbar}>
-				<Toolbar>
-					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
-						<MenuIcon />
-					</IconButton>
-					<Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
-						{list("left")}
-					</Drawer>
-					<Typography variant="h6" className={classes.title}>
-						TELLaLIFE
-					</Typography>
-				</Toolbar>
-			</AppBar>
->>>>>>> a71c3e23a854125e8e16c69902e86301178321b5
 
 			{display === "Reservation" ? (
 				<ReservationManagement user={user} setVideo={setVideo} video={video} />

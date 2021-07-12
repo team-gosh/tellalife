@@ -7,8 +7,8 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
   email: String!
   home_country: String
   # reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-  # reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-  reservations: [String]
+  reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
+  # reservations: [String]
   # posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
   posts: [Post] @connection(keyName: "byUser", fields: ["id"])
   #change above keyname to byUser
