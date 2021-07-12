@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Profile from "./Profile";
 import ReservationManagement from "./ReservationManagement";
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import Amplify, { API, graphqlOperation } from "aws-amplify";
 // import { GetUserByEmail } from '../graphql/queries';
-import * as queries from '../graphql/queries';
-import * as mutations from '../graphql/mutations';
+import * as queries from "../graphql/queries";
+import * as mutations from "../graphql/mutations";
 import Feed from "./Feed";
 import App from "../App";
 import CheckoutForm from "./CheckoutForm";
@@ -14,7 +14,6 @@ import CheckoutForm from "./CheckoutForm";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,30 +30,30 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    color: "#F9F7F7",
-    fontSize: 40,
-  },
-  list: {
-    width: 250,
-  },
-  fullList: {
-    width: "auto",
-  },
-  iconButtonLabel: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  appbar: {
-    backgroundColor: "#3F72AF",
-  },
+	root: {
+		flexGrow: 1,
+	},
+	menuButton: {
+		marginRight: theme.spacing(2),
+	},
+	title: {
+		flexGrow: 1,
+		color: "#F9F7F7",
+		fontSize: 40,
+	},
+	list: {
+		width: 250,
+	},
+	fullList: {
+		width: "auto",
+	},
+	iconButtonLabel: {
+		display: "flex",
+		flexDirection: "column",
+	},
+	appbar: {
+		backgroundColor: "#3F72AF",
+	},
 }));
 
 function MainPage(props) {
@@ -130,56 +129,57 @@ function MainPage(props) {
     // }
   }, []);
 
-  // material ui drawer
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-      return;
-    }
-    setState({ ...state, [anchor]: open });
-  };
+	// material ui drawer
+	const toggleDrawer = (anchor, open) => (event) => {
+		if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+			return;
+		}
+		setState({ ...state, [anchor]: open });
+	};
 
-  const list = (anchor) => (
-    <div
-      className={clsx(classes.list, {
-        [classes.fullList]: anchor === "top" || anchor === "bottom",
-      })}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {["Reservation", "Feed", "Profile", "Something"].map((text, index) => (
-          <ListItem button key={text} onClick={() => setDisplay(text)}>
-            <ListItemIcon>
-              {index === 0 ? (
-                <VideoCallIcon />
-              ) : index === 1 ? (
-                <DescriptionIcon />
-              ) : index === 2 ? (
-                <AccountCircleIcon />
-              ) : (
-                <ExitToAppIcon />
-              )}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["Logout"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              <ExitToAppIcon />
-              <AmplifySignOut />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+	const list = (anchor) => (
+		<div
+			className={clsx(classes.list, {
+				[classes.fullList]: anchor === "top" || anchor === "bottom",
+			})}
+			role="presentation"
+			onClick={toggleDrawer(anchor, false)}
+			onKeyDown={toggleDrawer(anchor, false)}
+		>
+			<List>
+				{[ "Reservation", "Feed", "Profile", "Something" ].map((text, index) => (
+					<ListItem button key={text} onClick={() => setDisplay(text)}>
+						<ListItemIcon>
+							{index === 0 ? (
+								<VideoCallIcon />
+							) : index === 1 ? (
+								<DescriptionIcon />
+							) : index === 2 ? (
+								<AccountCircleIcon />
+							) : (
+								<ExitToAppIcon />
+							)}
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
+				))}
+			</List>
+			<Divider />
+			<List>
+				{[ "Logout" ].map((text, index) => (
+					<ListItem button key={text}>
+						<ListItemIcon>
+							<ExitToAppIcon />
+							<AmplifySignOut />
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
+				))}
+			</List>
+		</div>
+	);
 
+<<<<<<< HEAD
   return (
     <div className="MainPage">
       <h1>Hello {user ? user.name : ""}!</h1>
@@ -197,16 +197,34 @@ function MainPage(props) {
           </Typography>
         </Toolbar>
       </AppBar>
+=======
+	return (
+		<div className="MainPage">
+			<h1>{JSON.stringify(user)}</h1>
+			<AppBar position="static" className={classes.appbar}>
+				<Toolbar>
+					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
+						<MenuIcon />
+					</IconButton>
+					<Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
+						{list("left")}
+					</Drawer>
+					<Typography variant="h6" className={classes.title}>
+						TELLaLIFE
+					</Typography>
+				</Toolbar>
+			</AppBar>
+>>>>>>> a71c3e23a854125e8e16c69902e86301178321b5
 
-      {display === "Reservation" ? (
-        <ReservationManagement user={user} setVideo={setVideo} video={video} />
-      ) : display === "Profile" ? (
-        <Profile user={user} />
-      ) : (
-        <Feed user={user} />
-      )}
-    </div>
-  );
+			{display === "Reservation" ? (
+				<ReservationManagement user={user} setVideo={setVideo} video={video} />
+			) : display === "Profile" ? (
+				<Profile user={user} />
+			) : (
+				<Feed user={user} />
+			)}
+		</div>
+	);
 }
 
 export default MainPage;
