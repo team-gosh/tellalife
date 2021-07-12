@@ -92,7 +92,7 @@
     "@aws-amplify/api-graphql" "2.0.5"
     "@aws-amplify/api-rest" "2.0.5"
 
-"@aws-amplify/auth@3.4.34", "@aws-amplify/auth@3.x.x":
+"@aws-amplify/auth@^3.4.34", "@aws-amplify/auth@3.4.34", "@aws-amplify/auth@3.x.x":
   "integrity" "sha512-6Q+QDjb3ljAh3PptLFpdZn1kXOsv1yAwyvBZdaKP8ZRmgj8yT7yeR3a2nczY7HTj9Vhr4DXqI3rB3YYToJemLQ=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/auth/-/auth-3.4.34.tgz"
   "version" "3.4.34"
