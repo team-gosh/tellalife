@@ -163,13 +163,13 @@ function Profile (props) {
       stripeAccount: "stripe Account data",
       isTeller: isTeller
     }
-    const updatedUser = (await API.graphql({
+    const response = (await API.graphql({
       query: mutations.updateUser,
       variables: { input: newData }
     }))
     console.log('updated user')
-    console.log(updatedUser)
-    setUser(updatedUser)
+    console.log(response.data.updateUser)
+    setUser(response.data.updateUser)
   }
 
 	// stripe
