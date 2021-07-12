@@ -192,7 +192,7 @@
     "zen-observable-ts" "0.8.19"
     "zen-push" "0.2.1"
 
-"@aws-amplify/interactions@3.x.x":
+"@aws-amplify/interactions@^3.3.34", "@aws-amplify/interactions@3.x.x":
   "integrity" "sha512-152FEwVqtfJ8rDi0VGzqL4CSu44QCiRTHpKyacWMPcxdC6E0DtVdzcNgo94fenpJIQi2LyKuN8UZvK+NnMDENg=="
   "resolved" "https://registry.npmjs.org/@aws-amplify/interactions/-/interactions-3.3.34.tgz"
   "version" "3.3.34"
