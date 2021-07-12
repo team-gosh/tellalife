@@ -155,7 +155,7 @@ function Profile (props) {
   const updateUser = async () => {
     const newData = {
       id: user.id,
-      name: user.name,
+      name: nickName,
       home_country: home,
       current_country: country,
       current_city: city,
@@ -163,10 +163,13 @@ function Profile (props) {
       stripeAccount: "stripe Account data",
       isTeller: isTeller
     }
-    const response = (await API.graphql({
+    const updatedUser = (await API.graphql({
       query: mutations.updateUser,
       variables: { input: newData }
-    })).data
+    }))
+    console.log('updated user')
+    console.log(updatedUser)
+    setUser(updatedUser)
   }
 
 	// stripe
