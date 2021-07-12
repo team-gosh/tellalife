@@ -33,9 +33,6 @@
         }
       ]
     },
-    "tellalifefc41e489": {
-      "dependsOn": []
-    },
     "tellalife9ec5a95b": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",

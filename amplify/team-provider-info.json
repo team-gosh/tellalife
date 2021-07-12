@@ -1,4 +1,23 @@
 {
+  "talback": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tellalife-talback-120302-authRole",
+      "UnauthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-talback-120302-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-talback-120302-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-tellalife-talback-120302-deployment",
+      "UnauthRoleName": "amplify-tellalife-talback-120302-unauthRole",
+      "StackName": "amplify-tellalife-talback-120302",
+      "StackId": "arn:aws:cloudformation:us-east-2:795712419446:stack/amplify-tellalife-talback-120302/ae06ce30-e2bd-11eb-a6ba-068aac37321e",
+      "AmplifyAppId": "d29bbs0f2rju24"
+    },
+    "categories": {
+      "auth": {
+        "tellalife9ec5a95b": {},
+        "userPoolGroups": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-tellalife-dev-123854-authRole",
@@ -27,24 +46,6 @@
     "categories": {
       "auth": {
         "tellalifefc41e489": {}
-      }
-    }
-  },
-  "talback": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-tellalife-talback-120302-authRole",
-      "UnauthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-talback-120302-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-talback-120302-authRole",
-      "Region": "us-east-2",
-      "DeploymentBucketName": "amplify-tellalife-talback-120302-deployment",
-      "UnauthRoleName": "amplify-tellalife-talback-120302-unauthRole",
-      "StackName": "amplify-tellalife-talback-120302",
-      "StackId": "arn:aws:cloudformation:us-east-2:795712419446:stack/amplify-tellalife-talback-120302/ae06ce30-e2bd-11eb-a6ba-068aac37321e",
-      "AmplifyAppId": "d29bbs0f2rju24"
-    },
-    "categories": {
-      "auth": {
-        "tellalife9ec5a95b": {}
       }
     }
   }
