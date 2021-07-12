@@ -1,11 +1,5 @@
 {
   "AppSyncApiName": "tellalife",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false,
-  "AuthCognitoUserPoolId": {
-    "Fn::GetAtt": [
-      "authtellalife9ec5a95b",
-      "Outputs.UserPoolId"
-    ]
-  }
+  "DynamoDBEnableServerSideEncryption": false
 }

@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "tellalife9ec5a95b_identitypool_9ec5a95b",
+    "identityPoolName": "testAuthIdentityPool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "tellal9ec5a95b",
-    "userPoolName": "tellalife9ec5a95b_userpool_9ec5a95b",
+    "resourceNameTruncated": "tellale117b5c7",
+    "userPoolName": "tellalife",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -12,27 +12,25 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Your verification code",
-    "emailVerificationMessage": "Your verification code is {####}",
+    "emailVerificationSubject": "Forgot password code: {####}",
+    "emailVerificationMessage": "Forgot password code: {####}",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
-    "passwordPolicyCharacters": [],
+    "passwordPolicyCharacters": [
+        "Requires Lowercase"
+    ],
     "requiredAttributes": [
         "email",
         "name"
     ],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
-    "userpoolClientWriteAttributes": [
-        "email"
-    ],
-    "userpoolClientReadAttributes": [
-        "email"
-    ],
-    "userpoolClientLambdaRole": "tellal9ec5a95b_userpoolclient_lambda_role",
+    "userpoolClientWriteAttributes": [],
+    "userpoolClientReadAttributes": [],
+    "userpoolClientLambdaRole": "tellale117b5c7_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "9ec5a95b",
-    "resourceName": "tellalife9ec5a95b",
+    "sharedId": "e117b5c7",
+    "resourceName": "tellalife",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -46,17 +44,16 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
-    "triggers": "{}",
-    "userPoolGroupList": [
-        "tellalifepool"
-    ],
     "serviceName": "Cognito",
+    "usernameAttributes": [
+        "email"
+    ],
+    "useDefault": "manual",
+    "userPoolGroups": false,
+    "userPoolGroupList": [],
+    "adminQueries": false,
+    "thirdPartyAuth": false,
+    "authProviders": [],
     "usernameCaseSensitive": false,
-    "parentStack": {
-        "Ref": "AWS::StackId"
-    },
-    "breakCircularDependency": true,
-    "permissions": [],
     "dependsOn": []
 }

@@ -6,9 +6,10 @@
       "output": {
         "authConfig": {
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authtellalife9ec5a95b"
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7,
+              "description": "tellkey"
             }
           },
           "additionalAuthenticationProviders": []
@@ -17,23 +18,7 @@
     }
   },
   "auth": {
-    "userPoolGroups": {
-      "service": "Cognito-UserPool-Groups",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "tellalife9ec5a95b",
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ]
-        }
-      ]
-    },
-    "tellalife9ec5a95b": {
+    "tellalife": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

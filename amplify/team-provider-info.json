@@ -13,8 +13,20 @@
     },
     "categories": {
       "auth": {
-        "tellalife9ec5a95b": {},
-        "userPoolGroups": {}
+        "tellalife86f8a525": {
+          "userPoolId": "us-east-2_sF38wJADZ",
+          "userPoolName": "tellalife-talback",
+          "webClientId": "3igt41bp1a9fvknv329d8duat7",
+          "nativeClientId": "3igt41bp1a9fvknv329d8duat7",
+          "identityPoolId": "us-east-2:b3eee02f-ab89-44b1-9557-dc6609bcb306",
+          "identityPoolName": "testAuthIdentityPool__talback",
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-talback-120302-authRole",
+          "authRoleName": "amplify-tellalife-talback-120302-authRole",
+          "unauthRoleArn": "arn:aws:iam::795712419446:role/amplify-tellalife-talback-120302-unauthRole",
+          "unauthRoleName": "amplify-tellalife-talback-120302-unauthRole"
+        },
+        "tellalife": {}
       }
     }
   },
