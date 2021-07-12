@@ -12,27 +12,7 @@ export const createUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          listenerIDs
-          tellerID
-          postID
-          content
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -71,27 +51,7 @@ export const updateUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          listenerIDs
-          tellerID
-          postID
-          content
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -130,27 +90,7 @@ export const deleteUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          listenerIDs
-          tellerID
-          postID
-          content
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -197,9 +137,7 @@ export const createPost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -238,9 +176,7 @@ export const updatePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -279,9 +215,7 @@ export const deletePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -317,38 +251,8 @@ export const createReservation = /* GraphQL */ `
       city
       title
       description
-      listenerIDs
+      userIDs
       tellerID
-      postID
-      post {
-        id
-        title
-        userID
-        dateTime
-        country
-        city
-        type
-        user {
-          id
-          name
-          username
-          email
-          home_country
-          isTeller
-          price
-          stripeAccount
-          current_country
-          current_city
-          createdAt
-          updatedAt
-        }
-        text
-        link
-        image
-        createdAt
-        updatedAt
-      }
-      content
       createdAt
       updatedAt
     }
@@ -370,38 +274,8 @@ export const updateReservation = /* GraphQL */ `
       city
       title
       description
-      listenerIDs
+      userIDs
       tellerID
-      postID
-      post {
-        id
-        title
-        userID
-        dateTime
-        country
-        city
-        type
-        user {
-          id
-          name
-          username
-          email
-          home_country
-          isTeller
-          price
-          stripeAccount
-          current_country
-          current_city
-          createdAt
-          updatedAt
-        }
-        text
-        link
-        image
-        createdAt
-        updatedAt
-      }
-      content
       createdAt
       updatedAt
     }
@@ -423,38 +297,8 @@ export const deleteReservation = /* GraphQL */ `
       city
       title
       description
-      listenerIDs
+      userIDs
       tellerID
-      postID
-      post {
-        id
-        title
-        userID
-        dateTime
-        country
-        city
-        type
-        user {
-          id
-          name
-          username
-          email
-          home_country
-          isTeller
-          price
-          stripeAccount
-          current_country
-          current_city
-          createdAt
-          updatedAt
-        }
-        text
-        link
-        image
-        createdAt
-        updatedAt
-      }
-      content
       createdAt
       updatedAt
     }

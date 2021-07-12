@@ -68,31 +68,39 @@ function MainPage(props) {
     // user authentication
   } = props;
   const [display, setDisplay] = useState("Feed");
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState();
   const [state, setState] = React.useState(false);
   const classes = useStyles();
 
   useEffect(async () => {
-    if (userAuth) {
+    // while (!user) {
+    console.log("before if 77")
+    console.log("user")
+    console.log(user)
+    if (userAuth && userAuth.attributes) {
+      console.log("after if 77")
       const userNameAndEmail = userAuth.attributes.email;
       const name = userAuth.attributes.name;
       try {
         // Try to get user from database
         const currentUser = await API.graphql({
-              query: queries.getUserByEmail,
-              variables: {
-                username: userNameAndEmail
-              }
-            });
+          query: queries.getUserByEmail,
+          variables: {
+            username: userNameAndEmail
+          }
+        });
 
-        console.log("currentUser");
-        console.log(currentUser)
-        console.log(currentUser.data.getUserByEmail.items.length)
+        // console.log("currentUser");
+        // console.log(currentUser)
+        // console.log(currentUser.data.getUserByEmail.items.length)
+        console.log('before if 94')
         if (currentUser.data.getUserByEmail.items.length) {
+          console.log('after if 94')
           // If user exists, set to user
-          setUser(currentUser.data.getUserByEmail.items[0]);
+          await setUser(currentUser.data.getUserByEmail.items[0]);
         }
         else {
+          console.log('after else 99')
           // If user doesn't exist, then create new user in database
           const newUserRegistrationData = {
             email: userNameAndEmail,
@@ -100,24 +108,26 @@ function MainPage(props) {
             name: name,
             isTeller: false
           };
-          await API.graphql({
+          const response = (await API.graphql({
             query: mutations.createUser,
-            variables: {input: newUserRegistrationData}
-          });
+            variables: { input: newUserRegistrationData }
+          })).data;
           // Retrieve new user data from database and set to user
-          const newUser = await API
-            .graphql({
-              query: queries.getUserByEmail,
-              variables: {
-                username: userNameAndEmail
-              }
-            });
-          setUser(newUser.data.getUserbyEmail.items[0]);
+          const newUser = await API.graphql({
+            query: queries.getUserByEmail,
+            variables: {
+              username: userNameAndEmail
+            }
+          });
+          await setUser(newUser.data.getUserByEmail.items[0]);
         }
+        console.log("after conditionals")
+        console.log(user)
       } catch (error) {
         console.error(error.message);
       }
     }
+    // }
   }, []);
 
   // material ui drawer
@@ -172,7 +182,8 @@ function MainPage(props) {
 
   return (
     <div className="MainPage">
-      <h1>{JSON.stringify(user)}</h1>
+      <h1>Hello {user ? user.name : ""}!</h1>
+      <h1>{JSON.stringify(state)}</h1>
       <AppBar position="static" className={classes.appbar}>
         <Toolbar>
           <IconButton onClick={toggleDrawer("left", true)} color="inherit">

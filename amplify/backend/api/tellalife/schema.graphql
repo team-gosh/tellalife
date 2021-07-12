@@ -6,7 +6,9 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
   username: String!
   email: String!
   home_country: String
-  reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
+  # reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
+  # reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
+  reservations: [String]
   # posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
   posts: [Post] @connection(keyName: "byUser", fields: ["id"])
   #change above keyname to byUser
@@ -37,7 +39,9 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 
 # Reservation Table
 # type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
-type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
+# type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
+type Reservation @model 
+@key(name: "hasReservation", fields: ["userIDs"]) {
   id: ID!
   # createdDateTime: String!
   startDateTime: String!
@@ -51,11 +55,11 @@ type Reservation @model @key(name: "hasReservation", fields: ["postID", "content
   city: String
   title: String
   description: String
-  listenerIDs: [String]! #subscription for this?
-  tellerID: String!
+  userIDs: [ID!]! #subscription for this?
+  tellerID: ID!
 
 
-  postID: ID!
-  post: Post @connection(fields: ["postID"])
-  content: String!
+  # postID: ID!
+  # post: Post @connection(fields: ["postID"])
+  # content: String!
 }
