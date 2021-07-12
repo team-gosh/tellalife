@@ -107,18 +107,20 @@ function MainPage(props) {
             name: name,
             isTeller: false
           };
-          const response = (await API.graphql({
+          const response = await API.graphql({
             query: mutations.createUser,
             variables: { input: newUserRegistrationData }
-          })).data;
-          // Retrieve new user data from database and set to user
-          const newUser = await API.graphql({
-            query: queries.getUserByEmail,
-            variables: {
-              username: userNameAndEmail
-            }
           });
-          await setUser(newUser.data.getUserByEmail.items[0]);
+          // Retrieve new user data from database and set to user
+          console.log("response");
+          console.log(response)
+          // const newUser = await API.graphql({
+          //   query: queries.getUserByEmail,
+          //   variables: {
+          //     username: userNameAndEmail
+          //   }
+          // });
+          setUser(response.data.createUser);
         }
         console.log("after conditionals")
         console.log(user)
@@ -127,7 +129,7 @@ function MainPage(props) {
       }
     }
     // }
-  }, []);
+  }, [userAuth]);
 
   // material ui drawer
   const toggleDrawer = (anchor, open) => (event) => {
