@@ -12,7 +12,7 @@ import faker from "faker";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    maxWidth: 500,
     margin: "auto"
   },
   media: {

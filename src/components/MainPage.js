@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Profile from "./Profile";
 import ReservationManagement from "./ReservationManagement";
+import Amplify, { API, graphqlOperation } from "aws-amplify";
+// import { GetUserByEmail } from '../graphql/queries';
+import * as queries from "../graphql/queries";
+import * as mutations from "../graphql/mutations";
 import Feed from "./Feed";
 import App from "../App";
 import CheckoutForm from "./CheckoutForm";
@@ -24,7 +28,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Amplify from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -57,6 +60,7 @@ function MainPage (props) {
 	const {
 		video,
 		setVideo,
+		userAuth,
 		AmplifySignOut,
 		Auth,
 		Amplify,
@@ -68,10 +72,50 @@ function MainPage (props) {
 	const classes = useStyles();
 
 	useEffect(async () => {
-		// const userData = (await axios.get(.......)).data
-		// setUser(userData)
-		// console.log(video);
-	});
+		if (userAuth) {
+			const userNameAndEmail = userAuth.attributes.email;
+			const name = userAuth.attributes.name;
+			try {
+				// Try to get user from database
+				const currentUser = await API.graphql({
+					query: queries.getUserByEmail,
+					variables: {
+						username: userNameAndEmail,
+					},
+				});
+
+				console.log("currentUser");
+				console.log(currentUser);
+				console.log(currentUser.data.getUserByEmail.items.length);
+				if (currentUser.data.getUserByEmail.items.length) {
+					// If user exists, set to user
+					setUser(currentUser.data.getUserByEmail.items[0]);
+				} else {
+					// If user doesn't exist, then create new user in database
+					const newUserRegistrationData = {
+						email: userNameAndEmail,
+						username: userNameAndEmail,
+						name: name,
+						isTeller: false,
+					};
+					await API.graphql({
+						query: mutations.createUser,
+						variables: { input: newUserRegistrationData },
+					});
+					// Retrieve new user data from database and set to user
+					const newUser = await API.graphql({
+						query: queries.getUserByEmail,
+						variables: {
+							username: userNameAndEmail,
+						},
+					});
+					setUser(newUser.data.getUserbyEmail.items[0]);
+				}
+			} catch (error) {
+				console.error(error.message);
+			}
+		}
+	}, []);
 
 	// material ui drawer
 	const toggleDrawer = (anchor, open) => (event) => {
@@ -125,6 +169,7 @@ function MainPage (props) {
 
 	return (
 		<div className="MainPage">
+			<h1>{JSON.stringify(user)}</h1>
 			<AppBar position="static" className={classes.appbar}>
 				<Toolbar>
 					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
