@@ -23,14 +23,22 @@ const useStyles = makeStyles((theme) => ({
 			margin: theme.spacing(1),
 		},
 		justifyContent: "space-around",
-		flexDirection: "row",
-		alignItems: "flex-start",
+		flexDirection: "column",
+		[theme.breakpoints.up("md")]: {
+			flexDirection: "row",
+			alignItems: "flex-start",
+		},
+		alignItems: "center",
 		marginTop: 10,
 	},
 	large: {
 		width: theme.spacing(20),
 		height: theme.spacing(20),
-		backgroundColor: deepOrange[500],
+		backgroundColor: deepOrange[700],
+		[theme.breakpoints.up("md")]: {
+			width: theme.spacing(30),
+			height: theme.spacing(30),
+		},
 	},
 	username: {
 		fontSize: 15,
@@ -41,8 +49,12 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: 40,
 	},
 	edit: {
-		fontSize: 40,
-		width: 240,
+		fontSize: 30,
+		width: 200,
+		[theme.breakpoints.up("md")]: {
+			fontSize: 40,
+			width: 240,
+		},
 	},
 	info: {
 		justifyContent: "space-around",
@@ -56,7 +68,10 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	margin: {
-		marginTop: 42,
+		marginTop: 20,
+		[theme.breakpoints.up("md")]: {
+			marginTop: 42,
+		},
 	},
 	priceLabel: {
 		textAlign: "left",
@@ -76,13 +91,7 @@ const cities = {
 
 function Profile (props) {
 	const classes = useStyles();
-	const {
-    user,
-    setUser,
-    API,
-    queries,
-    mutations
-  } = props;
+	const { user, setUser, API, queries, mutations } = props;
 
 	// Connect with DB
 	const [ nickName, setNickName ] = React.useState(user.name);
@@ -152,25 +161,25 @@ function Profile (props) {
 		setNickName(event.target.value);
 	};
 
-  const updateUser = async () => {
-    const newData = {
-      id: user.id,
-      name: nickName,
-      home_country: home,
-      current_country: country,
-      current_city: city,
-      price: value,
-      stripeAccount: "stripe Account data",
-      isTeller: isTeller
-    }
-    const response = (await API.graphql({
-      query: mutations.updateUser,
-      variables: { input: newData }
-    }))
-    console.log('updated user')
-    console.log(response.data.updateUser)
-    setUser(response.data.updateUser)
-  }
+	const updateUser = async () => {
+		const newData = {
+			id: user.id,
+			name: nickName,
+			home_country: home,
+			current_country: country,
+			current_city: city,
+			price: value,
+			stripeAccount: "stripe Account data",
+			isTeller: isTeller,
+		};
+		const response = await API.graphql({
+			query: mutations.updateUser,
+			variables: { input: newData },
+		});
+		console.log("updated user");
+		console.log(response.data.updateUser);
+		setUser(response.data.updateUser);
+	};
 
 	// stripe
 	// create express account
@@ -282,14 +291,15 @@ function Profile (props) {
 								value={city}
 								onChange={handleCurrentCityChange}
 							>
-								{country 
-                ? cities[country].map((option) => (
-									<MenuItem key={option} value={option}>
-										{option}
-									</MenuItem>
-								 ))
-                : <MenuItem />
-                }
+								{country ? (
+									cities[country].map((option) => (
+										<MenuItem key={option} value={option}>
+											{option}
+										</MenuItem>
+									))
+								) : (
+									<MenuItem />
+								)}
 							</TextField>
 						</div>
 
@@ -327,7 +337,7 @@ function Profile (props) {
 								value !== 0 ? (
 									() => {
 										console.log("go to stripe");
-                    updateUser()
+										updateUser();
 									}
 								) : (
 									() => {

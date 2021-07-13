@@ -60,8 +60,18 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
   userIDs: [User!]! @connection(name: "reservationToUsers") #subscription for this?
   tellerID: User!
 
+	# postID: ID!
+	# post: Post @connection(fields: ["postID"])
+	# content: String!
+}
 
-  # postID: ID!
-  # post: Post @connection(fields: ["postID"])
-  # content: String!
+# Twilio Video Generator
+input VideoInput {
+	id: String!
+	identity: String!
+	room: String!
+}
+
+type Mutation {
+	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken-${env}")
 }

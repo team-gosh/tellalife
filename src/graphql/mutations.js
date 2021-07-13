@@ -1,6 +1,11 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const generateVideoToken = /* GraphQL */ `
+  mutation GenerateVideoToken($input: VideoInput!) {
+    generateVideoToken(input: $input)
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!

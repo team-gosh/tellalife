@@ -24,5 +24,12 @@
       "dependsOn": [],
       "customAuth": false
     }
+  },
+  "function": {
+    "createVideoToken": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
   }
 }
