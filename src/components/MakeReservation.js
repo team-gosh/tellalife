@@ -16,6 +16,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import AlertDialog from "./AlertDialog";
 
+
+
+
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -117,7 +120,7 @@ function MakeReservation(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <AlertDialog setOpen={setOpen} />
+          <AlertDialog setOpen={setOpen} user={user} date={date}/>
         </DialogActions>
       </Dialog>
     </div>
