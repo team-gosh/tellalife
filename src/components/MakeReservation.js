@@ -7,17 +7,12 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 
 import { makeStyles } from "@material-ui/core/styles";
 
 import AlertDialog from "./AlertDialog";
-
-
-
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -35,12 +30,9 @@ function MakeReservation(props) {
   const { user } = props;
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState("");
+  const [duration, setDuration] = useState("");
 
   const classes = useStyles();
-  const [duration, setDuration] = useState({
-    age: "",
-    name: "hai"
-  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -50,13 +42,13 @@ function MakeReservation(props) {
     setOpen(false);
   };
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    setDuration({
-      ...duration,
-      [name]: event.target.value
-    });
-  };
+  // const handleChange = (event) => {
+  //   const name = event.target.name;
+  //   setDuration({
+  //     ...duration,
+  //     [name]: event.target.value
+  //   });
+  // };
 
   return (
     <div>
@@ -99,8 +91,8 @@ function MakeReservation(props) {
                 Duration
               </InputLabel>
               <NativeSelect
-                value={duration.age}
-                onChange={handleChange}
+                value={duration}
+                onChange={(event) => setDuration(event.target.value)}
                 inputProps={{
                   name: "age",
                   id: "age-native-label-placeholder"
@@ -120,7 +112,7 @@ function MakeReservation(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <AlertDialog setOpen={setOpen} user={user} date={date}/>
+          <AlertDialog setOpen={setOpen} />
         </DialogActions>
       </Dialog>
     </div>
