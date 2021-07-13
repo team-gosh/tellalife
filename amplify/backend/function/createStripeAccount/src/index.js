@@ -1,3 +1,5 @@
+const { AccountBalance } = require("@material-ui/icons");
+
 const secretKey = process.env.REACT_APP_STRIPE_API_SECRET;
 const stripe = require("stripe")(secretKey);
 
@@ -13,5 +15,7 @@ exports.handler = async function (event, context, callback) {
 		type: "account_onboarding",
 	});
 
-	return accountLink.url;
+	account.url = accountLink.url;
+
+	return JSON.stringify(account);
 };

@@ -113,7 +113,7 @@ function MainPage (props) {
 					setUser(response.data.createUser);
 				}
 				console.log("after conditionals");
-				console.log(user);
+				console.log(user, 'this is because the react thing');
 			} catch (error) {
 				console.error(error.message);
 			}

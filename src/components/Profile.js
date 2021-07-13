@@ -77,6 +77,9 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: "left",
 		fontSize: 12,
 	},
+	stripeNotice: {
+		fontSize: 10,
+	},
 }));
 
 // get from APIs
@@ -102,6 +105,7 @@ function Profile (props) {
 	const [ nameEditing, setNameEdit ] = React.useState(false);
 	const [ registration, setRegistration ] = React.useState(false);
 	const [ error, setError ] = React.useState("");
+	const [ stripeObj, setStripeObj ] = React.useState({});
 
 	// From DB
 	const [ isTeller, setTeller ] = React.useState(false);
@@ -169,9 +173,11 @@ function Profile (props) {
 			current_country: country,
 			current_city: city,
 			price: value,
-			stripeAccount: "stripe Account data",
-			isTeller: isTeller,
+			stripeAccount: stripeObj.id,
+			isTeller: true,
 		};
+		// logic to handle to timeout!!!!
+
 		const response = await API.graphql({
 			query: mutations.updateUser,
 			variables: { input: newData },
@@ -219,8 +225,13 @@ function Profile (props) {
 				},
 			},
 		});
-		console.log(response.data.createStripeAccount);
-		window.location = response.data.createStripeAccount;
+		const stripeUser = response.data.createStripeAccount;
+		const jsonUser = JSON.parse(stripeUser);
+		setStripeObj(jsonUser);
+		console.log(jsonUser);
+		console.log(jsonUser.url);
+		window.open(jsonUser.url, "_blank");
+		console.log(stripeObj);
 	};
 
 	return (
@@ -350,7 +361,6 @@ function Profile (props) {
 							onClick={
 								value !== 0 ? (
 									() => {
-										console.log("go to stripe");
 										createUser();
 										updateUser();
 									}
@@ -364,6 +374,7 @@ function Profile (props) {
 							Continue
 						</Button>
 						<br />
+
 						<Button
 							size="medium"
 							variant="outlined"
@@ -384,6 +395,13 @@ function Profile (props) {
 					>
 						Register
 					</Button>
+				)}
+				{stripeObj.url ? (
+					<span className={classes.stripeNotice}>
+						Please access here to register <a href={stripeObj.url}>Go to Stripe</a>
+					</span>
+				) : (
+					<span />
 				)}
 				<br />
 			</div>
