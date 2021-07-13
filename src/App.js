@@ -80,14 +80,6 @@ function App () {
 		// Need to find better solution
 		authState === AuthState.SignedIn && userAuth && userAuth.attributes ? (
 			<div className="App">
-				{/* < Stripe /> */}
-				{/* <a href="#" className="stripe-connect">
-				<span>Connect with</span>
-			</a> */}
-				<button onClick={createAccount}>CreateAccount</button>
-				<button onClick={setLink}>Link</button>
-				<button onClick={paymentIntent}>PaymentIntent</button>
-				<button onClick={getSecret}>Secret</button>
 
 				{video.isActive ? (
 					<VideoChat

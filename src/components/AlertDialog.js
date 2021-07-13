@@ -27,7 +27,7 @@ export default function AlertDialog(props) {
       status: "pending", 
       tellerID: teller.id,
       type: "pair",
-      userIDs: [user.id]
+      userIDs: user.id
     }
     const response = await API.graphql({
       query: mutations.createReservation,

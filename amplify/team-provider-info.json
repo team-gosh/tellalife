@@ -39,7 +39,7 @@
         },
         "createStripeAccount": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",
-          "s3Key": "amplify-builds/createStripeAccount-43756c51586165462b56-build.zip"
+          "s3Key": "amplify-builds/createStripeAccount-70754f504d726f4e3039-build.zip"
         }
       }
     }
