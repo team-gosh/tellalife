@@ -36,25 +36,12 @@ const getVideo = () => {
 
 exports.handler = async (event, context, callback) => {
 	const videoToken = getVideo();
-	console.log(event, "this is event in lambda func");
-	const token = videoToken(event.identity, event.room, generateToken());
+	console.log(event.arguments.input, "this is event in lambda func");
+	const token = videoToken(event.arguments.input.identity, event.arguments.input.room, generateToken());
 
 	const jwtToken = { token: token.toJwt() };
 
-	const test =
-		// const response = {
-		// 	statusCode: 200,
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 		"Access-Control-Allow-Headers": "Content-Type",
-		// 		"Access-Control-Allow-Origin": "*",
-		// 		"Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-		// 	},
-		// 	body: JSON.stringify(jwtToken),
-		// 	isBase64Encoded: false,
-		// };
+	
 
-		// console.log(response);
-
-		callback(null, jwtToken.token);
+	callback(null, jwtToken.token);
 };
