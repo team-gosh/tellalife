@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Posts from "./Posts";
 import Input from "./Input";
+import Posting from "./Posting";
 
 function Feed(props) {
   const { user } = props;
@@ -10,7 +11,8 @@ function Feed(props) {
     <div className="Feed">
       {/* <h1>Feed</h1> */}
       <div className="filter">
-        <h2>Filter</h2>
+        {/* <h2>Filter</h2> */}
+        <Posting />
       </div>
       {/* <Posts filter={filter} /> */}
       <Input />
