@@ -209,6 +209,20 @@ function Profile (props) {
 		console.log(clientSecret);
 	};
 
+	const createUser = async () => {
+		// need to change later
+		const response = await API.graphql({
+			query: mutations.createStripeAccount,
+			variables: {
+				input: {
+					type: "express",
+				},
+			},
+		});
+		console.log(response.data.createStripeAccount);
+		window.location = response.data.createStripeAccount;
+	};
+
 	return (
 		<div className={classes.root}>
 			<div className={classes.info}>
@@ -337,6 +351,7 @@ function Profile (props) {
 								value !== 0 ? (
 									() => {
 										console.log("go to stripe");
+										createUser();
 										updateUser();
 									}
 								) : (

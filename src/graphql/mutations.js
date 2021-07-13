@@ -6,6 +6,11 @@ export const generateVideoToken = /* GraphQL */ `
     generateVideoToken(input: $input)
   }
 `;
+export const createStripeAccount = /* GraphQL */ `
+  mutation CreateStripeAccount($input: AccountType!) {
+    createStripeAccount(input: $input)
+  }
+`;
 export const processOrder = /* GraphQL */ `
   mutation ProcessOrder($input: PaymentIntent!) {
     processOrder(input: $input)

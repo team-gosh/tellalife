@@ -73,18 +73,18 @@ input PaymentIntent {
 	stripeAccount: String!
 }
 
-enum TokenStatus {
-	SUCCESS
-	FAILED
-}
-
 input VideoInput {
 	id: ID!
 	identity: String!
 	room: String!
 }
 
+input AccountType {
+	type: String!
+}
+
 type Mutation {
-	generateVideoToken(input: VideoInput!): TokenStatus @function(name: "createVideoToken")
+	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken")
+	createStripeAccount(input: AccountType!): String @function(name: "createStripeAccount")
 	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
 }
