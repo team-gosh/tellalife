@@ -4,6 +4,10 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+import { API } from "aws-amplify";
+import * as queries from "../graphql/queries";
+import * as mutations from "../graphql/mutations";
+
 export default function AlertDialog(props) {
   const { setOpen } = props;
   const [dialog, setDialog] = useState(false);
