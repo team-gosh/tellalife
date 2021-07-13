@@ -89,7 +89,8 @@ function MainPage (props) {
 						username: userNameAndEmail,
 					},
 				});
-
+        console.log("main page current user")
+        console.log(currentUser)
 				if (currentUser.data.getUserByEmail.items.length) {
 					console.log("after if 94 (user exists)");
 					// If user exists, set to user
@@ -120,6 +121,7 @@ function MainPage (props) {
 		}
 		// }
 	}, []);
+
 
 	// //test
 
@@ -196,7 +198,7 @@ function MainPage (props) {
 			</List>
 		</div>
 	);
-
+  console.log(user)
 	return (
 		<div className="MainPage">
 			<h1>Hello {user ? user.name : ""}!</h1>
