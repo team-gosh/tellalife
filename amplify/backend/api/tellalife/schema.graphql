@@ -6,8 +6,8 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
   username: String!
   email: String!
   home_country: String
-  # reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-  reservations: [Reservation] @connection(name: "userToReservations") # subscription for this?
+  reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
+  # reservations: [Reservation] @connection(name: "userToReservations") # subscription for this?
   # reservations: [ID]
   # reservations: [String]
   # posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
@@ -39,18 +39,16 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 }
 
 # Reservation Table
-# type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
 # type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
 type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 # type Reservation @model {
-# @key(name: "hasReservation", fields: ["userIDs"]) {
   id: ID! @connection(name: "userToReservations")
   # createdDateTime: String!
   startDateTime: String!
   duration: Float!
   price: Float!
-  status: String!
-  type: String! #subscription for this?
+  status: String! #subscription for this?
+  # type: String! #subscription for this?
   # country: String!
   # city: String!
   country: String
@@ -58,6 +56,7 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
   title: String
   description: String
   userIDs: [User!]! @connection(name: "reservationToUsers") #subscription for this?
+  # userIDs: [User!]!
   tellerID: User!
 
 	# postID: ID!
