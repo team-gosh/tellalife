@@ -131,9 +131,12 @@ function Reservation (props) {
 								variant="outlined"
 								color="primary"
 								onClick={(e) => {
-									const newVideo = {};
-									newVideo.isActive = true;
-									newVideo.username = newVideo.roomName = setVideo(newVideo); //user.username; //e.target.id
+									const newVideo = {
+										isActive: true,
+										username: user.username,
+										roomName: "pluto", // need to pass later
+									};
+									setVideo(newVideo);
 								}}
 							>
 								Go to video chat

@@ -9,6 +9,7 @@ import * as mutations from "../graphql/mutations";
 import Feed from "./Feed";
 import App from "../App";
 import CheckoutForm from "./CheckoutForm";
+import { Auth, Hub } from "aws-amplify";
 
 //material ui
 import Drawer from "@material-ui/core/Drawer";
@@ -30,190 +31,200 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    color: "#F9F7F7",
-    fontSize: 40,
-  },
-  list: {
-    width: 250,
-  },
-  fullList: {
-    width: "auto",
-  },
-  iconButtonLabel: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  appbar: {
-    backgroundColor: "#3F72AF",
-  },
+	root: {
+		flexGrow: 1,
+	},
+	menuButton: {
+		marginRight: theme.spacing(2),
+	},
+	title: {
+		flexGrow: 1,
+		color: "#F9F7F7",
+		fontSize: 40,
+	},
+	list: {
+		width: 250,
+	},
+	fullList: {
+		width: "auto",
+	},
+	iconButtonLabel: {
+		display: "flex",
+		flexDirection: "column",
+	},
+	appbar: {
+		backgroundColor: "#3F72AF",
+	},
 }));
 
-function MainPage(props) {
-  const {
-    video,
-    setVideo,
-    userAuth,
-    AmplifySignOut,
-    Auth,
-    Amplify,
-    // user authentication
-  } = props;
-  const [display, setDisplay] = useState("Feed");
-  const [user, setUser] = useState();
-  const [state, setState] = React.useState(false);
-  const classes = useStyles();
+function MainPage (props) {
+	const {
+		video,
+		setVideo,
+		userAuth,
+		AmplifySignOut,
+		Auth,
+		Amplify,
+		// user authentication
+	} = props;
+	const [ display, setDisplay ] = useState("Feed");
+	const [ user, setUser ] = useState();
+	const [ state, setState ] = React.useState(false);
+	const classes = useStyles();
 
-  useEffect(async () => {
-    // while (!user) {
-    console.log("before if 77")
-    console.log("user")
-    console.log(user)
-    if (userAuth && userAuth.attributes) {
-      console.log("after if 77")
-      const userNameAndEmail = userAuth.attributes.email;
-      const name = userAuth.attributes.name;
-      try {
-        // Try to get user from database
-        const currentUser = await API.graphql({
-          query: queries.getUserByEmail,
-          variables: {
-            username: userNameAndEmail
-          }
-        });
+	useEffect(
+		async () => {
+			// while (!user) {
+			console.log("before if 77");
+			console.log("user");
+			console.log(user);
+			if (userAuth && userAuth.attributes) {
+				console.log("after if 77");
+				const userNameAndEmail = userAuth.attributes.email;
+				const name = userAuth.attributes.name;
+				try {
+					// Try to get user from database
+					const currentUser = await API.graphql({
+						query: queries.getUserByEmail,
+						variables: {
+							username: userNameAndEmail,
+						},
+					});
 
-        // console.log("currentUser");
-        // console.log(currentUser)
-        // console.log(currentUser.data.getUserByEmail.items.length)
-        console.log('before if 94')
-        if (currentUser.data.getUserByEmail.items.length) {
-          console.log('after if 94')
-          // If user exists, set to user
-          await setUser(currentUser.data.getUserByEmail.items[0]);
-        }
-        else {
-          console.log('after else 99')
-          // If user doesn't exist, then create new user in database
-          const newUserRegistrationData = {
-            email: userNameAndEmail,
-            username: userNameAndEmail,
-            name: name,
-            isTeller: false
-          };
-          const response = await API.graphql({
-            query: mutations.createUser,
-            variables: { input: newUserRegistrationData }
-          });
-          // Retrieve new user data from database and set to user
-          console.log("response");
-          console.log(response)
-          // const newUser = await API.graphql({
-          //   query: queries.getUserByEmail,
-          //   variables: {
-          //     username: userNameAndEmail
-          //   }
-          // });
-          setUser(response.data.createUser);
-        }
-        console.log("after conditionals")
-        console.log(user)
-      } catch (error) {
-        console.error(error.message);
-      }
-    }
-    // }
-  }, [userAuth]);
+					// console.log("currentUser");
+					// console.log(currentUser)
+					// console.log(currentUser.data.getUserByEmail.items.length)
+					console.log("before if 94");
+					if (currentUser.data.getUserByEmail.items.length) {
+						console.log("after if 94");
+						// If user exists, set to user
+						await setUser(currentUser.data.getUserByEmail.items[0]);
+					} else {
+						console.log("after else 99");
+						// If user doesn't exist, then create new user in database
+						const newUserRegistrationData = {
+							email: userNameAndEmail,
+							username: userNameAndEmail,
+							name: name,
+							isTeller: false,
+						};
+						const response = await API.graphql({
+							query: mutations.createUser,
+							variables: { input: newUserRegistrationData },
+						});
+						// Retrieve new user data from database and set to user
+						console.log("response");
+						console.log(response);
+						// const newUser = await API.graphql({
+						//   query: queries.getUserByEmail,
+						//   variables: {
+						//     username: userNameAndEmail
+						//   }
+						// });
+						setUser(response.data.createUser);
+					}
+					console.log("after conditionals");
+					console.log(user);
+				} catch (error) {
+					console.error(error.message);
+				}
+			}
+			// }
+		},
+		[ userAuth ]
+	);
 
-  // material ui drawer
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-      return;
-    }
-    setState({ ...state, [anchor]: open });
-  };
+	// material ui drawer
+	const toggleDrawer = (anchor, open) => (event) => {
+		if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+			return;
+		}
+		setState({ ...state, [anchor]: open });
+	};
 
-  const list = (anchor) => (
-    <div
-      className={clsx(classes.list, {
-        [classes.fullList]: anchor === "top" || anchor === "bottom",
-      })}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {["Reservation", "Feed", "Profile", "Something"].map((text, index) => (
-          <ListItem button key={text} onClick={() => setDisplay(text)}>
-            <ListItemIcon>
-              {index === 0 ? (
-                <VideoCallIcon />
-              ) : index === 1 ? (
-                <DescriptionIcon />
-              ) : index === 2 ? (
-                <AccountCircleIcon />
-              ) : (
-                <ExitToAppIcon />
-              )}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["Logout"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              <ExitToAppIcon />
-              <AmplifySignOut />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+	// signout button
+	const handleSignOutButtonClick = async () => {
+		try {
+			await Auth.signOut();
+			Hub.dispatch("UI Auth", {
+				// channel must be 'UI Auth'
+				event: "AuthStateChange", 
+				message: "signedout",
+			});
+		} catch (error) {
+			console.log("error signing out: ", error);
+		}
+	};
 
-  return (
-    <div className="MainPage">
-      <h1>Hello {user ? user.name : ""}!</h1>
-      <h1>{JSON.stringify(state)}</h1>
-      <AppBar position="static" className={classes.appbar}>
-        <Toolbar>
-          <IconButton onClick={toggleDrawer("left", true)} color="inherit">
-            <MenuIcon />
-          </IconButton>
-          <Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
-            {list("left")}
-          </Drawer>
-          <Typography variant="h6" className={classes.title}>
-            TELLaLIFE
-          </Typography>
-        </Toolbar>
-      </AppBar>
+	const list = (anchor) => (
+		<div
+			className={clsx(classes.list, {
+				[classes.fullList]: anchor === "top" || anchor === "bottom",
+			})}
+			role="presentation"
+			onClick={toggleDrawer(anchor, false)}
+			onKeyDown={toggleDrawer(anchor, false)}
+		>
+			<List>
+				{[ "Reservation", "Feed", "Profile", "Something" ].map((text, index) => (
+					<ListItem button key={text} onClick={() => setDisplay(text)}>
+						<ListItemIcon>
+							{index === 0 ? (
+								<VideoCallIcon />
+							) : index === 1 ? (
+								<DescriptionIcon />
+							) : index === 2 ? (
+								<AccountCircleIcon />
+							) : (
+								<ExitToAppIcon />
+							)}
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
+				))}
+			</List>
+			<Divider />
+			<List>
+				{[ "Logout" ].map((text, index) => (
+					<ListItem button key={text} onClick={handleSignOutButtonClick}>
+						<ListItemIcon>
+							<ExitToAppIcon />
+							{/* <AmplifySignOut /> */}
+						</ListItemIcon>
+						<ListItemText primary={text} />
+					</ListItem>
+				))}
+			</List>
+		</div>
+	);
 
-      {display === "Reservation" ? (
-        <ReservationManagement user={user} setVideo={setVideo} video={video} />
-      ) : display === "Profile" ? (
-        <Profile
-          user={user}
-          setUser={setUser}
-          API={API}
-          queries={queries}
-          mutations={mutations}
-        />
-      ) : (
-        <Feed user={user} />
-      )}
-    </div>
-  );
+	return (
+		<div className="MainPage">
+			<h1>Hello {user ? user.name : ""}!</h1>
+			<h1>{JSON.stringify(state)}</h1>
+			<AppBar position="static" className={classes.appbar}>
+				<Toolbar>
+					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
+						<MenuIcon />
+					</IconButton>
+					<Drawer anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
+						{list("left")}
+					</Drawer>
+					<Typography variant="h6" className={classes.title}>
+						TELLaLIFE
+					</Typography>
+				</Toolbar>
+			</AppBar>
+
+			{display === "Reservation" ? (
+				<ReservationManagement user={user} setVideo={setVideo} video={video} />
+			) : display === "Profile" ? (
+				<Profile user={user} setUser={setUser} API={API} queries={queries} mutations={mutations} />
+			) : (
+				<Feed user={user} />
+			)}
+		</div>
+	);
 }
 
 export default MainPage;
