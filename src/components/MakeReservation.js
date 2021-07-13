@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 function MakeReservation(props) {
   const { user } = props;
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState("");
+  const [data, setDate] = useState("");
 
   const classes = useStyles();
 

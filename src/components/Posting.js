@@ -15,7 +15,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Posting(props) {
-  const { user } = props;
+  const {
+    user,
+    API,
+    mutations
+  } = props;
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
@@ -49,7 +53,7 @@ function Posting(props) {
             To subscribe to this website, please enter title and text here.
           </DialogContentText>
           <TextField
-            id="filled-full-width"
+            id="filled-full-width-2"
             label="Title"
             placeholder="Title"
             fullWidth
@@ -100,15 +104,24 @@ function Posting(props) {
           <Button
             color="primary"
             disabled={disable}
-            onClick={() => {
+            onClick={async () => {
               handleClose();
               setDisable(true);
-              obj["userID"] = user.id;
+              obj["userID"] = String(user.id);
               obj["type"] = "post";
               obj["title"] = title;
               obj["text"] = text;
+              obj["city"] = user.current_city;
+              obj["country"] = user.current_country;
+              obj["dateTime"] = String((new Date()).getTime());
+
               setTitle("");
               setText("");
+              const response = await API.graphql({
+                query: mutations.createPost,
+                variables: { input: obj },
+              })
+              console.log(response)
               console.log(obj);
               console.log(user);
             }}

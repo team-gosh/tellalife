@@ -64,7 +64,7 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 	tellerID: ID!
 	# postID: ID!
 	# post: Post @connection(fields: ["postID"])
-	# content: String!
+	# content: String!  
 }
 
 # Twilio Video Generator
