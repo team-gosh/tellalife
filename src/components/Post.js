@@ -2,24 +2,16 @@ import React, { useState, useEffect } from "react";
 import MakeReservation from "./MakeReservation";
 
 function Post (props) {
-	const { data, user } = props;
+	const { postData, user } = props;
 	console.log("in Post");
-	console.log(data);
+	console.log(postData);
 	console.log(user);
 
 	return (
 		<div>
-			<h3>{data.title}</h3>
-<<<<<<< HEAD
-			<p>{data.text}</p>
-			{user && data.userID === user.id ? <div /> : <MakeReservation user={data.user} />}
-=======
-      <p>{data.text}</p>
-      {user && data.userID === user.id 
-        ? <div></div>
-        : <MakeReservation user={data.user} />
-      }
->>>>>>> be50ff5bff9766ee3989b87869d582252499817f
+			<h3>{postData.title}</h3>
+			<p>{postData.text}</p>
+			{user && postData.userID === user.id ? <div /> : <MakeReservation teller={postData.user} user={user} />}
 		</div>
 	);
 }

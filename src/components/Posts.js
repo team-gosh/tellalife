@@ -17,7 +17,7 @@ function Posts(props) {
 
   return (
     <div className='Posts'>
-      {posts.map(data => <Post data={data} user={user}/>)}
+      {posts.map(postData => <Post postData={postData} user={user}/>)}
     </div>
   )
 

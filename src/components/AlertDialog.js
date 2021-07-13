@@ -9,11 +9,31 @@ import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 
 export default function AlertDialog(props) {
-  const { setOpen } = props;
+  const { 
+    setOpen,
+    teller,
+    date,
+    user,
+    duration
+  } = props;
   const [dialog, setDialog] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = async () => {
     setDialog(true);
+    const newReservation = {
+      duration: Number(duration),
+      price: Number(duration) / 30 * Number(teller.price),
+      startDateTime: String(date),
+      status: "pending", 
+      tellerID: teller.id,
+      type: "pair",
+      userIDs: [user.id]
+    }
+    const response = await API.graphql({
+      query: mutations.createReservation,
+      variables: {input: newReservation},
+    });
+    console.log(response)
   };
 
   const handleClose = () => {

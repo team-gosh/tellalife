@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MakeReservation(props) {
-  const { user } = props;
+  const { teller, user } = props;
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState("");
   const [duration, setDuration] = useState("");
@@ -112,7 +112,7 @@ function MakeReservation(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <AlertDialog setOpen={setOpen} />
+          <AlertDialog setOpen={setOpen} teller={teller} date={date} user={user} duration={duration}/>
         </DialogActions>
       </Dialog>
     </div>
