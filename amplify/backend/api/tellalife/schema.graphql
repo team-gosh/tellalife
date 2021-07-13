@@ -7,7 +7,8 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
 	email: String!
 	home_country: String
 	# reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-	reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
+	# reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
+	reservations: [ID]
 	# reservations: [String]
 	# posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
 	posts: [Post] @connection(keyName: "byUser", fields: ["id"])
@@ -41,12 +42,12 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 # type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
 # type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
 # type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
-type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
+type Reservation @model {
 	id: ID!
 	# createdDateTime: String!
 	startDateTime: String!
-	duration: Float!
-	price: Float!
+	duration: Int!
+	price: Int!
 	status: String!
 	type: String! #subscription for this?
 	# country: String!
