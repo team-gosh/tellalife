@@ -6,6 +6,12 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 import AlertDialog from "./AlertDialog";
@@ -25,9 +31,13 @@ const useStyles = makeStyles((theme) => ({
 function MakeReservation(props) {
   const { user } = props;
   const [open, setOpen] = useState(false);
-  const [data, setDate] = useState("");
+  const [date, setDate] = useState("");
 
   const classes = useStyles();
+  const [duration, setDuration] = useState({
+    age: "",
+    name: "hai"
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -35,6 +45,14 @@ function MakeReservation(props) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    setDuration({
+      ...duration,
+      [name]: event.target.value
+    });
   };
 
   return (
@@ -73,6 +91,29 @@ function MakeReservation(props) {
                 setDate(millisecond);
               }}
             />
+            <FormControl className={classes.formControl}>
+              <InputLabel shrink htmlFor="age-native-label-placeholder">
+                Duration
+              </InputLabel>
+              <NativeSelect
+                value={duration.age}
+                onChange={handleChange}
+                inputProps={{
+                  name: "age",
+                  id: "age-native-label-placeholder"
+                }}
+              >
+                <option value="">None</option>
+                <option value={30}>30 min</option>
+                <option value={60}>60 min</option>
+                <option value={90}>90 min</option>
+                <option value={120}>120 min</option>
+                <option value={150}>150 min</option>
+                <option value={180}>180 min</option>
+                <option value={210}>210 min</option>
+                <option value={240}>240 min</option>
+              </NativeSelect>
+            </FormControl>
           </form>
         </DialogContent>
         <DialogActions>
