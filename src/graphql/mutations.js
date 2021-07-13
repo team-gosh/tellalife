@@ -27,25 +27,7 @@ export const createUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          userIDs
-          tellerID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -84,25 +66,7 @@ export const updateUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          userIDs
-          tellerID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -141,25 +105,7 @@ export const deleteUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          userIDs
-          tellerID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -206,9 +152,7 @@ export const createPost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -247,9 +191,7 @@ export const updatePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -288,9 +230,7 @@ export const deletePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -305,75 +245,6 @@ export const deletePost = /* GraphQL */ `
       text
       link
       image
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createReservation = /* GraphQL */ `
-  mutation CreateReservation(
-    $input: CreateReservationInput!
-    $condition: ModelReservationConditionInput
-  ) {
-    createReservation(input: $input, condition: $condition) {
-      id
-      startDateTime
-      duration
-      price
-      status
-      type
-      country
-      city
-      title
-      description
-      userIDs
-      tellerID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateReservation = /* GraphQL */ `
-  mutation UpdateReservation(
-    $input: UpdateReservationInput!
-    $condition: ModelReservationConditionInput
-  ) {
-    updateReservation(input: $input, condition: $condition) {
-      id
-      startDateTime
-      duration
-      price
-      status
-      type
-      country
-      city
-      title
-      description
-      userIDs
-      tellerID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteReservation = /* GraphQL */ `
-  mutation DeleteReservation(
-    $input: DeleteReservationInput!
-    $condition: ModelReservationConditionInput
-  ) {
-    deleteReservation(input: $input, condition: $condition) {
-      id
-      startDateTime
-      duration
-      price
-      status
-      type
-      country
-      city
-      title
-      description
-      userIDs
-      tellerID
       createdAt
       updatedAt
     }

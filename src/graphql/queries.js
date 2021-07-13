@@ -9,25 +9,7 @@ export const getUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          userIDs
-          tellerID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -68,9 +50,7 @@ export const listUsers = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -102,9 +82,7 @@ export const getPost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -145,6 +123,7 @@ export const listPosts = /* GraphQL */ `
           username
           email
           home_country
+          reservations
           isTeller
           price
           stripeAccount
@@ -156,53 +135,6 @@ export const listPosts = /* GraphQL */ `
         text
         link
         image
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getReservation = /* GraphQL */ `
-  query GetReservation($id: ID!) {
-    getReservation(id: $id) {
-      id
-      startDateTime
-      duration
-      price
-      status
-      type
-      country
-      city
-      title
-      description
-      userIDs
-      tellerID
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listReservations = /* GraphQL */ `
-  query ListReservations(
-    $filter: ModelReservationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listReservations(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        startDateTime
-        duration
-        price
-        status
-        type
-        country
-        city
-        title
-        description
-        userIDs
-        tellerID
         createdAt
         updatedAt
       }
@@ -233,9 +165,7 @@ export const getUserByEmail = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
