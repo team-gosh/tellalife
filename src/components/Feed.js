@@ -12,7 +12,7 @@ function Feed(props) {
       {/* <h1>Feed</h1> */}
       <div className="filter">
         {/* <h2>Filter</h2> */}
-        <Posting />
+        <Posting user={user} />
       </div>
       {/* <Posts filter={filter} /> */}
       <Input />

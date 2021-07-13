@@ -23,6 +23,8 @@ function Posting(props) {
 
   const classes = useStyles();
 
+  const obj = {};
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -101,8 +103,14 @@ function Posting(props) {
             onClick={() => {
               handleClose();
               setDisable(true);
+              obj["userID"] = user.id;
+              obj["type"] = "post";
+              obj["title"] = title;
+              obj["text"] = text;
               setTitle("");
               setText("");
+              console.log(obj);
+              console.log(user);
             }}
           >
             Subscribe

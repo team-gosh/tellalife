@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+require("dotenv").config();
+
+>>>>>>> 4643bb0e4c8201b52e22c318bde945ebbc2a3f64
 const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
 const apiKey = process.env.REACT_APP_TWILIO_APIKEY;
 const apiSecret = process.env.REACT_APP_TWILIO_API_SECRET;
@@ -8,7 +13,15 @@ const AccessToken = twilio.jwt.AccessToken;
 const { VideoGrant } = AccessToken;
 
 const generateToken = (config) => {
+<<<<<<< HEAD
 	return new AccessToken(accountSid, apiKey, apiSecret);
+=======
+	return new AccessToken(
+		accountSid,
+		apiKey,
+		apiSecret
+	);
+>>>>>>> 4643bb0e4c8201b52e22c318bde945ebbc2a3f64
 };
 
 const getVideo = () => {
