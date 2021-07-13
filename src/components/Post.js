@@ -11,7 +11,8 @@ function Post (props) {
 		<div>
 			<h3>{data.title}</h3>
       <p>{data.text}</p>
-      {data.userID === user.id         ? <div></div>
+      {user && data.userID === user.id 
+        ? <div></div>
         : <MakeReservation user={data.user} />
       }
 		</div>
