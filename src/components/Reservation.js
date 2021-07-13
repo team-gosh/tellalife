@@ -71,23 +71,7 @@ function Reservation (props) {
 		setOpen(false);
 	};
 
-	const payment = async () => {
-		// need to change later
-		const response = await API.graphql({
-			query: mutations.processOrder,
-			variables: {
-				input: {
-					id: "1",
-					payment_method_type: [ "card" ],
-					amount: 1000,
-					currency: "JPY",
-					application_fee_amount: 123,
-					stripeAccount: "acct_1JAqYHRN8v3zy7ya",
-				},
-			},
-		});
-		console.log(response);
-	};
+
 
 	// input PaymentIntent {
 	// 	id: String!

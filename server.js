@@ -1,13 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-const stripe = require("stripe")(
-	"sk_test_51J9oYtITm2RX3fVqDlxAFvVcTcHeRuCUoyPkaD13a1W11CTEtv5aKNIwLw9vJ5cmEUTIeKzFPJJjxv75ujMraEcb002w3ZloIO"
-);
 
 const app = express();
 const PORT = 8000;
-
-
 
 app.use(cors());
 app.use(express.json());
@@ -46,8 +41,8 @@ app.post("/v1/accounts", async (req, res) => {
 app.post("/v1/account_links", async (req, res) => {
 	const accountLink = await stripe.accountLinks.create({
 		account: "acct_1JAqYHRN8v3zy7ya",
-		refresh_url: "https://example.com/reauth",
-		return_url: "https://example.com/return",
+		refresh_url: "http://localhost:3000/",
+		return_url: "http://localhost:3000/",
 		type: "account_onboarding",
 	});
 
@@ -68,26 +63,3 @@ app.post("/v1/payment_intents", async (req, res) => {
 	);
 	res.send(paymentIntent);
 });
-
-// console.log(account)
-
-// app.post("/v1/account_links", async (req, res) => {
-// 	await stripe.accountLinks.create({
-// 		account: "acct_1032D82eZvKYlo2C",
-// 		refresh_url: "https://example.com/reauth",
-// 		return_url: "https://example.com/return",
-// 		type: "account_onboarding",
-// 	});
-
-// 	res.send("Account is linked.\n");
-// });
-
-// const paymentIntent = await stripe.paymentIntents.create({
-//     payment_method_types: ['card'],
-//     amount: 1000,
-//     currency: 'jpy',
-//     application_fee_amount: 123,
-//   }, {
-//     stripeAccount: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
-
-//   });
