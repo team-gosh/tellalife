@@ -5,21 +5,27 @@ import Post from './Post';
 function Posts(props) {
   const {
     filter,
+    posts,
+    user
   } = props;
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
 
   useEffect(async () => {
     // const matchingPosts = (await axios.get(.....)).data
     // setPosts(matchingPosts);
   }, []);
 
-  return createPosts() 
+  return (
+    <div className='Posts'>
+      {posts.map(data => <Post data={data} user={user}/>)}
+    </div>
+  )
 
-  function createPosts() {
-    // return posts
-    // .map(data => <Post data={data} />)
-    return <Post />
-  }
+  // function createPosts() {
+  //   return posts
+  //   .map(data => <Post data={data} />)
+  //   // return <Post />
+  // }
 }
 
 export default Posts;

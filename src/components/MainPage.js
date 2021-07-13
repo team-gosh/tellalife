@@ -220,7 +220,7 @@ function MainPage (props) {
 			) : display === "Profile" ? (
 				<Profile user={user} setUser={setUser} API={API} queries={queries} mutations={mutations} />
 			) : (
-				<Feed user={user} />
+				<Feed user={user} API={API} queries={queries} mutations={mutations} />
 			)}
 		</div>
 	);
