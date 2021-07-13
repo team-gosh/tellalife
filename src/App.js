@@ -78,6 +78,8 @@ function App() {
   // console.log(authState ? authState.SignedIn : undefined);
 
   return (
+    // Below line is for avoiding database duplicates, and undefined userAuth in MainPage.
+    // Need to find better solution
     authState === AuthState.SignedIn && userAuth && userAuth.attributes ? (
       <div className="App">
         {/* < Stripe /> */}
