@@ -76,17 +76,13 @@ function App () {
 	// console.log("Auth State Signed In");
 	// console.log(authState ? authState.SignedIn : undefined);
 
-	// console.log("Auth State");
-	// console.log(authState);
-	// console.log("User Auth");
-	// console.log(userAuth);
-	// console.log("Auth State Signed In");
-	// console.log(authState ? authState.SignedIn : undefined);
-
-	return authState === AuthState.SignedIn && userAuth && userAuth.attributes ? (
-		<div className="App">
-			{/* < Stripe /> */}
-			{/* <a href="#" className="stripe-connect">
+  return (
+    // Below line is for avoiding database duplicates, and undefined userAuth in MainPage.
+    // Need to find better solution
+    authState === AuthState.SignedIn && userAuth && userAuth.attributes ? (
+      <div className="App">
+        {/* < Stripe /> */}
+        {/* <a href="#" className="stripe-connect">
 				<span>Connect with</span>
 			</a> */}
 			<button onClick={createAccount}>CreateAccount</button>
