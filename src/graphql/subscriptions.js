@@ -217,3 +217,63 @@ export const onDeletePost = /* GraphQL */ `
     }
   }
 `;
+export const onCreateReservation = /* GraphQL */ `
+  subscription OnCreateReservation {
+    onCreateReservation {
+      id
+      startDateTime
+      duration
+      price
+      status
+      type
+      country
+      city
+      title
+      description
+      userIDs
+      tellerID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateReservation = /* GraphQL */ `
+  subscription OnUpdateReservation {
+    onUpdateReservation {
+      id
+      startDateTime
+      duration
+      price
+      status
+      type
+      country
+      city
+      title
+      description
+      userIDs
+      tellerID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteReservation = /* GraphQL */ `
+  subscription OnDeleteReservation {
+    onDeleteReservation {
+      id
+      startDateTime
+      duration
+      price
+      status
+      type
+      country
+      city
+      title
+      description
+      userIDs
+      tellerID
+      createdAt
+      updatedAt
+    }
+  }
+`;

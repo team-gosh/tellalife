@@ -41,8 +41,8 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 # Reservation Table
 # type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
 # type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
-# type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
-type Reservation @model {
+type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
+	# type Reservation @model {
 	id: ID!
 	# createdDateTime: String!
 	startDateTime: String!
