@@ -1,8 +1,8 @@
 require("dotenv").config();
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const apiKey = process.env.TWILIO_APIKEY;
-const apiSecret = process.env.TWILIO_API_SECRET;
+const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
+const apiKey = process.env.REACT_APP_TWILIO_APIKEY;
+const apiSecret = process.env.REACT_APP_TWILIO_API_SECRET;
 
 // twilio
 const twilio = require("twilio");
@@ -11,9 +11,9 @@ const { VideoGrant } = AccessToken;
 
 const generateToken = (config) => {
 	return new AccessToken(
-		"AC279350ed9469ed0b3f128b39865384ac",
-		"SK53bb5f7f0406e4d81eeeb647c682df9a",
-		"X6Dan53akV8IPz9Tg4yjfaILPwhflE2b"
+		accountSid,
+		apiKey,
+		apiSecret
 	);
 };
 
