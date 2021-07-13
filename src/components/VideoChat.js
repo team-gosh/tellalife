@@ -40,7 +40,7 @@ const VideoChat = (props) => {
 			const response = await API.graphql({
 				query: mutations.generateVideoToken,
 				variables: {
-					input: { id: "2", identity: username, room: roomName },
+					input: { id: "1", identity: username, room: roomName },
 				},
 			});
 
