@@ -1,7 +1,4 @@
 # User table
-
-# type Blog @model {
-# User table
 # type Blog @model {
 type User @model @key(name: "byUserName", fields: ["username", "id"], queryField: "getUserByEmail") {
 	id: ID!
@@ -11,7 +8,6 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
 	home_country: String
 	# reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
 	reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-	# reservations: [ID]
 	# reservations: [String]
 	# posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
 	posts: [Post] @connection(keyName: "byUser", fields: ["id"])
@@ -45,8 +41,6 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 # type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
 # type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
 type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
-	# type Reservation @model {
-	# @key(name: "hasReservation", fields: ["userIDs"]) {
 	id: ID!
 	# createdDateTime: String!
 	startDateTime: String!
@@ -62,33 +56,24 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 	description: String
 	userIDs: [ID!]! #subscription for this?
 	tellerID: ID!
+
 	# postID: ID!
 	# post: Post @connection(fields: ["postID"])
-	# content: String!  
+	# content: String!
 }
 
 # Twilio Video Generator
+type Mutation {
+	generateVideoToken(input: VideoInput!): TokenStatus @function(name: "createVideoToken")
+}
+
+enum TokenStatus {
+	SUCCESS
+	FAILED
+}
+
 input VideoInput {
-	id: String!
+	id: ID!
 	identity: String!
 	room: String!
-}
-
-# StripePayment
-input PaymentIntent {
-	id: String!
-	payment_method_type: [String!]
-	amount: Int!
-	currency: String!
-	application_fee_amount: Int!
-	stripeAccount: String!
-}
-
-# input Destination {
-# 	destination: String!
-# }
-
-type Mutation {
-	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken-${env}")
-	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
 }

@@ -6,11 +6,6 @@ export const generateVideoToken = /* GraphQL */ `
     generateVideoToken(input: $input)
   }
 `;
-export const processOrder = /* GraphQL */ `
-  mutation ProcessOrder($input: PaymentIntent!) {
-    processOrder(input: $input)
-  }
-`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
