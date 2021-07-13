@@ -27,15 +27,6 @@ const VideoChat = (props) => {
 		async (event) => {
 			event.preventDefault();
 			setConnecting(true);
-			// const response = await axios.post("/video/token", {"identity": username, "room": roomName});
-			// const response = await axios.post("http://localhost:5000/video/token", {"identity": username, "room": roomName});
-			// const response = await axios.get(`http://localhost:5000/video/token/${roomName}/${username}`);
-			// const response = await axios.get(`https://a47f92088797.ngrok.io/video/token/${roomName}/${username}`);
-			// const response = await axios.get(`/video/token/${roomName}/${username}`);
-			// const response = await axios.get(
-			// 	`https://685d8pusc8.execute-api.us-east-1.amazonaws.com/production/generateTokenTwilioVideo?identity=${username}&room=${roomName}`
-			// );
-			// https://685d8pusc8.execute-api.us-east-1.amazonaws.com/production/generateTokenTwilioVideo?identity=Miho&room=heso
 
 			const response = await API.graphql({
 				query: mutations.generateVideoToken,

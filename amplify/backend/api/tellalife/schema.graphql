@@ -77,13 +77,18 @@ input VideoInput {
 # StripePayment
 input PaymentIntent {
 	id: String!
+	payment_method_type: [String!]
 	amount: Int!
 	currency: String!
-	application_fee_amount: String!
+	application_fee_amount: Int!
 	stripeAccount: String!
 }
 
+# input Destination {
+# 	destination: String!
+# }
+
 type Mutation {
 	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken-${env}")
-	# processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
+	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
 }
