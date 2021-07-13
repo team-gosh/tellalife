@@ -63,17 +63,12 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 }
 
 # Twilio Video Generator
-type Mutation {
-	generateVideoToken(input: VideoInput!): TokenStatus @function(name: "createVideoToken")
-}
-
-enum TokenStatus {
-	SUCCESS
-	FAILED
-}
-
 input VideoInput {
-	id: ID!
+	id: String!
 	identity: String!
 	room: String!
+}
+
+type Mutation {
+	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken-${env}")
 }

@@ -72,67 +72,66 @@ function MainPage (props) {
 	const [ state, setState ] = React.useState(false);
 	const classes = useStyles();
 
-	useEffect(
-		async () => {
-			// while (!user) {
-			console.log("before if 77");
-			console.log("user");
-			console.log(user);
-			if (userAuth && userAuth.attributes) {
-				console.log("after if 77");
-				const userNameAndEmail = userAuth.attributes.email;
-				const name = userAuth.attributes.name;
-				try {
-					// Try to get user from database
-					const currentUser = await API.graphql({
-						query: queries.getUserByEmail,
-						variables: {
-							username: userNameAndEmail,
-						},
-					});
+	useEffect(async () => {
+		// while (!user) {
+		console.log("before if 77");
+		console.log("user");
+		console.log(user);
+		if (userAuth && userAuth.attributes) {
+			console.log("after if 77");
+			const userNameAndEmail = userAuth.attributes.email;
+			const name = userAuth.attributes.name;
+			try {
+				// Try to get user from database
+				const currentUser = await API.graphql({
+					query: queries.getUserByEmail,
+					variables: {
+						username: userNameAndEmail,
+					},
+				});
 
-					// console.log("currentUser");
-					// console.log(currentUser)
-					// console.log(currentUser.data.getUserByEmail.items.length)
-					console.log("before if 94");
-					if (currentUser.data.getUserByEmail.items.length) {
-						console.log("after if 94");
-						// If user exists, set to user
-						await setUser(currentUser.data.getUserByEmail.items[0]);
-					} else {
-						console.log("after else 99");
-						// If user doesn't exist, then create new user in database
-						const newUserRegistrationData = {
-							email: userNameAndEmail,
-							username: userNameAndEmail,
-							name: name,
-							isTeller: false,
-						};
-						const response = await API.graphql({
-							query: mutations.createUser,
-							variables: { input: newUserRegistrationData },
-						});
-						// Retrieve new user data from database and set to user
-						console.log("response");
-						console.log(response);
-						// const newUser = await API.graphql({
-						//   query: queries.getUserByEmail,
-						//   variables: {
-						//     username: userNameAndEmail
-						//   }
-						// });
-						setUser(response.data.createUser);
-					}
-					console.log("after conditionals");
-					console.log(user);
-				} catch (error) {
-					console.error(error.message);
+				if (currentUser.data.getUserByEmail.items.length) {
+					console.log("after if 94 (user exists)");
+					// If user exists, set to user
+					setUser(currentUser.data.getUserByEmail.items[0]);
+				} else if (!user) {
+					console.log("after else 99 (create new user)");
+					// If user doesn't exist, then create new user in database
+					const newUserRegistrationData = {
+						email: userNameAndEmail,
+						username: userNameAndEmail,
+						name: name,
+						isTeller: false,
+					};
+					const response = await API.graphql({
+						query: mutations.createUser,
+						variables: { input: newUserRegistrationData },
+					});
+					// Retrieve new user data from database and set to user
+					console.log("response");
+					console.log(response);
+					setUser(response.data.createUser);
 				}
+				console.log("after conditionals");
+				console.log(user);
+			} catch (error) {
+				console.error(error.message);
 			}
-			// }
-		},
-		[ userAuth ]
-	);
+		}
+		// }
+	}, []);
+
+	// //test
+
+	// (async () => {
+	// 	const response = await API.graphql({
+	// 		query: mutations.generateVideoToken,
+	// 		variables: {
+	// 			input: { id: "2", identity: "miho", room: "roomName" },
+	// 		},
+	// 	});
+	// 	console.log(response, "this is response from Twilio");
+	// })();
 
 	// material ui drawer
 	const toggleDrawer = (anchor, open) => (event) => {
@@ -148,7 +147,7 @@ function MainPage (props) {
 			await Auth.signOut();
 			Hub.dispatch("UI Auth", {
 				// channel must be 'UI Auth'
-				event: "AuthStateChange", 
+				event: "AuthStateChange",
 				message: "signedout",
 			});
 		} catch (error) {

@@ -58,6 +58,8 @@ function Reservation (props) {
 	const classes = useStyles();
 	const bull = <span className={classes.bullet}>•</span>;
 	const { user, data, status, view, setVideo, video } = props;
+	console.log("console.log after props");
+	console.log(user);
 
 	const [ open, setOpen ] = React.useState(false);
 	const handleClickOpen = () => {
@@ -131,9 +133,11 @@ function Reservation (props) {
 								variant="outlined"
 								color="primary"
 								onClick={(e) => {
+									console.log("user");
+									console.log(user);
 									const newVideo = {
 										isActive: true,
-										username: user.username,
+										identity: user.username,
 										roomName: "pluto", // need to pass later
 									};
 									setVideo(newVideo);

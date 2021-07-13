@@ -136,6 +136,7 @@ function ReservationManagement (props) {
 						view={view}
 						setVideo={setVideo}
 						video={video}
+						user={user}
 					/>
 				);
 			}

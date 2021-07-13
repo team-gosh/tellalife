@@ -1,76 +1,83 @@
 import React, { useState, useEffect, useRef } from "react";
 
 const Participant = ({ participant }) => {
-  const [videoTracks, setVideoTracks] = useState([]);
-  const [audioTracks, setAudioTracks] = useState([]);
+	const [ videoTracks, setVideoTracks ] = useState([]);
+	const [ audioTracks, setAudioTracks ] = useState([]);
 
-  const videoRef = useRef();
-  const audioRef = useRef();
-  
-  const trackpubsToTracks = (trackMap) =>
-    Array.from(trackMap.values())
-      .map((publication) => publication.track)
-      .filter((track) => track !== null);
+	const videoRef = useRef();
+	const audioRef = useRef();
 
-  useEffect(() => {
-    setVideoTracks(trackpubsToTracks(participant.videoTracks));
-    setAudioTracks(trackpubsToTracks(participant.audioTracks));
+	const trackpubsToTracks = (trackMap) =>
+		Array.from(trackMap.values()).map((publication) => publication.track).filter((track) => track !== null);
 
-    const trackSubscribed = (track) => {
-      if (track.kind === "video") {
-        setVideoTracks((videoTracks) => [...videoTracks, track]);
-        // videoTracks.push(track);
-      } else if (track.kind === "audio") {
-        setAudioTracks((audioTracks) => [...audioTracks, track]);
-        // audioTracks.push(track);
-      }
-    };
+	useEffect(
+		() => {
+			setVideoTracks(trackpubsToTracks(participant.videoTracks));
+			setAudioTracks(trackpubsToTracks(participant.audioTracks));
 
-    const trackUnsubscribed = (track) => {
-      if (track.kind === "video") {
-        setVideoTracks((videoTracks) => videoTracks.filter((v) => v !== track));
-      } else if (track.kind === "audio") {
-        setAudioTracks((audioTracks) => audioTracks.filter((a) => a !== track));
-      }
-    };
+			const trackSubscribed = (track) => {
+				if (track.kind === "video") {
+					setVideoTracks((videoTracks) => [ ...videoTracks, track ]);
+					// videoTracks.push(track);
+				} else if (track.kind === "audio") {
+					setAudioTracks((audioTracks) => [ ...audioTracks, track ]);
+					// audioTracks.push(track);
+				}
+			};
 
-    participant.on("trackSubscribed", trackSubscribed);
-    participant.on("trackUnsubscribed", trackUnsubscribed);
+			const trackUnsubscribed = (track) => {
+				if (track.kind === "video") {
+					setVideoTracks((videoTracks) => videoTracks.filter((v) => v !== track));
+				} else if (track.kind === "audio") {
+					setAudioTracks((audioTracks) => audioTracks.filter((a) => a !== track));
+				}
+			};
 
-    return () => {
-      setVideoTracks([]);
-      setAudioTracks([]);
-      participant.removeAllListeners();
-    };
-  }, [participant]);
+			participant.on("trackSubscribed", trackSubscribed);
+			participant.on("trackUnsubscribed", trackUnsubscribed);
 
-  useEffect(() => {
-    const videoTrack = videoTracks[0];
-    if (videoTrack) {
-      videoTrack.attach(videoRef.current);
-      return () => {
-        videoTrack.detach();
-      };
-    }
-  }, [videoTracks]);
+			return () => {
+				setVideoTracks([]);
+				setAudioTracks([]);
+				participant.removeAllListeners();
+			};
+		},
+		[ participant ]
+	);
 
-  useEffect(() => {
-    const audioTrack = audioTracks[0];
-    if (audioTrack) {
-      audioTrack.attach(audioRef.current);
-      return () => {
-        audioTrack.detach();
-      };
-    }
-  }, [audioTracks]);
+	useEffect(
+		() => {
+			const videoTrack = videoTracks[0];
+			if (videoTrack) {
+				videoTrack.attach(videoRef.current);
+				return () => {
+					videoTrack.detach();
+				};
+			}
+		},
+		[ videoTracks ]
+	);
 
-  return (
-    <div className="participant">
-      <h5>{participant.identity}</h5>
-      <video width="160" height="120" ref={videoRef} autoPlay={true} />
-      <audio ref={audioRef} autoPlay={true} />
-    </div>
-  );
+	useEffect(
+		() => {
+			const audioTrack = audioTracks[0];
+			if (audioTrack) {
+				audioTrack.attach(audioRef.current);
+				return () => {
+					audioTrack.detach();
+				};
+			}
+		},
+		[ audioTracks ]
+	);
+
+	return (
+		<div className="participant">
+			{/* <h5>{participant.identity}</h5> */}
+			<video width="160" height="120" ref={videoRef} autoPlay={true} />
+			<audio ref={audioRef} autoPlay={true} />
+		</div>
+	);
 };
 
 export default Participant;

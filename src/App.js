@@ -12,8 +12,8 @@ import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-console.log("awsconfig");
-console.log(awsconfig);
+// console.log("awsconfig")
+// console.log(awsconfig)
 Amplify.configure(awsconfig);
 
 // Auth.configure(awsconfig)
@@ -40,6 +40,7 @@ function App () {
 			setUserAuth(authData);
 		});
 	}, []);
+
 
 	// create express account
 	const createAccount = () => {
@@ -75,7 +76,14 @@ function App () {
 	// console.log("Auth State Signed In");
 	// console.log(authState ? authState.SignedIn : undefined);
 
-	return authState === AuthState.SignedIn && userAuth ? (
+	// console.log("Auth State");
+	// console.log(authState);
+	// console.log("User Auth");
+	// console.log(userAuth);
+	// console.log("Auth State Signed In");
+	// console.log(authState ? authState.SignedIn : undefined);
+
+	return authState === AuthState.SignedIn && userAuth && userAuth.attributes ? (
 		<div className="App">
 			{/* < Stripe /> */}
 			{/* <a href="#" className="stripe-connect">
