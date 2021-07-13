@@ -15,26 +15,26 @@ export default function CheckoutForm () {
 		// We don't want to let default form submission happen here,
 		// which would refresh the page.
 		event.preventDefault();
-
 		console.log(stripe, elements, "stripe and element");
 		// if (!stripe || !elements) {
-			console.log("here");
-			const pay = await API.graphql({
-				query: mutations.processOrder,
-				variables: {
-					input: {
-						id: "1",
-						payment_method_type: [ "card" ],
-						amount: 1000,
-						currency: "JPY",
-						application_fee_amount: 123,
+		console.log("here");
+		const pay = await API.graphql({
+			query: mutations.processOrder,
+			variables: {
+				input: {
+					id: "1",
+					payment_method_type: [ "card" ],
+					amount: 1000,
+					currency: "JPY",
+					application_fee_amount: 123,
 
-						stripeAccount: "acct_1JAqYHRN8v3zy7ya",
-					},
+					stripeAccount: "acct_1JAqYHRN8v3zy7ya",
 				},
-			});
-			console.log(pay);
-			return;
+			},
+		});
+		console.log(pay);
+		return;
+		// }
 		// }
 
 		// const result = await stripe.confirmCardPayment("acct_1JAqYHRN8v3zy7ya", {
