@@ -9,9 +9,9 @@ const { VideoGrant } = AccessToken;
 
 const generateToken = (config) => {
 	return new AccessToken(
-		accountSid,
-		apiKey,
-		apiSecret
+		"AC279350ed9469ed0b3f128b39865384ac",
+		"SK53bb5f7f0406e4d81eeeb647c682df9a",
+		"X6Dan53akV8IPz9Tg4yjfaILPwhflE2b"
 	);
 };
 

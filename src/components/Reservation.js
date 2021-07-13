@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Amplify, { API, graphqlOperation } from "aws-amplify";
+import * as mutations from "../graphql/mutations";
 
 import axios from "axios";
 import App from "../App";
@@ -70,22 +71,22 @@ function Reservation (props) {
 		setOpen(false);
 	};
 
-	const payment = async () => {
-		// need to change later
-		const response = await API.graphql({
-			query: mutations.createPayment,
-			variables: {
-				input: {
-					id: "1",
-					amount: 1000,
-					currency: "JPY",
-					application_fee_amount: "123",
-					stripeAccount: "acct_1JAqYHRN8v3zy7ya",
-				},
-			},
-		});
-		console.log(response);
-	};
+	// const payment = async () => {
+	// 	// need to change later
+	// 	const response = await API.graphql({
+	// 		query: mutations.createPayment,
+	// 		variables: {
+	// 			input: {
+	// 				id: "1",
+	// 				amount: 1000,
+	// 				currency: "JPY",
+	// 				application_fee_amount: "123",
+	// 				stripeAccount: "acct_1JAqYHRN8v3zy7ya",
+	// 			},
+	// 		},
+	// 	});
+	// 	console.log(response);
+	// };
 
 	return (
 		<div className="Reservation">
@@ -114,7 +115,7 @@ function Reservation (props) {
 				) : status === "approved" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="primary" onClick={payment}>
+							<Button size="small" variant="outlined" color="primary">
 								Pay
 							</Button>
 

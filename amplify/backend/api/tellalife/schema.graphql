@@ -1,13 +1,16 @@
 # User table
+
+# type Blog @model {
+# User table
 # type Blog @model {
 type User @model @key(name: "byUserName", fields: ["username", "id"], queryField: "getUserByEmail") {
-	id: ID! @connection(name: "reservationToUsers")
+	id: ID!
 	name: String!
 	username: String!
 	email: String!
 	home_country: String
+	# reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
 	reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-	# reservations: [Reservation] @connection(name: "userToReservations") # subscription for this?
 	# reservations: [ID]
 	# reservations: [String]
 	# posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
@@ -39,26 +42,26 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 }
 
 # Reservation Table
+# type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
 # type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
 type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 	# type Reservation @model {
-	id: ID! @connection(name: "userToReservations")
+	# @key(name: "hasReservation", fields: ["userIDs"]) {
+	id: ID!
 	# createdDateTime: String!
 	startDateTime: String!
 	duration: Float!
 	price: Float!
-	status: String! #subscription for this?
-	# type: String! #subscription for this?
+	status: String!
+	type: String! #subscription for this?
 	# country: String!
 	# city: String!
 	country: String
 	city: String
 	title: String
 	description: String
-	userIDs: [User!]! @connection(name: "reservationToUsers") #subscription for this?
-	# userIDs: [User!]!
-	tellerID: User!
-
+	userIDs: [ID!]! #subscription for this?
+	tellerID: ID!
 	# postID: ID!
 	# post: Post @connection(fields: ["postID"])
 	# content: String!
@@ -82,5 +85,5 @@ input PaymentIntent {
 
 type Mutation {
 	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken-${env}")
-	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
+	# processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
 }
