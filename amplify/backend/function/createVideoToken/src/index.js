@@ -2,6 +2,7 @@ const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
 const apiKey = process.env.REACT_APP_TWILIO_APIKEY;
 const apiSecret = process.env.REACT_APP_TWILIO_API_SECRET;
 
+
 // twilio
 const twilio = require("twilio");
 const AccessToken = twilio.jwt.AccessToken;
@@ -11,14 +12,11 @@ console.log(AccessToken, "AccessToken");
 console.log(VideoGrant, "VideoGrant");
 
 const generateToken = (config) => {
-	const accessToken = new AccessToken(accountSid, apiKey, apiSecret);
-	console.log(accessToken, "accessToken from generatetoken func");
+	// const accessToken = new AccessToken(accountSid, apiKey, apiSecret);
+	// console.log(accessToken, "accessToken from generatetoken func");
 
-	console.log(accountSid, "this is accoundSid in generateTOken");
-	console.log(apiKey, "This is apikey in generatetoken");
-	console.log(apiSecret, "This is apiSecret in generatetoken");
-	return accessToken;
-	// return new AccessToken(accountSid, apiKey, apiSecret);
+	// return accessToken;
+	return new AccessToken(accountSid, apiKey, apiSecret);
 };
 
 const getVideo = () => {
@@ -47,23 +45,9 @@ const getVideo = () => {
 exports.handler = async (event, context, callback) => {
 	console.log("this is inside of handler");
 	const videoToken = getVideo();
-	const token = videoToken(event.queryStringParameters.identity, event.queryStringParameters.room, generateToken());
+	const token = videoToken(event.arguments.input.identity, event.arguments.input.room, generateToken());
 
 	const jwtToken = { token: token.toJwt() };
 
-	const response = {
-		statusCode: 200,
-		headers: {
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Headers": "Content-Type",
-			"Access-Control-Allow-Origin": "*",
-			"Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-		},
-		body: JSON.stringify(jwtToken),
-		isBase64Encoded: false,
-	};
-
-	console.log(response);
-
-	callback(null, response);
+	callback(null, jwtToken.token);
 };
