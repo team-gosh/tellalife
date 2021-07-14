@@ -89,8 +89,9 @@ function MainPage (props) {
 						username: userNameAndEmail,
 					},
 				});
-        console.log("main page current user")
-        console.log(currentUser)
+				console.log(currentUser);
+				console.log("main page current user");
+				console.log(currentUser);
 				if (currentUser.data.getUserByEmail.items.length) {
 					console.log("after if 94 (user exists)");
 					// If user exists, set to user
@@ -114,14 +115,13 @@ function MainPage (props) {
 					setUser(response.data.createUser);
 				}
 				console.log("after conditionals");
-				console.log(user, 'this is because the react thing');
+				console.log(user, "this is because the react thing");
 			} catch (error) {
 				console.error(error.message);
 			}
 		}
 		// }
 	}, []);
-
 
 	// //test
 
@@ -198,11 +198,10 @@ function MainPage (props) {
 			</List>
 		</div>
 	);
-  console.log(user)
+	console.log(user);
 	return (
 		<div className="MainPage">
-			<h1>Hello {user ? user.name : ""}!</h1>
-			<h1>{JSON.stringify(state)}</h1>
+			{/* <h1>{JSON.stringify(state)}</h1> */}
 			<AppBar position="static" className={classes.appbar}>
 				<Toolbar>
 					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
@@ -213,6 +212,7 @@ function MainPage (props) {
 					</Drawer>
 					<Typography variant="h6" className={classes.title}>
 						TELLaLIFE
+						<h3>Hello {user ? user.name : ""}!</h3>
 					</Typography>
 				</Toolbar>
 			</AppBar>

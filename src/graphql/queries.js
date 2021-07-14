@@ -142,6 +142,53 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
+export const getReservation = /* GraphQL */ `
+  query GetReservation($id: ID!) {
+    getReservation(id: $id) {
+      id
+      startDateTime
+      duration
+      price
+      status
+      type
+      country
+      city
+      title
+      description
+      userIDs
+      tellerID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listReservations = /* GraphQL */ `
+  query ListReservations(
+    $filter: ModelReservationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReservations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        tellerID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getUserByEmail = /* GraphQL */ `
   query GetUserByEmail(
     $username: String
