@@ -14,19 +14,20 @@ export default function CheckoutForm () {
 		// We don't want to let default form submission happen here,
 		// which would refresh the page.
 		event.preventDefault();
-		console.log(stripe, elements, "stripe and element");
 		// if (!stripe || !elements) {
-		console.log("here");
 		const paymentIntentReturn = await API.graphql({
 			query: mutations.processOrder,
 			variables: {
 				input: {
 					id: "1",
 					payment_method_type: [ "card" ],
+
+					// need to change here
 					amount: 1000,
 					currency: "JPY",
-					application_fee_amount: 123,
 
+					// need to change here
+					application_fee_amount: 123,
 					stripeAccount: "acct_1JAqYHRN8v3zy7ya",
 				},
 			},
@@ -40,10 +41,13 @@ export default function CheckoutForm () {
 			payment_method: {
 				card: elements.getElement(CardElement),
 				billing_details: {
+					// need to change here
 					name: "Jenny Rosen",
 				},
 			},
 		});
+
+		console.log(result, " before the result. error");
 
 		if (result.error) {
 			// we actually need to figure out how to set the test account payable
@@ -73,13 +77,6 @@ export default function CheckoutForm () {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			{/* <form
-			id="payment-form"
-			onSubmit={() => {
-				console.log("hey");
-				handleSubmit();
-			}}
-		> */}
 			<CardSection />
 			<button id="submit" disabled={!stripe} color="primary">
 				Confirm order
