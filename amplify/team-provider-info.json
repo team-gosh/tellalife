@@ -31,7 +31,7 @@
       "function": {
         "createVideoToken": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",
-          "s3Key": "amplify-builds/createVideoToken-446169746730306c7470-build.zip"
+          "s3Key": "amplify-builds/createVideoToken-325a50476c767a686345-build.zip"
         },
         "createPayment": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",
@@ -39,7 +39,7 @@
         },
         "createStripeAccount": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",
-          "s3Key": "amplify-builds/createStripeAccount-70754f504d726f4e3039-build.zip"
+          "s3Key": "amplify-builds/createStripeAccount-795279572f734566366e-build.zip"
         }
       }
     }

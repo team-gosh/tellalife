@@ -73,14 +73,6 @@ function Reservation (props) {
 
 
 
-	// input PaymentIntent {
-	// 	id: String!
-	// 	payment_method_type: [String!]
-	// 	amount: Int!
-	// 	currency: String!
-	// 	application_fee_amount: Int!
-	// 	transfer_data: [Destination]
-	// }
 
 	return (
 		<div className="Reservation">
