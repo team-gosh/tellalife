@@ -6,6 +6,10 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import NativeSelect from "@material-ui/core/NativeSelect";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 import AlertDialog from "./AlertDialog";
@@ -23,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MakeReservation(props) {
-  const { user } = props;
+  const { teller, user } = props;
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState("2021-07-29");
-  const [time, setTime] = useState("12:00");
+  const [date, setDate] = useState("");
+  const [duration, setDuration] = useState("");
 
   const classes = useStyles();
 
@@ -38,9 +42,17 @@ function MakeReservation(props) {
     setOpen(false);
   };
 
+  // const handleChange = (event) => {
+  //   const name = event.target.name;
+  //   setDuration({
+  //     ...duration,
+  //     [name]: event.target.value
+  //   });
+  // };
+
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" color="primary" onClick={handleClickOpen}>
         Reservation
       </Button>
       <Dialog
@@ -51,40 +63,56 @@ function MakeReservation(props) {
         <DialogTitle id="form-dialog-title">MakeReservation</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            If you wish to chat, please enter your name and room name below.
+            If you want to chat, please enter your preferred time
           </DialogContentText>
           <form className={classes.container} noValidate>
             <TextField
-              id="date"
-              label="Reservation Date"
-              type="date"
-              defaultValue="2021-07-29"
+              id="datetime-local"
+              label="Desired time"
+              type="datetime-local"
+              defaultValue=""
               className={classes.textField}
               InputLabelProps={{
                 shrink: true
               }}
-              onChange={(event) => setDate(event.target.value)}
-            />
-          </form>
-          <form className={classes.container} noValidate>
-            <TextField
-              id="time"
-              label="Alarm clock"
-              type="time"
-              defaultValue="12:00"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true
+              onChange={(event) => {
+                const millisecond = new Date(
+                  Number(event.target.value.slice(0, 4)),
+                  Number(event.target.value.slice(5, 7)),
+                  Number(event.target.value.slice(8, 10)),
+                  Number(event.target.value.slice(11, 13)),
+                  Number(event.target.value.slice(14))
+                ).getTime();
+                setDate(millisecond);
               }}
-              inputProps={{
-                step: 300 // 5 min
-              }}
-              onChange={(event) => setTime(event.target.value)}
             />
+            <FormControl className={classes.formControl}>
+              <InputLabel shrink htmlFor="age-native-label-placeholder">
+                Duration
+              </InputLabel>
+              <NativeSelect
+                value={duration}
+                onChange={(event) => setDuration(event.target.value)}
+                inputProps={{
+                  name: "age",
+                  id: "age-native-label-placeholder"
+                }}
+              >
+                <option value="">None</option>
+                <option value={30}>30 min</option>
+                <option value={60}>60 min</option>
+                <option value={90}>90 min</option>
+                <option value={120}>120 min</option>
+                <option value={150}>150 min</option>
+                <option value={180}>180 min</option>
+                <option value={210}>210 min</option>
+                <option value={240}>240 min</option>
+              </NativeSelect>
+            </FormControl>
           </form>
         </DialogContent>
         <DialogActions>
-          <AlertDialog setOpen={setOpen} />
+          <AlertDialog setOpen={setOpen} teller={teller} date={date} user={user} duration={duration}/>
         </DialogActions>
       </Dialog>
     </div>

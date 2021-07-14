@@ -4,16 +4,19 @@ import "@fontsource/roboto";
 import VideoChat from "./components/VideoChat";
 import MainPage from "./components/MainPage";
 import axios from "axios";
-import Amplify from "aws-amplify";
+import Amplify, { Auth, graphqlOperation } from "aws-amplify";
+// import Amplify from "aws-amplify";
 import { AmplifyAuthenticator, AmplifySignOut, AmplifySignUp, AmplifySignIn } from "@aws-amplify/ui-react";
-// import awsconfig from "./aws-exports";
+import awsconfig from "./aws-exports";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+// console.log("awsconfig")
+// console.log(awsconfig)
+Amplify.configure(awsconfig);
 
-// Amplify.configure(awsconfig);
-
+// Auth.configure(awsconfig)
 function App () {
 	// const [ video, setVideo ] = useState(false);
 	const [ video, setVideo ] = useState({
@@ -65,71 +68,74 @@ function App () {
 		console.log(clientSecret);
 	};
 
-	console.log("Auth State");
-	console.log(authState);
-	console.log("User Auth");
-	console.log(userAuth);
-	console.log("Auth State Signed In");
-	console.log(authState ? authState.SignedIn : undefined);
+
 
 	return (
-		// authState === AuthState.SignedIn && userAuth ? (
-		<div className="App">
-			{/* < Stripe /> */}
-			{/* <a href="#" className="stripe-connect">
-				<span>Connect with</span>
-			</a> */}
-			<button onClick={createAccount}>CreateAccount</button>
-			<button onClick={setLink}>Link</button>
-			<button onClick={paymentIntent}>PaymentIntent</button>
-			<button onClick={getSecret}>Secret</button>
+		// Below line is for avoiding database duplicates, and undefined userAuth in MainPage.
+		// Need to find better solution
+		authState === AuthState.SignedIn && userAuth && userAuth.attributes ? (
+			<div className="App">
 
-			{video.isActive ? (
-				<VideoChat guestName={video.username} guestRoom={video.roomName} />
-			) : (
-				<Elements stripe={stripePromise}>
-					<MainPage video={video} setVideo={setVideo} />
-				</Elements>
-			)}
-		</div>
+				{video.isActive ? (
+					<VideoChat
+						guestName={video.username}
+						guestRoom={video.roomName}
+						Amplify={Amplify}
+						graphqlOperation={graphqlOperation}
+					/>
+				) : (
+					<Elements stripe={stripePromise}>
+						<MainPage
+							video={video}
+							setVideo={setVideo}
+							userAuth={userAuth}
+							AmplifySignOut={AmplifySignOut}
+							Auth={Auth}
+							Amplify={Amplify}
+							graphqlOperation={graphqlOperation}
+						/>
+					</Elements>
+				)}
+			</div>
+		) : (
+			// );
+			// ) : (
+			// 	<div />
+			// );
+			<AmplifyAuthenticator>
+				<AmplifySignUp
+					slot="sign-up"
+					formFields={[
+						{
+							type: "name",
+							label: "Name",
+							inputProps: { required: true },
+							// placeholder: "Custom phone placeholder",
+						},
+						{
+							type: "username",
+							label: "E-Mail",
+							inputProps: { required: true, autocomplete: "username" },
+							// placeholder: "Custom phone placeholder",
+						},
+						// {
+						//   type: "email",
+						//   label: "E-Mail",
+						//   // placeholder: "Custom email placeholder",
+						//   inputProps: { required: true },
+						// },
+						{
+							type: "password",
+							label: "Password",
+							// placeholder: "Custom password placeholder",
+							inputProps: { required: true, autocomplete: "new-password" },
+						},
+					]}
+				/>
+				<AmplifySignIn slot="sign-in" />
+			</AmplifyAuthenticator>
+		)
 	);
-	// ) : (
-	// 	<div />
-	// );
-	// ) : (
-	// 	<AmplifyAuthenticator>
-	// 		<AmplifySignUp
-	// 			slot="sign-up"
-	// 			formFields={[
-	// 				{
-	// 					type: "name",
-	// 					label: "Name",
-	// 					inputProps: { required: true },
-	// 					// placeholder: "Custom phone placeholder",
-	// 				},
-	// 				{
-	// 					type: "username",
-	// 					label: "Username",
-	// 					inputProps: { required: true, autocomplete: "username" },
-	// 					// placeholder: "Custom phone placeholder",
-	// 				},
-	// 				{
-	// 					type: "email",
-	// 					label: "E-Mail",
-	// 					// placeholder: "Custom email placeholder",
-	// 					inputProps: { required: true },
-	// 				},
-	// 				{
-	// 					type: "password",
-	// 					label: "Password",
-	// 					// placeholder: "Custom password placeholder",
-	// 					inputProps: { required: true, autocomplete: "new-password" },
-	// 				},
-	// 			]}
-	// 		/>
-	// 		<AmplifySignIn slot="sign-in" />
-	// 	</AmplifyAuthenticator>
-	// );
 }
 
 export default App;

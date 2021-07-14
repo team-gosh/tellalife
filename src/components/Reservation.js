@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import Amplify, { API, graphqlOperation } from "aws-amplify";
+import * as mutations from "../graphql/mutations";
 
 import axios from "axios";
 import App from "../App";
@@ -58,6 +60,8 @@ function Reservation (props) {
 	const classes = useStyles();
 	const bull = <span className={classes.bullet}>•</span>;
 	const { user, data, status, view, setVideo, video } = props;
+	console.log("console.log after props");
+	console.log(user);
 
 	const [ open, setOpen ] = React.useState(false);
 	const handleClickOpen = () => {
@@ -66,6 +70,17 @@ function Reservation (props) {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
+
+
+	// input PaymentIntent {
+	// 	id: String!
+	// 	payment_method_type: [String!]
+	// 	amount: Int!
+	// 	currency: String!
+	// 	application_fee_amount: Int!
+	// 	transfer_data: [Destination]
+	// }
 
 	return (
 		<div className="Reservation">
@@ -131,9 +146,14 @@ function Reservation (props) {
 								variant="outlined"
 								color="primary"
 								onClick={(e) => {
-									const newVideo = {};
-									newVideo.isActive = true;
-									newVideo.username = newVideo.roomName = setVideo(newVideo); //user.username; //e.target.id
+									console.log("user");
+									console.log(user);
+									const newVideo = {
+										isActive: true,
+										identity: user.username,
+										roomName: "pluto", // need to pass later
+									};
+									setVideo(newVideo);
 								}}
 							>
 								Go to video chat
