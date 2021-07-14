@@ -2,7 +2,6 @@ const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
 const apiKey = process.env.REACT_APP_TWILIO_APIKEY;
 const apiSecret = process.env.REACT_APP_TWILIO_API_SECRET;
 
-
 // twilio
 const twilio = require("twilio");
 const AccessToken = twilio.jwt.AccessToken;
