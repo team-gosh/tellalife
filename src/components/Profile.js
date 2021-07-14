@@ -14,7 +14,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
-import { API } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -187,24 +186,6 @@ function Profile (props) {
 		setUser(response.data.updateUser);
 	};
 
-	// stripe
-	// create express account
-	const createAccount = () => {
-		console.log("clicked!!");
-		axios.post("/v1/accounts").then((res) => console.log(res));
-	};
-
-	// account link
-	const setLink = () => {
-		console.log("clicked!!");
-		axios.post("/v1/account_links").then((res) => console.log(res));
-	};
-
-	// make payment
-	const paymentIntent = () => {
-		console.log("clicked!!");
-		axios.post("/v1/payment_intents").then((res) => console.log(res));
-	};
 
 	// fetch the client secret with JavaScript on the client side (from Stripe example, so it should be secure)
 	const getSecret = async () => {
