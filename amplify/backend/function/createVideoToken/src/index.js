@@ -1,9 +1,7 @@
-// const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
-// const apiKey = process.env.REACT_APP_TWILIO_APIKEY;
-// const apiSecret = process.env.REACT_APP_TWILIO_API_SECRET;
-const accountSid = "AC279350ed9469ed0b3f128b39865384ac";
-const apiKey = "SKca9689896af5eb45336c65e6aaaa3f74";
-const apiSecret = "2Aj9TYA9onGXIaJMdMEggCNsnp74uagQ";
+const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
+const apiKey = process.env.REACT_APP_TWILIO_APIKEY;
+const apiSecret = process.env.REACT_APP_TWILIO_API_SECRET;
+
 
 // twilio
 const twilio = require("twilio");
