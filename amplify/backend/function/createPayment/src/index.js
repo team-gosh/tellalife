@@ -3,9 +3,6 @@ const secretKey = process.env.REACT_APP_STRIPE_API_SECRET;
 const stripe = require("stripe")(secretKey);
 
 exports.handler = async function (event, context, callback) {
-	console.log(event.arguments.input, "this is body");
-	console.log(context, 'this is context');
-
 	const paymentIntent = await stripe.paymentIntents.create({
 		amount: parseInt(event.arguments.input.amount),
 		currency: event.arguments.input.currency,

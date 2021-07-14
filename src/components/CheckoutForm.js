@@ -35,8 +35,6 @@ export default function CheckoutForm () {
 
 		const secret = paymentIntentReturn.data.processOrder;
 
-		console.log(typeof secret, secret);
-
 		const result = await stripe.confirmCardPayment(`${secret}`, {
 			payment_method: {
 				card: elements.getElement(CardElement),
@@ -47,7 +45,6 @@ export default function CheckoutForm () {
 			},
 		});
 
-		console.log(result, " before the result. error");
 
 		if (result.error) {
 			// we actually need to figure out how to set the test account payable
