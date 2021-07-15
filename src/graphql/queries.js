@@ -9,25 +9,7 @@ export const getUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations {
-        items {
-          id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          userIDs
-          tellerID
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
+      reservations
       posts {
         items {
           id
@@ -68,9 +50,7 @@ export const listUsers = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -102,9 +82,7 @@ export const getPost = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }
@@ -145,6 +123,7 @@ export const listPosts = /* GraphQL */ `
           username
           email
           home_country
+          reservations
           isTeller
           price
           stripeAccount
@@ -233,9 +212,7 @@ export const getUserByEmail = /* GraphQL */ `
         username
         email
         home_country
-        reservations {
-          nextToken
-        }
+        reservations
         posts {
           nextToken
         }

@@ -218,7 +218,14 @@ function MainPage (props) {
 			</AppBar>
 
 			{display === "Reservation" ? (
-				<ReservationManagement user={user} setVideo={setVideo} video={video} API={API} queries={queries} mutations={mutations} />
+				<ReservationManagement
+					user={user}
+					setVideo={setVideo}
+					video={video}
+					API={API}
+					queries={queries}
+					mutations={mutations}
+				/>
 			) : display === "Profile" ? (
 				<Profile user={user} setUser={setUser} API={API} queries={queries} mutations={mutations} />
 			) : (

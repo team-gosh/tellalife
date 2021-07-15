@@ -16,6 +16,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
+import PublicIcon from "@material-ui/icons/Public";
+import LocationCityIcon from "@material-ui/icons/LocationCity";
+import TimerIcon from "@material-ui/icons/Timer";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -30,15 +33,15 @@ const useStyles = makeStyles((theme) => ({
 			alignItems: "flex-start",
 		},
 		alignItems: "center",
-		marginTop: 10,
+		marginTop: 3,
 	},
 	large: {
-		width: theme.spacing(20),
-		height: theme.spacing(20),
+		width: theme.spacing(16),
+		height: theme.spacing(16),
 		backgroundColor: deepOrange[700],
 		[theme.breakpoints.up("md")]: {
-			width: theme.spacing(30),
-			height: theme.spacing(30),
+			width: theme.spacing(40),
+			height: theme.spacing(40),
 		},
 	},
 	username: {
@@ -47,14 +50,17 @@ const useStyles = makeStyles((theme) => ({
 		textAlign: "center",
 	},
 	profile: {
-		fontSize: 40,
+		fontSize: 20,
+		[theme.breakpoints.up("md")]: {
+			fontSize: 40,
+		},
 	},
 	edit: {
 		fontSize: 30,
 		width: 200,
 		[theme.breakpoints.up("md")]: {
 			fontSize: 40,
-			width: 240,
+			width: 300,
 		},
 	},
 	info: {
@@ -81,6 +87,23 @@ const useStyles = makeStyles((theme) => ({
 	stripeNotice: {
 		fontSize: 10,
 	},
+	card_root: {
+		minWidth: 400,
+		minHeight: 400,
+		display: "flex",
+		justifyContent: "space-around",
+		[theme.breakpoints.up("md")]: {
+			minWidth: 1400,
+			minHeight: 600,
+		},
+	},
+	profile_container: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-around",
+		alignItems: "flex-start",
+		alignContent: "space-around",
+	},
 }));
 
 // get from APIs
@@ -102,8 +125,8 @@ function Profile (props) {
 	const [ home, setHome ] = React.useState();
 	const [ country, setCountry ] = React.useState();
 	const [ city, setCity ] = React.useState();
-	const [ value, setValue ] = React.useState(0);
-	const [ nameEditing, setNameEdit ] = React.useState(false);
+	const [ value, setValue ] = React.useState(user.price ? user.price : 0);
+	const [ isEditing, setEdit ] = React.useState(false);
 	const [ registration, setRegistration ] = React.useState(false);
 	const [ error, setError ] = React.useState("");
 	const [ stripeObj, setStripeObj ] = React.useState({});
@@ -111,14 +134,7 @@ function Profile (props) {
 	// From DB
 	const [ isTeller, setTeller ] = React.useState(false);
 
-	const stripePromise = loadStripe(
-		// stripe with public key (exposable)
-		"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
-		{
-			// this needs to be changed and get from DB
-			stripeAccount: "acct_1JAqYHRN8v3zy7ya",
-		}
-	);
+	const bull = <span className={classes.bullet}>•</span>;
 
 	// currency later
 	// const [ currency, setCurrency ] = React.useState("JPY");
@@ -188,7 +204,6 @@ function Profile (props) {
 		setUser(response.data.updateUser);
 	};
 
-
 	const createUser = async () => {
 		// need to change later
 		const response = await API.graphql({
@@ -210,175 +225,206 @@ function Profile (props) {
 
 	return (
 		<div className={classes.root}>
-			<div className={classes.info}>
-				<div>
+			<Card className={classes.card_root}>
+				<CardContent>
 					<Avatar alt="Miho Ogura" src="" className={classes.large} />
 					<Typography className={classes.username}>{user.email}</Typography>
-				</div>
-			</div>
-
-			<div className={classes.margin}>
-				{nameEditing === false ? (
-					<Typography className={classes.profile}>
-						{nickName}{" "}
-						<Button
-							size="small"
-							variant="outlined"
-							color="primary"
-							onClick={() => {
-								setNameEdit(true);
-							}}
-						>
-							Edit
-						</Button>
-					</Typography>
-				) : (
+					<Typography className={classes.username}>Home Country:{user.home_country}</Typography>
+				</CardContent>
+				<CardContent>
 					<div>
-						<Input id="name" value={nickName} onChange={handleNameChange} className={classes.edit} />
-						<Button
-							size="small"
-							variant="outlined"
-							color="primary"
-							onClick={() => {
-								setNameEdit(false);
-							}}
-						>
-							Save
-						</Button>
-					</div>
-				)}
-
-				{isTeller === true || registration ? (
-					<form className={classes.list_root} noValidate autoComplete="off">
-						<div className={classes.margin}>
-							<TextField
-								className={classes.margin}
-								id="homecountry"
-								select
-								label="Home Country"
-								value={home}
-								onChange={handleHomeChange}
-							>
-								{countries.map((option) => (
-									<MenuItem key={option} value={option}>
-										{option}
-									</MenuItem>
-								))}
-							</TextField>
-						</div>
-
-						<div className={classes.margin}>
-							<TextField
-								id="currentcountry"
-								select
-								label="Current Country"
-								value={country}
-								onChange={handleCurrentCountryChange}
-							>
-								{countries.map((option) => (
-									<MenuItem key={option} value={option}>
-										{option}
-									</MenuItem>
-								))}
-							</TextField>
-						</div>
-						<div className={classes.margin}>
-							<TextField
-								id="currentcity"
-								select
-								label="Current city"
-								value={city}
-								onChange={handleCurrentCityChange}
-							>
-								{country ? (
-									cities[country].map((option) => (
-										<MenuItem key={option} value={option}>
-											{option}
-										</MenuItem>
-									))
-								) : (
-									<MenuItem />
-								)}
-							</TextField>
-						</div>
-
-						<div className={classes.margin}>
-							<InputLabel htmlFor="price" className={classes.priceLabel}>
-								Price per hour
-							</InputLabel>
-
-							<Input
-								id="price"
-								value={value}
-								onChange={handleInputChange}
-								startAdornment={<InputAdornment position="start">¥</InputAdornment>}
-							/>
-						</div>
-						{error}
-					</form>
-				) : (
-					<div />
-				)}
-			</div>
-			<div className={classes.info}>
-				<Button size="medium" variant="outlined" color="primary">
-					Update
-				</Button>
-				<br />
-				{registration ? (
-					<div>
-						<Button
-							size="medium"
-							variant="outlined"
-							color="primary"
-							className={classes.margin}
-							onClick={
-								value !== 0 ? (
-									() => {
-										createUser();
+						{isEditing === false ? (
+							<Typography className={classes.profile}>
+								{nickName}{" "}
+								<Button
+									size="small"
+									variant="outlined"
+									color="primary"
+									onClick={() => {
+										setEdit(true);
+									}}
+								>
+									Edit
+								</Button>
+							</Typography>
+						) : (
+							<div>
+								<Input
+									id="name"
+									value={nickName}
+									onChange={handleNameChange}
+									className={classes.edit}
+								/>
+								<Button
+									size="small"
+									variant="outlined"
+									color="primary"
+									onClick={() => {
 										updateUser();
-									}
-								) : (
-									() => {
-										setError("Please fill in the price");
-									}
-								)
-							}
-						>
-							Continue
-						</Button>
-						<br />
+										setEdit(false);
+									}}
+								>
+									Save
+								</Button>
+							</div>
+						)}
 
-						<Button
-							size="medium"
-							variant="outlined"
-							color="secondary"
-							className={classes.margin}
-							onClick={() => setRegistration(false)}
-						>
-							Cancel
-						</Button>
+						{user.isTeller === true || registration ? (
+							<form className={classes.list_root} noValidate autoComplete="off">
+								<div className={classes.margin}>
+									{isEditing === false ? (
+										<div className={classes.profile_container}>
+											<Typography className={classes.profile}>
+												<PublicIcon color="primary" fontSize="large" /> {user.current_country}
+											</Typography>
+											<Typography className={classes.profile}>
+												<LocationCityIcon color="primary" fontSize="large" />{" "}
+												{user.current_city}
+											</Typography>
+											<Typography className={classes.profile}>
+												<TimerIcon color="primary" fontSize="large" /> ¥{user.price} / hour
+											</Typography>
+										</div>
+									) : (
+										<div>
+											<div>
+												{user.home_country ? (
+													<Typography>{user.home_country}</Typography>
+												) : (
+													<TextField
+														className={classes.margin}
+														id="homecountry"
+														select
+														label="Home Country"
+														value={home}
+														onChange={handleHomeChange}
+														helperText="Please select your home country *This can't be changed"
+													>
+														{countries.map((option) => (
+															<MenuItem key={option} value={option}>
+																{option}
+															</MenuItem>
+														))}
+													</TextField>
+												)}
+											</div>
+
+											<div className={classes.margin}>
+												<TextField
+													id="currentcountry"
+													select
+													label="Current Country"
+													value={country}
+													onChange={handleCurrentCountryChange}
+													helperText="Please select your current country"
+												>
+													{countries.map((option) => (
+														<MenuItem key={option} value={option}>
+															{option}
+														</MenuItem>
+													))}
+												</TextField>
+											</div>
+											<div className={classes.margin}>
+												<TextField
+													id="currentcity"
+													select
+													label="Current City"
+													value={city}
+													onChange={handleCurrentCityChange}
+													helperText="Please select your current city"
+												>
+													{country ? (
+														cities[country].map((option) => (
+															<MenuItem key={option} value={option}>
+																{option}
+															</MenuItem>
+														))
+													) : (
+														<MenuItem />
+													)}
+												</TextField>
+											</div>
+											<div className={classes.margin}>
+												<InputLabel htmlFor="price" className={classes.priceLabel}>
+													Price per hour
+												</InputLabel>
+
+												<Input
+													id="price"
+													value={value}
+													onChange={handleInputChange}
+													startAdornment={<InputAdornment position="start">¥</InputAdornment>}
+												/>
+											</div>
+										</div>
+									)}
+								</div>
+
+								{error}
+							</form>
+						) : (
+							<div />
+						)}
 					</div>
-				) : (
-					<Button
-						size="medium"
-						variant="outlined"
-						color="primary"
-						className={classes.margin}
-						onClick={() => setRegistration(true)}
-					>
-						Register
-					</Button>
-				)}
-				{stripeObj.url ? (
-					<span className={classes.stripeNotice}>
-						Please access here to register <a href={stripeObj.url}>Go to Stripe</a>
-					</span>
-				) : (
-					<span />
-				)}
-				<br />
-			</div>
+				</CardContent>
+				<CardActions>
+					<div className={classes.info}>
+						{registration ? (
+							<div>
+								<Button
+									size="medium"
+									variant="outlined"
+									color="primary"
+									className={classes.margin}
+									onClick={
+										value !== 0 ? (
+											() => {
+												createUser();
+											}
+										) : (
+											() => {
+												setError("Please fill in the price");
+											}
+										)
+									}
+								>
+									Continue
+								</Button>
+								<br />
+
+								<Button
+									size="medium"
+									variant="outlined"
+									color="secondary"
+									className={classes.margin}
+									onClick={() => setRegistration(false)}
+								>
+									Cancel
+								</Button>
+							</div>
+						) : (
+							<Button
+								size="medium"
+								variant="outlined"
+								color="primary"
+								className={classes.margin}
+								onClick={() => setRegistration(true)}
+							>
+								Register
+							</Button>
+						)}
+						{stripeObj.url ? (
+							<span className={classes.stripeNotice}>
+								Please access here to register <a href={stripeObj.url}>Go to Stripe</a>
+							</span>
+						) : (
+							<span />
+						)}
+						<br />
+					</div>
+				</CardActions>
+			</Card>
 		</div>
 	);
 }
