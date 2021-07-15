@@ -31,6 +31,7 @@ function MakeReservation(props) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState("");
   const [duration, setDuration] = useState("");
+  const [disable, setDisable] = useState(true);
 
   const classes = useStyles();
 
@@ -40,15 +41,10 @@ function MakeReservation(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setDate("");
+    setDuration("");
+    setDisable(true);
   };
-
-  // const handleChange = (event) => {
-  //   const name = event.target.name;
-  //   setDuration({
-  //     ...duration,
-  //     [name]: event.target.value
-  //   });
-  // };
 
   return (
     <div>
@@ -78,12 +74,19 @@ function MakeReservation(props) {
               onChange={(event) => {
                 const millisecond = new Date(
                   Number(event.target.value.slice(0, 4)),
-                  Number(event.target.value.slice(5, 7)),
+                  // Date ConstructorのmonthIndexは0-11
+                  Number(event.target.value.slice(5, 7) - 1),
                   Number(event.target.value.slice(8, 10)),
                   Number(event.target.value.slice(11, 13)),
                   Number(event.target.value.slice(14))
                 ).getTime();
-                setDate(millisecond);
+                if (millisecond - new Date().getTime() > 0) {
+                  setDate(millisecond);
+                  if (duration.length > 0) setDisable(false);
+                } else {
+                  setDate("");
+                  setDisable(true);
+                }
               }}
             />
             <FormControl className={classes.formControl}>
@@ -92,7 +95,10 @@ function MakeReservation(props) {
               </InputLabel>
               <NativeSelect
                 value={duration}
-                onChange={(event) => setDuration(event.target.value)}
+                onChange={(event) => {
+                  setDuration(event.target.value);
+                  if (date) setDisable(false);
+                }}
                 inputProps={{
                   name: "age",
                   id: "age-native-label-placeholder"
@@ -112,7 +118,16 @@ function MakeReservation(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <AlertDialog setOpen={setOpen} teller={teller} date={date} user={user} duration={duration}/>
+          <AlertDialog
+            setOpen={setOpen}
+            teller={teller}
+            date={date}
+            setDate={setDate}
+            user={user}
+            duration={duration}
+            setDuration={setDuration}
+            disable={disable}
+          />
         </DialogActions>
       </Dialog>
     </div>
