@@ -83,6 +83,8 @@ function ReservationManagement (props) {
 	useEffect(async () => {
 		// const reservations = (await axios.get(.....)).data
 		// setReservations(reservations);
+    console.log("user in ReservationManagement.js")
+    console.log(user)
     const allResponse = await API.graphql({
       query: queries.listReservations,
       // variables: {

@@ -83,19 +83,36 @@ function MainPage (props) {
 			const name = userAuth.attributes.name;
 			try {
 				// Try to get user from database
-				const currentUser = await API.graphql({
+        console.log("before currntuserID")
+				const currentUserData = (await API.graphql({
 					query: queries.getUserByEmail,
 					variables: {
 						username: userNameAndEmail,
 					},
-				});
-				console.log(currentUser);
-				console.log("main page current user");
-				console.log(currentUser);
-				if (currentUser.data.getUserByEmail.items.length) {
-					console.log("after if 94 (user exists)");
-					// If user exists, set to user
-					setUser(currentUser.data.getUserByEmail.items[0]);
+				})).data.getUserByEmail.items;
+        console.log('before')
+        console.log(currentUserData);
+        console.log('after')
+        
+				// console.log("main page current user big Get");
+				// console.log(currentUser);
+				// if (currentUser.data.getUser) {
+          if (currentUserData.length) {
+            console.log("after if 94 (user exists)");
+            // If user exists, set to user
+            
+            const currentUser = await API.graphql({
+              query: queries.getUser,
+            	variables: {
+                id: currentUserData[0].id,
+            	},
+            });
+
+          setUser(currentUser.data.getUser)
+          console.log("!!!!!!HERE!!!!!!!!")
+          console.log(currentUser)
+          // console.log(currentUserData)
+					// setUser(currentUser.data.getUser);
 				} else if (!user) {
 					console.log("after else 99 (create new user)");
 					// If user doesn't exist, then create new user in database
@@ -107,14 +124,23 @@ function MainPage (props) {
 					};
           console.log("newUserRegistrationData in useEffect Main Page 108")
           console.log(newUserRegistrationData)
-					const response = await API.graphql({
+					const newUserId = (await API.graphql({
 						query: mutations.createUser,
 						variables: { input: newUserRegistrationData },
-					});
+					})).data.createUser.id;
 					// Retrieve new user data from database and set to user
-					console.log("response");
-					console.log(response);
-					setUser(response.data.createUser);
+					// console.log("response");
+					// console.log(response);
+					// setUser(response.data.createUser);
+          const newUser = await API.graphql({
+            query: queries.getUser,
+            variables: {
+              id: newUserId,
+            },
+          });
+          console.log("newUser")
+          console.log(newUser)
+          setUser(newUser.data.getUser)
 				}
 				console.log("after conditionals");
 				console.log(user, "this is because the react thing");
@@ -203,7 +229,7 @@ function MainPage (props) {
 	console.log(user);
 	return (
 		<div className="MainPage">
-			{/* <h1>{JSON.stringify(state)}</h1> */}
+			<h1>{JSON.stringify(user)}</h1>
 			<AppBar position="static" className={classes.appbar}>
 				<Toolbar>
 					<IconButton onClick={toggleDrawer("left", true)} color="inherit">

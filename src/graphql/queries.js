@@ -41,6 +41,7 @@ export const getUser = /* GraphQL */ `
       stripeAccount
       current_country
       current_city
+      stripeURL
       createdAt
       updatedAt
     }
@@ -70,6 +71,7 @@ export const listUsers = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -104,6 +106,7 @@ export const getPost = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -141,6 +144,7 @@ export const listPosts = /* GraphQL */ `
           stripeAccount
           current_country
           current_city
+          stripeURL
           createdAt
           updatedAt
         }
@@ -196,6 +200,7 @@ export const getAttendingUsers = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -242,6 +247,7 @@ export const listAttendingUsers = /* GraphQL */ `
           stripeAccount
           current_country
           current_city
+          stripeURL
           createdAt
           updatedAt
         }
@@ -346,6 +352,7 @@ export const getUserByEmail = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
