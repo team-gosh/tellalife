@@ -13,6 +13,7 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
 	current_country: String
 	current_city: String
   stripeURL: String
+  avatar: String
 }
 
 # Post Table
@@ -64,6 +65,7 @@ type Reservation
   users: [AttendingUsers!]! @connection(keyName: "reservationAttendedBy", fields: ["id"])
 	# tellerID: ID!
 	tellerID: String!
+  seen: Boolean!
 }
 
 # Twilio Video Generator

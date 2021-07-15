@@ -160,7 +160,7 @@ function ReservationManagement(props) {
       <div className={classes.root}>
         <div>
           <h1>{view}</h1>
-          <h1>{JSON.stringify(reservations)}</h1>
+          {/* <h1>{JSON.stringify(reservations)}</h1> */}
           {/* this h2 is just for testing purpose */}
           <Paper square className={classes.root}>
             <Tabs

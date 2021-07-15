@@ -60,6 +60,7 @@ export const createUser = /* GraphQL */ `
       current_country
       current_city
       stripeURL
+      avatar
       createdAt
       updatedAt
     }
@@ -109,6 +110,7 @@ export const updateUser = /* GraphQL */ `
       current_country
       current_city
       stripeURL
+      avatar
       createdAt
       updatedAt
     }
@@ -158,6 +160,7 @@ export const deleteUser = /* GraphQL */ `
       current_country
       current_city
       stripeURL
+      avatar
       createdAt
       updatedAt
     }
@@ -194,6 +197,7 @@ export const createPost = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -236,6 +240,7 @@ export const updatePost = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -278,6 +283,7 @@ export const deletePost = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -314,6 +320,7 @@ export const createAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        seen
         createdAt
         updatedAt
       }
@@ -335,6 +342,7 @@ export const createAttendingUsers = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -368,6 +376,7 @@ export const updateAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        seen
         createdAt
         updatedAt
       }
@@ -389,6 +398,7 @@ export const updateAttendingUsers = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -422,6 +432,7 @@ export const deleteAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        seen
         createdAt
         updatedAt
       }
@@ -443,6 +454,7 @@ export const deleteAttendingUsers = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -479,6 +491,7 @@ export const createReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      seen
       createdAt
       updatedAt
     }
@@ -512,6 +525,7 @@ export const updateReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      seen
       createdAt
       updatedAt
     }
@@ -545,6 +559,7 @@ export const deleteReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      seen
       createdAt
       updatedAt
     }

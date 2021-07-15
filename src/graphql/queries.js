@@ -42,6 +42,7 @@ export const getUser = /* GraphQL */ `
       current_country
       current_city
       stripeURL
+      avatar
       createdAt
       updatedAt
     }
@@ -72,6 +73,7 @@ export const listUsers = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -107,6 +109,7 @@ export const getPost = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -145,6 +148,7 @@ export const listPosts = /* GraphQL */ `
           current_country
           current_city
           stripeURL
+          avatar
           createdAt
           updatedAt
         }
@@ -180,6 +184,7 @@ export const getAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        seen
         createdAt
         updatedAt
       }
@@ -201,6 +206,7 @@ export const getAttendingUsers = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -233,6 +239,7 @@ export const listAttendingUsers = /* GraphQL */ `
           description
           userIDs
           tellerID
+          seen
           createdAt
           updatedAt
         }
@@ -248,6 +255,7 @@ export const listAttendingUsers = /* GraphQL */ `
           current_country
           current_city
           stripeURL
+          avatar
           createdAt
           updatedAt
         }
@@ -283,6 +291,7 @@ export const getReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      seen
       createdAt
       updatedAt
     }
@@ -311,6 +320,7 @@ export const listReservations = /* GraphQL */ `
           nextToken
         }
         tellerID
+        seen
         createdAt
         updatedAt
       }
@@ -353,6 +363,7 @@ export const getUserByEmail = /* GraphQL */ `
         current_country
         current_city
         stripeURL
+        avatar
         createdAt
         updatedAt
       }
