@@ -68,12 +68,7 @@ function App () {
 		console.log(clientSecret);
 	};
 
-	// console.log("Auth State");
-	// console.log(authState);
-	// console.log("User Auth");
-	// console.log(userAuth);
-	// console.log("Auth State Signed In");
-	// console.log(authState ? authState.SignedIn : undefined);
+
 
 	return (
 		// Below line is for avoiding database duplicates, and undefined userAuth in MainPage.

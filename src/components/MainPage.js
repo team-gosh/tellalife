@@ -167,7 +167,7 @@ function MainPage (props) {
 			onKeyDown={toggleDrawer(anchor, false)}
 		>
 			<List>
-				{[ "Reservation", "Feed", "Profile", "Something" ].map((text, index) => (
+				{[ "Reservation", "Feed", "Profile" ].map((text, index) => (
 					<ListItem button key={text} onClick={() => setDisplay(text)}>
 						<ListItemIcon>
 							{index === 0 ? (
