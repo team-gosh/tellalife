@@ -229,7 +229,7 @@ function MainPage (props) {
 	console.log(user);
 	return (
 		<div className="MainPage">
-			<h1>{JSON.stringify(user)}</h1>
+			{/* <h1>{JSON.stringify(user)}</h1> */}
 			<AppBar position="static" className={classes.appbar}>
 				<Toolbar>
 					<IconButton onClick={toggleDrawer("left", true)} color="inherit">
