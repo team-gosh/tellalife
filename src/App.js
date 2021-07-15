@@ -10,8 +10,6 @@ import { AmplifyAuthenticator, AmplifySignOut, AmplifySignUp, AmplifySignIn } fr
 import awsconfig from "./aws-exports";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
 // console.log("awsconfig")
 // console.log(awsconfig)
 Amplify.configure(awsconfig);
@@ -26,13 +24,6 @@ function App () {
 	});
 	const [ authState, setAuthState ] = useState();
 	const [ userAuth, setUserAuth ] = useState(); // Change name to avoid confusion
-
-	const stripePromise = loadStripe(
-		"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
-		{
-			stripeAccount: "acct_1JAqYHRN8v3zy7ya",
-		}
-	);
 
 	useEffect(() => {
 		return onAuthUIStateChange((nextAuthState, authData) => {
@@ -68,14 +59,11 @@ function App () {
 		console.log(clientSecret);
 	};
 
-
-
 	return (
 		// Below line is for avoiding database duplicates, and undefined userAuth in MainPage.
 		// Need to find better solution
 		authState === AuthState.SignedIn && userAuth && userAuth.attributes ? (
 			<div className="App">
-
 				{video.isActive ? (
 					<VideoChat
 						guestName={video.username}
@@ -84,17 +72,17 @@ function App () {
 						graphqlOperation={graphqlOperation}
 					/>
 				) : (
-					<Elements stripe={stripePromise}>
-						<MainPage
-							video={video}
-							setVideo={setVideo}
-							userAuth={userAuth}
-							AmplifySignOut={AmplifySignOut}
-							Auth={Auth}
-							Amplify={Amplify}
-							graphqlOperation={graphqlOperation}
-						/>
-					</Elements>
+					// <Elements stripe={stripePromise}>
+					<MainPage
+						video={video}
+						setVideo={setVideo}
+						userAuth={userAuth}
+						AmplifySignOut={AmplifySignOut}
+						Auth={Auth}
+						Amplify={Amplify}
+						graphqlOperation={graphqlOperation}
+					/>
+					// </Elements>
 				)}
 			</div>
 		) : (

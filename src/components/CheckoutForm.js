@@ -3,7 +3,6 @@ import Amplify, { API, graphqlOperation } from "aws-amplify";
 import * as mutations from "../graphql/mutations";
 
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-
 import CardSection from "./CardSection";
 
 export default function CheckoutForm () {
@@ -11,10 +10,14 @@ export default function CheckoutForm () {
 	const elements = useElements();
 
 	const handleSubmit = async (event) => {
-		// We don't want to let default form submission happen here,
-		// which would refresh the page.
+		console.log(stripe.confirmCardPayment, " this is promise");
+
 		event.preventDefault();
-		// if (!stripe || !elements) {
+		if (!stripe || !elements) {
+			// Stripe.js has not yet loaded.
+			// Make sure to disable form submission until Stripe.js has loaded.
+			return;
+		}
 		const paymentIntentReturn = await API.graphql({
 			query: mutations.processOrder,
 			variables: {
@@ -35,7 +38,7 @@ export default function CheckoutForm () {
 
 		const secret = paymentIntentReturn.data.processOrder;
 
-		const result = await stripe.confirmCardPayment(`${secret}`, {
+		const result = await stripe.confirmCardPayment(secret, {
 			payment_method: {
 				card: elements.getElement(CardElement),
 				billing_details: {
@@ -44,7 +47,6 @@ export default function CheckoutForm () {
 				},
 			},
 		});
-
 
 		if (result.error) {
 			// we actually need to figure out how to set the test account payable

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -14,6 +13,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -109,11 +111,11 @@ function Profile (props) {
 	// From DB
 	const [ isTeller, setTeller ] = React.useState(false);
 
-	// stripe with public key
 	const stripePromise = loadStripe(
+		// stripe with public key (exposable)
 		"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
 		{
-			// this stripe account get from DB
+			// this needs to be changed and get from DB
 			stripeAccount: "acct_1JAqYHRN8v3zy7ya",
 		}
 	);
@@ -186,15 +188,6 @@ function Profile (props) {
 		setUser(response.data.updateUser);
 	};
 
-
-	// fetch the client secret with JavaScript on the client side (from Stripe example, so it should be secure)
-	const getSecret = async () => {
-		console.log("clicked!!");
-		const response = await fetch("/secret");
-		const { client_secret: clientSecret } = await response.json();
-
-		console.log(clientSecret);
-	};
 
 	const createUser = async () => {
 		// need to change later
