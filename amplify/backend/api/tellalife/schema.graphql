@@ -88,7 +88,7 @@ input AccountType {
 }
 
 type Mutation {
-	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken")
-	createStripeAccount(input: AccountType!): String @function(name: "createStripeAccount")
+	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken-${env}")
+	createStripeAccount(input: AccountType!): String @function(name: "createStripeAccount-${env}")
 	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
 }
