@@ -71,9 +71,6 @@ function Reservation (props) {
 		setOpen(false);
 	};
 
-
-
-
 	return (
 		<div className="Reservation" id={data.id}>
 			{/* consumer view */}
@@ -86,7 +83,7 @@ function Reservation (props) {
 						{"Teller ID: " + data.tellerID}
 					</Typography>
 					<Typography variant="body2" component="p" className={classes.text}>
-						{(new Date(data.startDateTime)).now}
+						{new Date(data.startDateTime).now}
 					</Typography>
 				</CardContent>
 				{view === "listener" ? status === "pending" ? (

@@ -27,7 +27,16 @@ export const createUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          reservationID
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -66,7 +75,16 @@ export const updateUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          reservationID
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -105,7 +123,16 @@ export const deleteUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          reservationID
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -152,7 +179,9 @@ export const createPost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -191,7 +220,9 @@ export const updatePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -230,7 +261,9 @@ export const deletePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -245,6 +278,165 @@ export const deletePost = /* GraphQL */ `
       text
       link
       image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createAttendingUsers = /* GraphQL */ `
+  mutation CreateAttendingUsers(
+    $input: CreateAttendingUsersInput!
+    $condition: ModelAttendingUsersConditionInput
+  ) {
+    createAttendingUsers(input: $input, condition: $condition) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateAttendingUsers = /* GraphQL */ `
+  mutation UpdateAttendingUsers(
+    $input: UpdateAttendingUsersInput!
+    $condition: ModelAttendingUsersConditionInput
+  ) {
+    updateAttendingUsers(input: $input, condition: $condition) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteAttendingUsers = /* GraphQL */ `
+  mutation DeleteAttendingUsers(
+    $input: DeleteAttendingUsersInput!
+    $condition: ModelAttendingUsersConditionInput
+  ) {
+    deleteAttendingUsers(input: $input, condition: $condition) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -267,6 +459,16 @@ export const createReservation = /* GraphQL */ `
       title
       description
       userIDs
+      users {
+        items {
+          id
+          reservationID
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       tellerID
       createdAt
       updatedAt
@@ -290,6 +492,16 @@ export const updateReservation = /* GraphQL */ `
       title
       description
       userIDs
+      users {
+        items {
+          id
+          reservationID
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       tellerID
       createdAt
       updatedAt
@@ -313,6 +525,16 @@ export const deleteReservation = /* GraphQL */ `
       title
       description
       userIDs
+      users {
+        items {
+          id
+          reservationID
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       tellerID
       createdAt
       updatedAt

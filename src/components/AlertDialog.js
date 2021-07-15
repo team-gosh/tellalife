@@ -14,22 +14,41 @@ export default function AlertDialog (props) {
 
 	const handleClickOpen = async () => {
 		setDialog(true);
-		const newReservation = {
+		const dataForNewReservation = {
 			duration: Number(duration),
 			price: Number(duration) / 30 * Number(teller.price),
 			startDateTime: String(date),
 			status: "pending",
 			tellerID: teller.id,
 			type: "pair",
-			userIDs: user.id,
+			// userIDs: user.id,
 		};
-    console.log("newReservation")
-    console.log(newReservation)
-		const response = await API.graphql({
+    console.log("dataForNewReservation")
+    console.log(dataForNewReservation)
+		const newReservation = await API.graphql({
 			query: mutations.createReservation,
-			variables: { input: newReservation },
+			variables: { input: dataForNewReservation },
 		});
-		console.log(response);
+		console.log(newReservation);
+    //newReservation.data.createReservatoin.id is new reservation id
+    const newAttendingListener = await API.graphql({
+      query: mutations.createAttendingUsers,
+      variables: { 
+        input: {
+          reservationID: newReservation.data.createReservation.id,
+          userID: user.id
+        }
+      }
+    });
+    const newAttendingTeller = await API.graphql({
+      query: mutations.createAttendingUsers,
+      variables: { 
+        input: {
+          reservationID: newReservation.data.createReservation.id,
+          userID: teller.id
+        }
+      }
+    });
 	};
 
 	const handleClose = () => {
