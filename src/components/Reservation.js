@@ -71,6 +71,12 @@ function Reservation (props) {
 		setOpen(false);
 	};
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 15921954de960bae0d2b9430b4700dc86b49f753
 	return (
 		<div className="Reservation" id={data.id}>
 			{/* consumer view */}
