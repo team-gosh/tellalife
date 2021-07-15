@@ -12,17 +12,8 @@ export const getUser = /* GraphQL */ `
       reservations {
         items {
           id
-          startDateTime
-          duration
-          price
-          status
-          type
-          country
-          city
-          title
-          description
-          userIDs
-          tellerID
+          reservationID
+          userID
           createdAt
           updatedAt
         }
@@ -163,6 +154,104 @@ export const listPosts = /* GraphQL */ `
     }
   }
 `;
+export const getAttendingUsers = /* GraphQL */ `
+  query GetAttendingUsers($id: ID!) {
+    getAttendingUsers(id: $id) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listAttendingUsers = /* GraphQL */ `
+  query ListAttendingUsers(
+    $filter: ModelAttendingUsersFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAttendingUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        reservationID
+        userID
+        reservation {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          userIDs
+          tellerID
+          createdAt
+          updatedAt
+        }
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getReservation = /* GraphQL */ `
   query GetReservation($id: ID!) {
     getReservation(id: $id) {
@@ -177,6 +266,16 @@ export const getReservation = /* GraphQL */ `
       title
       description
       userIDs
+      users {
+        items {
+          id
+          reservationID
+          userID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       tellerID
       createdAt
       updatedAt
@@ -202,6 +301,9 @@ export const listReservations = /* GraphQL */ `
         title
         description
         userIDs
+        users {
+          nextToken
+        }
         tellerID
         createdAt
         updatedAt

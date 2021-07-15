@@ -105,6 +105,8 @@ function MainPage (props) {
 						name: name,
 						isTeller: false,
 					};
+          console.log("newUserRegistrationData in useEffect Main Page 108")
+          console.log(newUserRegistrationData)
 					const response = await API.graphql({
 						query: mutations.createUser,
 						variables: { input: newUserRegistrationData },
