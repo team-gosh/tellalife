@@ -4,18 +4,9 @@ const secretKey =
 const stripe = require("stripe")(secretKey);
 
 exports.handler = async function (event, context, callback) {
-	const account = await stripe.accounts.create({
-		type: "express",
-	});
-
-	const accountLink = await stripe.accountLinks.create({
-		account: account.id,
-		refresh_url: "http://localhost:3000/",
-		return_url: "http://localhost:3000/",
-		type: "account_onboarding",
-	});
-
-	account.url = accountLink.url;
+	console.log(event.arguments);
+    const account = await stripe.accounts.retrieve(event.arguments.input.id);
+    
 
 	return JSON.stringify(account);
 };

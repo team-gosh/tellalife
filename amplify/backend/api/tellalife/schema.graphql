@@ -82,8 +82,13 @@ input AccountType {
 	type: String!
 }
 
+input StripeAccount {
+	id: String!
+}
+
 type Mutation {
 	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken")
 	createStripeAccount(input: AccountType!): String @function(name: "createStripeAccount")
 	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
+	getStripeAccount(input: StripeAccount!): String @function(name: "getStripeAccount-${env}")
 }

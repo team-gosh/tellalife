@@ -16,6 +16,11 @@ export const processOrder = /* GraphQL */ `
     processOrder(input: $input)
   }
 `;
+export const getStripeAccount = /* GraphQL */ `
+  mutation GetStripeAccount($input: StripeAccount!) {
+    getStripeAccount(input: $input)
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!

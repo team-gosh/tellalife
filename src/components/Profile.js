@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { loadStripe } from "@stripe/stripe-js";
+import { useStripe, useElements } from "@stripe/react-stripe-js";
 
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
@@ -19,6 +19,7 @@ import CardContent from "@material-ui/core/CardContent";
 import PublicIcon from "@material-ui/icons/Public";
 import LocationCityIcon from "@material-ui/icons/LocationCity";
 import TimerIcon from "@material-ui/icons/Timer";
+import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -101,8 +102,11 @@ const useStyles = makeStyles((theme) => ({
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-around",
-		alignItems: "flex-start",
+		alignItems: "center",
 		alignContent: "space-around",
+	},
+	card_content: {
+		flexGrow: "1",
 	},
 }));
 
@@ -117,8 +121,11 @@ const cities = {
 };
 
 function Profile (props) {
+	const stripe = useStripe();
+	const elements = useElements();
+
 	const classes = useStyles();
-	const { user, setUser, API, queries, mutations } = props;
+	const { user, setUser, API, mutations } = props;
 
 	// Connect with DB
 	const [ nickName, setNickName ] = React.useState(user.name);
@@ -130,37 +137,13 @@ function Profile (props) {
 	const [ registration, setRegistration ] = React.useState(false);
 	const [ error, setError ] = React.useState("");
 	const [ stripeObj, setStripeObj ] = React.useState({});
+	const [ url, setUrl ] = React.useState("");
+	const [ charges_enabled, setCharges_enabled ] = React.useState(false);
 
 	// From DB
 	const [ isTeller, setTeller ] = React.useState(false);
 
 	const bull = <span className={classes.bullet}>•</span>;
-
-	// currency later
-	// const [ currency, setCurrency ] = React.useState("JPY");
-
-	// const currencies = [
-	// 	{
-	// 		value: "USD",
-	// 		label: "$",
-	// 	},
-	// 	{
-	// 		value: "EUR",
-	// 		label: "€",
-	// 	},
-	// 	{
-	// 		value: "BTC",
-	// 		label: "฿",
-	// 	},
-	// 	{
-	// 		value: "JPY",
-	// 		label: "¥",
-	// 	},
-	// ];
-
-	// const handleCurrencyChange = (event) => {
-	// 	setCurrency(event.target.value);
-	// };
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
@@ -204,6 +187,28 @@ function Profile (props) {
 		setUser(response.data.updateUser);
 	};
 
+	const updateName = async () => {
+		const newData = {
+			id: user.id,
+			name: nickName,
+			home_country: home,
+			current_country: country,
+			current_city: city,
+			price: value,
+			stripeAccount: stripeObj.id,
+			isTeller: false,
+		};
+		// logic to handle to timeout!!!!
+
+		const response = await API.graphql({
+			query: mutations.updateUser,
+			variables: { input: newData },
+		});
+		console.log("updated user");
+		console.log(response.data.updateUser);
+		setUser(response.data.updateUser);
+	};
+
 	const createUser = async () => {
 		// need to change later
 		const response = await API.graphql({
@@ -219,19 +224,45 @@ function Profile (props) {
 		setStripeObj(jsonUser);
 		console.log(jsonUser);
 		console.log(jsonUser.url);
+		setUrl(jsonUser.url);
 		window.open(jsonUser.url, "_blank");
 		console.log(stripeObj);
 	};
 
+	const account = async () => {
+		const response = await API.graphql({
+			query: mutations.getStripeAccount,
+			variables: {
+				input: {
+					id: user.stripeAccount,
+				},
+			},
+		});
+		const userObj = JSON.parse(response.data.getStripeAccount);
+
+		console.log(userObj);
+
+		if (userObj.charges_enabled === true) {
+			setCharges_enabled(true);
+		} else {
+			console.log("Processs has not finished yet");
+		}
+	};
+
 	return (
 		<div className={classes.root}>
+			Editing {isEditing ? "true" : "false"}
+			<br />
+			Registration {registration ? "true" : "false"}
+			<br />
+			isTeller {user.isTeller ? "true" : "false"}
 			<Card className={classes.card_root}>
 				<CardContent>
 					<Avatar alt="Miho Ogura" src="" className={classes.large} />
 					<Typography className={classes.username}>{user.email}</Typography>
-					<Typography className={classes.username}>Home Country:{user.home_country}</Typography>
 				</CardContent>
-				<CardContent>
+
+				<CardContent className={classes.card_content}>
 					<div>
 						{isEditing === false ? (
 							<Typography className={classes.profile}>
@@ -241,6 +272,7 @@ function Profile (props) {
 									variant="outlined"
 									color="primary"
 									onClick={() => {
+										account();
 										setEdit(true);
 									}}
 								>
@@ -256,24 +288,77 @@ function Profile (props) {
 									className={classes.edit}
 								/>
 								<Button
-									size="small"
+									size="medium"
 									variant="outlined"
 									color="primary"
 									onClick={() => {
-										updateUser();
+										console.log(url, "this is url");
+										if (charges_enabled === true) {
+											updateUser();
+										} else {
+											updateName();
+										}
 										setEdit(false);
+										setRegistration(false);
 									}}
 								>
 									Save
 								</Button>
+
+								{user.isTeller === false && registration === false ? (
+									<span>
+										<Button
+											size="medium"
+											variant="outlined"
+											color="primary"
+											onClick={() => {
+												setRegistration(true);
+											}}
+										>
+											Register as a teller
+										</Button>
+										<Button
+											size="medium"
+											variant="outlined"
+											color="secondary"
+											onClick={() => {
+												setEdit(false);
+												setRegistration(false);
+											}}
+											r
+										>
+											Cancel
+										</Button>
+									</span>
+								) : (
+									<span>
+										<Button size="medium" variant="outlined" color="gray" disabled={true}>
+											Register as a teller
+										</Button>
+										<Button
+											size="medium"
+											variant="outlined"
+											color="secondary"
+											onClick={() => {
+												setEdit(false);
+												setRegistration(false);
+											}}
+										>
+											Cancel
+										</Button>
+									</span>
+								)}
 							</div>
 						)}
 
-						{user.isTeller === true || registration ? (
+						{user ? (
 							<form className={classes.list_root} noValidate autoComplete="off">
 								<div className={classes.margin}>
 									{isEditing === false ? (
 										<div className={classes.profile_container}>
+											<Typography className={classes.profile}>
+												<HomeIcon color="primary" fontSize="large" /> {user.home_country}
+											</Typography>
 											<Typography className={classes.profile}>
 												<PublicIcon color="primary" fontSize="large" /> {user.current_country}
 											</Typography>
@@ -281,15 +366,22 @@ function Profile (props) {
 												<LocationCityIcon color="primary" fontSize="large" />{" "}
 												{user.current_city}
 											</Typography>
-											<Typography className={classes.profile}>
-												<TimerIcon color="primary" fontSize="large" /> ¥{user.price} / hour
-											</Typography>
+											{user.isTeller ? (
+												<Typography className={classes.profile}>
+													<TimerIcon color="primary" fontSize="large" /> ¥{user.price} / hour
+												</Typography>
+											) : (
+												<div />
+											)}
 										</div>
 									) : (
 										<div>
 											<div>
 												{user.home_country ? (
-													<Typography>{user.home_country}</Typography>
+													<Typography>
+														<HomeIcon />
+														{user.home_country}
+													</Typography>
 												) : (
 													<TextField
 														className={classes.margin}
@@ -357,6 +449,45 @@ function Profile (props) {
 													startAdornment={<InputAdornment position="start">¥</InputAdornment>}
 												/>
 											</div>
+											{user.charges_enabled === true || registration === false ? (
+												<Button
+													size="medium"
+													variant="outlined"
+													color="primary"
+													className={classes.margin}
+													disabled={true}
+												>
+													Register Stripe Account
+												</Button>
+											) : (
+												<div>
+													<Button
+														size="medium"
+														variant="outlined"
+														color="primary"
+														className={classes.margin}
+														onClick={
+															value !== 0 ? (
+																() => {
+																	createUser();
+																}
+															) : (
+																() => {
+																	setError("Please fill in the price");
+																}
+															)
+														}
+													>
+														Register Stripe Account
+													</Button>
+													<p> *You need Stripe account to get paid</p>
+													{url ? (
+														<a href={url}>Finish your registration from here</a>
+													) : (
+														<span />
+													)}
+												</div>
+											)}
 										</div>
 									)}
 								</div>
@@ -368,7 +499,7 @@ function Profile (props) {
 						)}
 					</div>
 				</CardContent>
-				<CardActions>
+				{/* <CardActions>
 					<div className={classes.info}>
 						{registration ? (
 							<div>
@@ -381,6 +512,7 @@ function Profile (props) {
 										value !== 0 ? (
 											() => {
 												createUser();
+												updateUser();
 											}
 										) : (
 											() => {
@@ -392,27 +524,9 @@ function Profile (props) {
 									Continue
 								</Button>
 								<br />
-
-								<Button
-									size="medium"
-									variant="outlined"
-									color="secondary"
-									className={classes.margin}
-									onClick={() => setRegistration(false)}
-								>
-									Cancel
-								</Button>
 							</div>
 						) : (
-							<Button
-								size="medium"
-								variant="outlined"
-								color="primary"
-								className={classes.margin}
-								onClick={() => setRegistration(true)}
-							>
-								Register
-							</Button>
+							<div />
 						)}
 						{stripeObj.url ? (
 							<span className={classes.stripeNotice}>
@@ -423,7 +537,7 @@ function Profile (props) {
 						)}
 						<br />
 					</div>
-				</CardActions>
+				</CardActions> */}
 			</Card>
 		</div>
 	);
