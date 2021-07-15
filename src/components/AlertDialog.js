@@ -23,6 +23,8 @@ export default function AlertDialog (props) {
 			type: "pair",
 			userIDs: user.id,
 		};
+    console.log("newReservation")
+    console.log(newReservation)
 		const response = await API.graphql({
 			query: mutations.createReservation,
 			variables: { input: newReservation },

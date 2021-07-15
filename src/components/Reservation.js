@@ -71,31 +71,19 @@ function Reservation (props) {
 		setOpen(false);
 	};
 
-
-
-	// input PaymentIntent {
-	// 	id: String!
-	// 	payment_method_type: [String!]
-	// 	amount: Int!
-	// 	currency: String!
-	// 	application_fee_amount: Int!
-	// 	transfer_data: [Destination]
-	// }
-
 	return (
-		<div className="Reservation">
+		<div className="Reservation" id={data.id}>
 			{/* consumer view */}
 			<Card className={classes.root}>
 				<CardContent>
 					<Typography className={classes.title} color="textSecondary" gutterBottom>
-						{data.teller}
+						{"Reservation ID: " + data.id}
 					</Typography>
 					<Typography variant="h5" component="h2">
-						{data.title}
+						{"Teller ID: " + data.tellerID}
 					</Typography>
 					<Typography variant="body2" component="p" className={classes.text}>
-						dsadfafsdasdfasdfasfd
-						{data.description}
+						{(new Date(data.startDateTime)).now}
 					</Typography>
 				</CardContent>
 				{view === "listener" ? status === "pending" ? (
@@ -151,7 +139,7 @@ function Reservation (props) {
 									const newVideo = {
 										isActive: true,
 										identity: user.username,
-										roomName: "pluto", // need to pass later
+										roomName: data.id, // need to pass later
 									};
 									setVideo(newVideo);
 								}}

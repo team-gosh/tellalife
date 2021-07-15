@@ -18,6 +18,7 @@ import PauseCircleFilledIcon from "@material-ui/icons/PauseCircleFilled";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import HistoryIcon from "@material-ui/icons/History";
+import { API } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -74,51 +75,73 @@ const useStyles = makeStyles((theme) => ({
 function ReservationManagement (props) {
 	const classes = useStyles();
 
-	const { user, setVideo, video } = props;
+	const { user, setVideo, video, API, queries, mutations } = props;
 	const [ view, setView ] = useState("listener");
 	const [ value, setValue ] = React.useState(0);
-	const [ reservations, setReservations ] = useState([
-		{
-			title: "Iceland",
-			status: "pending",
-			teller: "Miho",
-			listener: "Yoshi",
-			date: "2021/07/12",
-			time: "15:00",
-			description: "Talking about the uni life in Australia",
-			duration: "1:00",
-		},
-		{
-			title: "Iceland2",
-			status: "approved",
-			teller: "Miho",
-			description: "Talking about the uni life in Australia",
-		},
-		{
-			title: "US",
-			status: "finished",
-			teller: "Miho",
-		},
-		{
-			title: "China",
-			status: "confirmed",
-			teller: "Miho",
-		},
-		{
-			title: "Australia",
-			status: "pending",
-			teller: "Miho",
-		},
-		{
-			title: "Australia",
-			status: "finished",
-			teller: "Miho",
-		},
-	]);
+  const [ reservations, setReservations ] = useState([]);
 
 	useEffect(async () => {
 		// const reservations = (await axios.get(.....)).data
 		// setReservations(reservations);
+    const allResponse = await API.graphql({
+      query: queries.listReservations,
+      // variables: {
+      //   filter: {
+      //     userIDs: {eq: user.id},
+      //     or: {tellerID: {eq: user.id}}
+      //   }
+      // }
+    });
+    console.log("all response");
+    console.log(allResponse)
+    setReservations(allResponse.data.listReservations.items)
+
+    const tellerResponse = await API.graphql({
+      query: queries.listReservations,
+      variables: {
+        filter: {
+          tellerID: {eq: user.id}
+        }
+      }
+    });
+    // setAllTeller(tellerResponse.data.listReservations.items);
+    const tellerReservations = {
+      pending: [],
+      approved: [],
+      confirmed: [],
+      finished: []
+    };
+    tellerResponse.data.listReservations.items
+    .forEach(e => tellerReservations[e.status].push(e));
+    // setTellerPending(tellerReservations.pending);
+    // setTellerApproved(tellerReservations.approved);
+    // setTellerConfirmed(tellerReservations.confirmed);
+    // setTellerFinished(tellerReservations.finished);
+    
+    const listenerResponse = await API.graphql({
+      query: queries.listReservations,
+      variables: {
+        filter: {
+          userIDs: {eq: user.id}
+        }
+      }
+    });
+    // setAllListener(listenerResponse.data.listReservations.items);
+    const listenerReservations = {
+      pending: [],
+      approved: [],
+      confirmed: [],
+      finished: []
+    };
+    tellerResponse.data.listReservations.items
+    .forEach(e => listenerReservations[e.status].push(e));
+    // setListenerPending(listenerReservations.pending);
+    // setListenerApproved(listenerReservations.approved);
+    // setListenerConfirmed(listenerReservations.confirmed);
+    // setListenerFinished(listenerReservations.finished);
+
+    // const allReservations = response.data.listReservations.
+    // setReservations(response.data.listReservations.items)
 	}, []);
 
 	function handleChange (event, newValue) {
@@ -126,8 +149,33 @@ function ReservationManagement (props) {
 	}
 
 	function createReservation (status) {
-		return reservations.map((data, index) => {
+    console.log("view in createReservation is", view)
+		return reservations
+    .filter(e => view === 'teller' ? e.tellerID === user.id : e.tellerID !== user.id )
+    .map((data, index) => {
+      // console.log(user.id)
+      // console.log(data.tellerID)
+			// if (
+      //   data.status === status
+      //   && view === 'teller'
+      //   && data.tellerID === user.id
+      // ) {
+      //   console.log("I'm a teller list")
+			// 	return (
+			// 		<Reservation
+			// 			key={index}
+			// 			data={data}
+			// 			status={data.status}
+			// 			view={view}
+			// 			setVideo={setVideo}
+			// 			video={video}
+			// 			user={user}
+			// 		/>
+			// 	);
+			// } else if (data.status === status) {
 			if (data.status === status) {
+        // console.log("I'm a listener list")
+        // console.log("view", view)
 				return (
 					<Reservation
 						key={index}
@@ -147,6 +195,7 @@ function ReservationManagement (props) {
 		<div>
 			<div className={classes.root}>
 				<div>
+          <h1>{view}</h1>
 					{/* this h2 is just for testing purpose */}
 					<Paper square className={classes.root}>
 						<Tabs
