@@ -8,14 +8,25 @@ exports.handler = async function (event, context, callback) {
 		type: "express",
 	});
 
-	const accountLink = await stripe.accountLinks.create({
+	const refreshFunc = await stripe.accountLinks.create({
 		account: account.id,
 		refresh_url: "http://localhost:3000/",
 		return_url: "http://localhost:3000/",
 		type: "account_onboarding",
 	});
 
+	const accountLink = await stripe.accountLinks.create({
+		account: account.id,
+		refresh_url: refreshFunc.url,
+		return_url: "http://localhost:3000/",
+		type: "account_onboarding",
+	});
+
+	accountLink.refresh_url = accountLink.url;
 	account.url = accountLink.url;
+
+	console.log(account);
+	console.log(refreshFunc);
 
 	return JSON.stringify(account);
 };

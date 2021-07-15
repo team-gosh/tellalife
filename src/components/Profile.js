@@ -37,31 +37,36 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: 3,
 	},
 	large: {
-		width: theme.spacing(16),
-		height: theme.spacing(16),
+		width: theme.spacing(10),
+		height: theme.spacing(10),
 		backgroundColor: deepOrange[700],
 		[theme.breakpoints.up("md")]: {
-			width: theme.spacing(40),
-			height: theme.spacing(40),
+			width: theme.spacing(30),
+			height: theme.spacing(30),
 		},
 	},
 	username: {
-		fontSize: 15,
+		fontSize: 8,
 		color: "#3F72AF",
 		textAlign: "center",
+		[theme.breakpoints.up("md")]: {
+			fontSize: 16,
+		},
 	},
 	profile: {
 		fontSize: 20,
+		marginTop: 20,
 		[theme.breakpoints.up("md")]: {
-			fontSize: 40,
+			fontSize: 35,
+			marginTop: 42,
 		},
 	},
 	edit: {
-		fontSize: 30,
-		width: 200,
+		fontSize: 20,
+		width: 100,
 		[theme.breakpoints.up("md")]: {
 			fontSize: 40,
-			width: 300,
+			width: 150,
 		},
 	},
 	info: {
@@ -78,24 +83,23 @@ const useStyles = makeStyles((theme) => ({
 	margin: {
 		marginTop: 20,
 		[theme.breakpoints.up("md")]: {
-			marginTop: 42,
+			marginTop: 30,
 		},
 	},
-	priceLabel: {
-		textAlign: "left",
-		fontSize: 12,
-	},
+
 	stripeNotice: {
 		fontSize: 10,
 	},
 	card_root: {
-		minWidth: 400,
+		minWidth: 375,
+		maxWidth: 375,
 		minHeight: 400,
 		display: "flex",
-		justifyContent: "space-around",
+		justifyContent: "center",
 		[theme.breakpoints.up("md")]: {
-			minWidth: 1400,
+			minWidth: 1000,
 			minHeight: 600,
+			justifyContent: "space-around",
 		},
 	},
 	profile_container: {
@@ -107,6 +111,21 @@ const useStyles = makeStyles((theme) => ({
 	},
 	card_content: {
 		flexGrow: "1",
+		[theme.breakpoints.up("md")]: {
+			flexGrow: "2",
+		},
+	},
+	price_label: {
+		color: "gray",
+		fontSize: 12,
+	},
+	buttons: {
+		marginLeft: 3,
+		marginTop: 5,
+		fontSize: 10,
+	},
+	textField: {
+		fontSize: 13,
 	},
 }));
 
@@ -121,9 +140,6 @@ const cities = {
 };
 
 function Profile (props) {
-	const stripe = useStripe();
-	const elements = useElements();
-
 	const classes = useStyles();
 	const { user, setUser, API, mutations } = props;
 
@@ -137,7 +153,7 @@ function Profile (props) {
 	const [ registration, setRegistration ] = React.useState(false);
 	const [ error, setError ] = React.useState("");
 	const [ stripeObj, setStripeObj ] = React.useState({});
-	const [ url, setUrl ] = React.useState("");
+	const [ stripeUrl, setUrl ] = React.useState("");
 	const [ charges_enabled, setCharges_enabled ] = React.useState(false);
 
 	// From DB
@@ -174,6 +190,7 @@ function Profile (props) {
 			current_city: city,
 			price: value,
 			stripeAccount: stripeObj.id,
+			stripeURL: stripeUrl,
 			isTeller: true,
 		};
 		// logic to handle to timeout!!!!
@@ -197,6 +214,7 @@ function Profile (props) {
 			price: value,
 			stripeAccount: stripeObj.id,
 			isTeller: false,
+			stripeURL: stripeUrl,
 		};
 		// logic to handle to timeout!!!!
 
@@ -222,11 +240,8 @@ function Profile (props) {
 		const stripeUser = response.data.createStripeAccount;
 		const jsonUser = JSON.parse(stripeUser);
 		setStripeObj(jsonUser);
-		console.log(jsonUser);
-		console.log(jsonUser.url);
 		setUrl(jsonUser.url);
 		window.open(jsonUser.url, "_blank");
-		console.log(stripeObj);
 	};
 
 	const account = async () => {
@@ -251,22 +266,16 @@ function Profile (props) {
 
 	return (
 		<div className={classes.root}>
-			Editing {isEditing ? "true" : "false"}
-			<br />
-			Registration {registration ? "true" : "false"}
-			<br />
-			isTeller {user.isTeller ? "true" : "false"}
 			<Card className={classes.card_root}>
 				<CardContent>
 					<Avatar alt="Miho Ogura" src="" className={classes.large} />
-					<Typography className={classes.username}>{user.email}</Typography>
 				</CardContent>
 
 				<CardContent className={classes.card_content}>
 					<div>
 						{isEditing === false ? (
-							<Typography className={classes.profile}>
-								{nickName}{" "}
+							<div className={classes.info}>
+								<Typography className={classes.profile}>{nickName}</Typography>
 								<Button
 									size="small"
 									variant="outlined"
@@ -278,21 +287,23 @@ function Profile (props) {
 								>
 									Edit
 								</Button>
-							</Typography>
+							</div>
 						) : (
 							<div>
 								<Input
 									id="name"
 									value={nickName}
 									onChange={handleNameChange}
-									className={classes.edit}
+									className={classes.profile}
 								/>
+								<br />
 								<Button
-									size="medium"
+									className={classes.buttons}
+									size="small"
 									variant="outlined"
 									color="primary"
 									onClick={() => {
-										console.log(url, "this is url");
+										console.log(stripeUrl, "this is url");
 										if (charges_enabled === true) {
 											updateUser();
 										} else {
@@ -308,41 +319,48 @@ function Profile (props) {
 								{user.isTeller === false && registration === false ? (
 									<span>
 										<Button
-											size="medium"
 											variant="outlined"
 											color="primary"
 											onClick={() => {
 												setRegistration(true);
 											}}
+											className={classes.buttons}
 										>
-											Register as a teller
+											Register
 										</Button>
 										<Button
-											size="medium"
+											size="small"
 											variant="outlined"
 											color="secondary"
 											onClick={() => {
 												setEdit(false);
 												setRegistration(false);
 											}}
-											r
+											className={classes.buttons}
 										>
 											Cancel
 										</Button>
 									</span>
 								) : (
 									<span>
-										<Button size="medium" variant="outlined" color="gray" disabled={true}>
-											Register as a teller
+										<Button
+											size="small"
+											variant="outlined"
+											color="gray"
+											disabled={true}
+											className={classes.buttons}
+										>
+											Register
 										</Button>
 										<Button
-											size="medium"
+											size="small"
 											variant="outlined"
 											color="secondary"
 											onClick={() => {
 												setEdit(false);
 												setRegistration(false);
 											}}
+											className={classes.buttons}
 										>
 											Cancel
 										</Button>
@@ -357,18 +375,18 @@ function Profile (props) {
 									{isEditing === false ? (
 										<div className={classes.profile_container}>
 											<Typography className={classes.profile}>
-												<HomeIcon color="primary" fontSize="large" /> {user.home_country}
+												<HomeIcon color="primary" fontSize="medium" /> {user.home_country}
 											</Typography>
 											<Typography className={classes.profile}>
-												<PublicIcon color="primary" fontSize="large" /> {user.current_country}
+												<PublicIcon color="primary" fontSize="medium" /> {user.current_country}
 											</Typography>
 											<Typography className={classes.profile}>
-												<LocationCityIcon color="primary" fontSize="large" />{" "}
+												<LocationCityIcon color="primary" fontSize="medium" />{" "}
 												{user.current_city}
 											</Typography>
 											{user.isTeller ? (
 												<Typography className={classes.profile}>
-													<TimerIcon color="primary" fontSize="large" /> ¥{user.price} / hour
+													<TimerIcon color="primary" fontSize="medium" /> ¥{user.price} / hour
 												</Typography>
 											) : (
 												<div />
@@ -376,21 +394,21 @@ function Profile (props) {
 										</div>
 									) : (
 										<div>
-											<div>
+											<div className={classes.profile_container}>
 												{user.home_country ? (
-													<Typography>
-														<HomeIcon />
+													<Typography className={classes.profile}>
+														<HomeIcon color="primary" fontSize="medium" />
 														{user.home_country}
 													</Typography>
 												) : (
 													<TextField
-														className={classes.margin}
 														id="homecountry"
 														select
 														label="Home Country"
 														value={home}
 														onChange={handleHomeChange}
 														helperText="Please select your home country *This can't be changed"
+														className={classes.textField}
 													>
 														{countries.map((option) => (
 															<MenuItem key={option} value={option}>
@@ -403,12 +421,14 @@ function Profile (props) {
 
 											<div className={classes.margin}>
 												<TextField
+													size="small"
 													id="currentcountry"
 													select
 													label="Current Country"
 													value={country}
 													onChange={handleCurrentCountryChange}
 													helperText="Please select your current country"
+													className={classes.textField}
 												>
 													{countries.map((option) => (
 														<MenuItem key={option} value={option}>
@@ -425,6 +445,7 @@ function Profile (props) {
 													value={city}
 													onChange={handleCurrentCityChange}
 													helperText="Please select your current city"
+													className={classes.textField}
 												>
 													{country ? (
 														cities[country].map((option) => (
@@ -438,34 +459,31 @@ function Profile (props) {
 												</TextField>
 											</div>
 											<div className={classes.margin}>
-												<InputLabel htmlFor="price" className={classes.priceLabel}>
-													Price per hour
-												</InputLabel>
-
 												<Input
 													id="price"
 													value={value}
 													onChange={handleInputChange}
 													startAdornment={<InputAdornment position="start">¥</InputAdornment>}
 												/>
+												<p className={classes.price_label}>Price per hour</p>
 											</div>
 											{user.charges_enabled === true || registration === false ? (
 												<Button
-													size="medium"
+													size="small"
 													variant="outlined"
 													color="primary"
-													className={classes.margin}
 													disabled={true}
+													className={classes.buttons}
 												>
 													Register Stripe Account
 												</Button>
 											) : (
 												<div>
 													<Button
-														size="medium"
+														size="small"
 														variant="outlined"
 														color="primary"
-														className={classes.margin}
+														className={classes.buttons}
 														onClick={
 															value !== 0 ? (
 																() => {
@@ -481,11 +499,6 @@ function Profile (props) {
 														Register Stripe Account
 													</Button>
 													<p> *You need Stripe account to get paid</p>
-													{url ? (
-														<a href={url}>Finish your registration from here</a>
-													) : (
-														<span />
-													)}
 												</div>
 											)}
 										</div>

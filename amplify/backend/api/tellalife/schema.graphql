@@ -12,7 +12,7 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
 	stripeAccount: String
 	current_country: String
 	current_city: String
-  stripeURL: String
+	stripeURL: String
 }
 
 # Post Table

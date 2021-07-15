@@ -64,6 +64,7 @@ export const createUser = /* GraphQL */ `
       stripeAccount
       current_country
       current_city
+      stripeURL
       createdAt
       updatedAt
     }
@@ -112,6 +113,7 @@ export const updateUser = /* GraphQL */ `
       stripeAccount
       current_country
       current_city
+      stripeURL
       createdAt
       updatedAt
     }
@@ -160,6 +162,7 @@ export const deleteUser = /* GraphQL */ `
       stripeAccount
       current_country
       current_city
+      stripeURL
       createdAt
       updatedAt
     }
@@ -195,6 +198,7 @@ export const createPost = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -236,6 +240,7 @@ export const updatePost = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -277,6 +282,7 @@ export const deletePost = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -333,6 +339,7 @@ export const createAttendingUsers = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -386,6 +393,7 @@ export const updateAttendingUsers = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
@@ -439,6 +447,7 @@ export const deleteAttendingUsers = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
         createdAt
         updatedAt
       }
