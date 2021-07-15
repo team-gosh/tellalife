@@ -21,277 +21,242 @@ import HistoryIcon from "@material-ui/icons/History";
 import { API } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		width: "100%",
-	},
-	tab: {
-		backgroundColor: "#E6DDC6",
-	},
-	pending: {
-		backgroundColor: "#F9F7F7",
-	},
-	approved: {
-		backgroundColor: "#F9F7F7",
-	},
-	confirmed: {
-		backgroundColor: "#F9F7F7",
-	},
-	finished: {
-		backgroundColor: "#F9F7F7",
-	},
-	heading: {
-		fontSize: theme.typography.pxToRem(15),
-		fontWeight: theme.typography.fontWeightRegular,
-	},
-	root: {
-		minWidth: 275,
-	},
-	bullet: {
-		display: "inline-block",
-		margin: "0 2px",
-		transform: "scale(0.8)",
-	},
-	title: {
-		fontSize: 14,
-	},
-	pos: {
-		marginBottom: 12,
-	},
-	column: {
-		display: "flex",
-		flexDirection: "row",
-		flexWrap: "wrap",
-		justifyContent: "center",
-	},
-	checkCircleIcon: {
-		color: "#63B028",
-	},
-	paper_root: {
-		flexGrow: 1,
-		maxWidth: 500,
-	},
+  root: {
+    width: "100%",
+  },
+  tab: {
+    backgroundColor: "#E6DDC6",
+  },
+  pending: {
+    backgroundColor: "#F9F7F7",
+  },
+  approved: {
+    backgroundColor: "#F9F7F7",
+  },
+  confirmed: {
+    backgroundColor: "#F9F7F7",
+  },
+  finished: {
+    backgroundColor: "#F9F7F7",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+  root: {
+    minWidth: 275,
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  column: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+  checkCircleIcon: {
+    color: "#63B028",
+  },
+  paper_root: {
+    flexGrow: 1,
+    maxWidth: 500,
+  },
 }));
 
-function ReservationManagement (props) {
-	const classes = useStyles();
+function ReservationManagement(props) {
+  const classes = useStyles();
 
-	const { user, setVideo, video, API, queries, mutations } = props;
-	const [ view, setView ] = useState("listener");
-	const [ value, setValue ] = React.useState(0);
-  const [ reservations, setReservations ] = useState([]);
+  const { user, setVideo, video, API, queries, mutations } = props;
+  const [view, setView] = useState("listener");
+  const [value, setValue] = React.useState(0);
+  const [reservations, setReservations] = useState([]);
 
-	useEffect(async () => {
-		// const reservations = (await axios.get(.....)).data
-		// setReservations(reservations);
-    const allResponse = await API.graphql({
-      query: queries.listReservations,
-      // variables: {
-      //   filter: {
-      //     userIDs: {eq: user.id},
-      //     or: {tellerID: {eq: user.id}}
-      //   }
-      // }
-    });
-    console.log("all response");
-    console.log(allResponse)
-    setReservations(allResponse.data.listReservations.items)
+  useEffect(async () => {
+ 
+    console.log("user in ReservationManagement.js")
+    console.log(user)
 
-    const tellerResponse = await API.graphql({
-      query: queries.listReservations,
-      variables: {
-        filter: {
-          tellerID: {eq: user.id}
-        }
-      }
-    });
-    // setAllTeller(tellerResponse.data.listReservations.items);
-    const tellerReservations = {
-      pending: [],
-      approved: [],
-      confirmed: [],
-      finished: []
-    };
-    tellerResponse.data.listReservations.items
-    .forEach(e => tellerReservations[e.status].push(e));
-    // setTellerPending(tellerReservations.pending);
-    // setTellerApproved(tellerReservations.approved);
-    // setTellerConfirmed(tellerReservations.confirmed);
-    // setTellerFinished(tellerReservations.finished);
-    
-    const listenerResponse = await API.graphql({
-      query: queries.listReservations,
-      variables: {
-        filter: {
-          userIDs: {eq: user.id}
-        }
-      }
-    });
-    // setAllListener(listenerResponse.data.listReservations.items);
-    const listenerReservations = {
-      pending: [],
-      approved: [],
-      confirmed: [],
-      finished: []
-    };
-    tellerResponse.data.listReservations.items
-    .forEach(e => listenerReservations[e.status].push(e));
-    // setListenerPending(listenerReservations.pending);
-    // setListenerApproved(listenerReservations.approved);
-    // setListenerConfirmed(listenerReservations.confirmed);
-    // setListenerFinished(listenerReservations.finished);
+    // Retrieve Reservation Data one at a time from data
+    // from intermediary table
+    const currentReservations = await Promise.all(user.reservations.items
+      .map(async (e) => {
+        console.log("inside map")
+        console.log(e)
+        const reservation = (await API.graphql({
+          query: queries.getReservation,
+          variables: {
+            id: e.reservationID
+          }
+        })).data.getReservation
+        console.log(reservation);
+        return reservation;
+      }));
+    console.log("currentReservations")
+    console.log(currentReservations)
+    setReservations(currentReservations)
+   
 
-    // const allReservations = response.data.listReservations.
-    // setReservations(response.data.listReservations.items)
-	}, []);
+  }, []);
 
-	function handleChange (event, newValue) {
-		setValue(newValue);
-	}
+  function handleChange(event, newValue) {
+    setValue(newValue);
+  }
 
-	function createReservation (status) {
+  function createReservation(status) {
     console.log("view in createReservation is", view)
-		return reservations
-    .filter(e => view === 'teller' ? e.tellerID === user.id : e.tellerID !== user.id )
-    .map((data, index) => {
-      // console.log(user.id)
-      // console.log(data.tellerID)
-			// if (
-      //   data.status === status
-      //   && view === 'teller'
-      //   && data.tellerID === user.id
-      // ) {
-      //   console.log("I'm a teller list")
-			// 	return (
-			// 		<Reservation
-			// 			key={index}
-			// 			data={data}
-			// 			status={data.status}
-			// 			view={view}
-			// 			setVideo={setVideo}
-			// 			video={video}
-			// 			user={user}
-			// 		/>
-			// 	);
-			// } else if (data.status === status) {
-			if (data.status === status) {
-        // console.log("I'm a listener list")
-        // console.log("view", view)
-				return (
-					<Reservation
-						key={index}
-						data={data}
-						status={data.status}
-						view={view}
-						setVideo={setVideo}
-						video={video}
-						user={user}
-					/>
-				);
-			}
-		});
-	}
+    console.log(reservations)
+    return reservations
+      .filter(e => view === 'teller' ? e.tellerID === user.id : e.tellerID !== user.id)
+      .map((data, index) => {
+        // console.log(user.id)
+        // console.log(data.tellerID)
+        // if (
+        //   data.status === status
+        //   && view === 'teller'
+        //   && data.tellerID === user.id
+        // ) {
+        //   console.log("I'm a teller list")
+        // 	return (
+        // 		<Reservation
+        // 			key={index}
+        // 			data={data}
+        // 			status={data.status}
+        // 			view={view}
+        // 			setVideo={setVideo}
+        // 			video={video}
+        // 			user={user}
+        // 		/>
+        // 	);
+        // } else if (data.status === status) {
+        if (data.status === status) {
+          // console.log("I'm a listener list")
+          // console.log("view", view)
+          return (
+            <Reservation
+              key={index}
+              data={data}
+              status={data.status}
+              view={view}
+              setVideo={setVideo}
+              video={video}
+              user={user}
+            />
+          );
+        }
+      });
+  }
 
-	return (
-		<div>
-			<div className={classes.root}>
-				<div>
+  return (
+    <div>
+      <div className={classes.root}>
+        <div>
           <h1>{view}</h1>
-					{/* this h2 is just for testing purpose */}
-					<Paper square className={classes.root}>
-						<Tabs
-							value={value}
-							onChange={handleChange}
-							variant="fullWidth"
-							indicatorColor="primary"
-							textColor="primary"
-							aria-label="icon label tabs example"
-						>
-							<Tab
-								icon={<HearingIcon />}
-								label="Listener"
-								onClick={() => {
-									setView("listener");
-								}}
-							/>
-							<Tab
-								icon={<RecordVoiceOverIcon />}
-								label="Teller"
-								onClick={() => {
-									setView("teller");
-								}}
-							/>
-						</Tabs>
-					</Paper>
-				</div>
-				<br />
-				<Accordion>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel1a-content"
-						id="panel1a-header"
-						className={classes.pending}
-					>
-						<Typography>
-							<PauseCircleFilledIcon color="primary" fontSize="large" /> Pending
-						</Typography>
-					</AccordionSummary>
-					<AccordionDetails>
-						<div>
-							<div className={classes.column}>{createReservation("pending")}</div>
-						</div>
-					</AccordionDetails>
-				</Accordion>
+          {/* <h1>{JSON.stringify(reservations)}</h1> */}
+          {/* this h2 is just for testing purpose */}
+          <Paper square className={classes.root}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              variant="fullWidth"
+              indicatorColor="primary"
+              textColor="primary"
+              aria-label="icon label tabs example"
+            >
+              <Tab
+                icon={<HearingIcon />}
+                label="Listener"
+                onClick={() => {
+                  setView("listener");
+                }}
+              />
+              <Tab
+                icon={<RecordVoiceOverIcon />}
+                label="Teller"
+                onClick={() => {
+                  setView("teller");
+                }}
+              />
+            </Tabs>
+          </Paper>
+        </div>
+        <br />
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            className={classes.pending}
+          >
+            <Typography>
+              <PauseCircleFilledIcon color="primary" fontSize="large" /> Pending
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div>
+              <div className={classes.column}>{createReservation("pending")}</div>
+            </div>
+          </AccordionDetails>
+        </Accordion>
 
-				<Accordion>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel2a-content"
-						id="panel2a-header"
-						className={classes.approved}
-					>
-						<div>
-							<CheckCircleIcon className={classes.checkCircleIcon} fontSize="large" /> Approved
-						</div>
-					</AccordionSummary>
-					<AccordionDetails>
-						<div className={classes.column}>{createReservation("approved")}</div>
-					</AccordionDetails>
-				</Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+            className={classes.approved}
+          >
+            <div>
+              <CheckCircleIcon className={classes.checkCircleIcon} fontSize="large" /> Approved
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div className={classes.column}>{createReservation("approved")}</div>
+          </AccordionDetails>
+        </Accordion>
 
-				<Accordion>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel2a-content"
-						id="panel2a-header"
-						className={classes.confirmed}
-					>
-						<div>
-							<MonetizationOnIcon color="error" fontSize="large" /> Payment Confirmed
-						</div>
-					</AccordionSummary>
-					<AccordionDetails>
-						<div className={classes.column}>{createReservation("confirmed")}</div>
-					</AccordionDetails>
-				</Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+            className={classes.confirmed}
+          >
+            <div>
+              <MonetizationOnIcon color="error" fontSize="large" /> Payment Confirmed
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div className={classes.column}>{createReservation("confirmed")}</div>
+          </AccordionDetails>
+        </Accordion>
 
-				<Accordion>
-					<AccordionSummary
-						expandIcon={<ExpandMoreIcon />}
-						aria-controls="panel2a-content"
-						id="panel2a-header"
-						className={classes.finished}
-					>
-						<div>
-							<HistoryIcon color="action" fontSize="large" /> Finished
-						</div>
-					</AccordionSummary>
-					<AccordionDetails>
-						<div className={classes.column}>{createReservation("finished")}</div>
-					</AccordionDetails>
-				</Accordion>
-			</div>
-		</div>
-	);
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+            className={classes.finished}
+          >
+            <div>
+              <HistoryIcon color="action" fontSize="large" /> Finished
+            </div>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div className={classes.column}>{createReservation("finished")}</div>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+    </div>
+  );
 }
 
 export default ReservationManagement;
