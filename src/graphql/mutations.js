@@ -27,7 +27,25 @@ export const createUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          userIDs
+          tellerID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -66,7 +84,25 @@ export const updateUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          userIDs
+          tellerID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -105,7 +141,25 @@ export const deleteUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          userIDs
+          tellerID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -152,7 +206,9 @@ export const createPost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -191,7 +247,9 @@ export const updatePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -230,7 +288,9 @@ export const deletePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
