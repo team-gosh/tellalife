@@ -3,37 +3,53 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { API } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 
-export default function AlertDialog (props) {
-	const { setOpen, teller, date, user, duration } = props;
-	const [ dialog, setDialog ] = useState(false);
+const useStyles = makeStyles((theme) => ({
+  button: {
+    marginRight: theme.spacing(1)
+  }
+}));
 
-	const handleClickOpen = async () => {
-		setDialog(true);
-		const dataForNewReservation = {
-			duration: Number(duration),
-			price: Number(duration) / 30 * Number(teller.price),
-			startDateTime: String(date),
-			status: "pending",
-			tellerID: teller.id,
-			type: "pair",
-			// userIDs: user.id,
-		};
-    console.log("dataForNewReservation")
-    console.log(dataForNewReservation)
-		const newReservation = await API.graphql({
-			query: mutations.createReservation,
-			variables: { input: dataForNewReservation },
-		});
-		console.log(newReservation);
+export default function AlertDialog(props) {
+  const {
+    setOpen,
+    teller,
+    date,
+    setDate,
+    user,
+    duration,
+    setDuration,
+    disable
+  } = props;
+  const [dialog, setDialog] = useState(false);
+
+  const handleClickOpen = async () => {
+    setDialog(true);
+    const dataForNewReservation = {
+      duration: Number(duration),
+      price: (Number(duration) / 30) * Number(teller.price),
+      startDateTime: String(date),
+      status: "pending",
+      tellerID: teller.id,
+      type: "pair"
+      // userIDs: user.id,
+    };
+    console.log("dataForNewReservation");
+    console.log(dataForNewReservation);
+    const newReservation = await API.graphql({
+      query: mutations.createReservation,
+      variables: { input: dataForNewReservation }
+    });
+    console.log(newReservation);
     //newReservation.data.createReservatoin.id is new reservation id
     const newAttendingListener = await API.graphql({
       query: mutations.createAttendingUsers,
-      variables: { 
+      variables: {
         input: {
           reservationID: newReservation.data.createReservation.id,
           userID: user.id
@@ -42,38 +58,57 @@ export default function AlertDialog (props) {
     });
     const newAttendingTeller = await API.graphql({
       query: mutations.createAttendingUsers,
-      variables: { 
+      variables: {
         input: {
           reservationID: newReservation.data.createReservation.id,
           userID: teller.id
         }
       }
     });
-	};
+  };
 
-	const handleClose = () => {
-		setDialog(false);
-		setOpen(false);
-	};
+  const classes = useStyles();
 
-	return (
-		<div>
-			<Button variant="contained" color="primary" onClick={handleClickOpen}>
-				Submit
-			</Button>
-			<Dialog
-				open={dialog}
-				onClose={handleClose}
-				aria-labelledby="alert-dialog-title"
-				aria-describedby="alert-dialog-description"
-			>
-				<DialogTitle id="alert-dialog-title">{"Your reservation is complete!"}</DialogTitle>
-				<DialogActions>
-					<Button onClick={handleClose} color="primary" autoFocus>
-						Close
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</div>
-	);
+  const handleClose = () => {
+    setDialog(false);
+    setOpen(false);
+    setDate("");
+    setDuration("");
+  };
+
+  return (
+    <div>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.button}
+        onClick={handleClose}
+      >
+        Cancel
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={disable}
+        onClick={handleClickOpen}
+      >
+        Submit
+      </Button>
+      <Dialog
+        open={dialog}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Your reservation is complete!"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
