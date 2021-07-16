@@ -11,6 +11,7 @@ import App from "../App";
 import CheckoutForm from "./CheckoutForm";
 import { Auth, Hub } from "aws-amplify";
 
+
 //material ui
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
@@ -72,6 +73,8 @@ function MainPage (props) {
 	const [ state, setState ] = React.useState(false);
 	const classes = useStyles();
 
+
+
 	useEffect(async () => {
 		// while (!user) {
 		console.log("before if 77");
@@ -83,35 +86,35 @@ function MainPage (props) {
 			const name = userAuth.attributes.name;
 			try {
 				// Try to get user from database
-        console.log("before currntuserID")
+				console.log("before currntuserID");
 				const currentUserData = (await API.graphql({
 					query: queries.getUserByEmail,
 					variables: {
 						username: userNameAndEmail,
 					},
 				})).data.getUserByEmail.items;
-        console.log('before')
-        console.log(currentUserData);
-        console.log('after')
-        
+				console.log("before");
+				console.log(currentUserData);
+				console.log("after");
+
 				// console.log("main page current user big Get");
 				// console.log(currentUser);
 				// if (currentUser.data.getUser) {
-          if (currentUserData.length) {
-            console.log("after if 94 (user exists)");
-            // If user exists, set to user
-            
-            const currentUser = await API.graphql({
-              query: queries.getUser,
-            	variables: {
-                id: currentUserData[0].id,
-            	},
-            });
+				if (currentUserData.length) {
+					console.log("after if 94 (user exists)");
+					// If user exists, set to user
 
-          setUser(currentUser.data.getUser)
-          console.log("!!!!!!HERE!!!!!!!!")
-          console.log(currentUser)
-          // console.log(currentUserData)
+					const currentUser = await API.graphql({
+						query: queries.getUser,
+						variables: {
+							id: currentUserData[0].id,
+						},
+					});
+
+					setUser(currentUser.data.getUser);
+					console.log("!!!!!!HERE!!!!!!!!");
+					console.log(currentUser);
+					// console.log(currentUserData)
 					// setUser(currentUser.data.getUser);
 				} else if (!user) {
 					console.log("after else 99 (create new user)");
@@ -122,8 +125,8 @@ function MainPage (props) {
 						name: name,
 						isTeller: false,
 					};
-          console.log("newUserRegistrationData in useEffect Main Page 108")
-          console.log(newUserRegistrationData)
+					console.log("newUserRegistrationData in useEffect Main Page 108");
+					console.log(newUserRegistrationData);
 					const newUserId = (await API.graphql({
 						query: mutations.createUser,
 						variables: { input: newUserRegistrationData },
@@ -132,15 +135,15 @@ function MainPage (props) {
 					// console.log("response");
 					// console.log(response);
 					// setUser(response.data.createUser);
-          const newUser = await API.graphql({
-            query: queries.getUser,
-            variables: {
-              id: newUserId,
-            },
-          });
-          console.log("newUser")
-          console.log(newUser)
-          setUser(newUser.data.getUser)
+					const newUser = await API.graphql({
+						query: queries.getUser,
+						variables: {
+							id: newUserId,
+						},
+					});
+					console.log("newUser");
+					console.log(newUser);
+					setUser(newUser.data.getUser);
 				}
 				console.log("after conditionals");
 				console.log(user, "this is because the react thing");
@@ -246,14 +249,14 @@ function MainPage (props) {
 			</AppBar>
 
 			{display === "Reservation" ? (
-				<ReservationManagement
-					user={user}
-					setVideo={setVideo}
-					video={video}
-					API={API}
-					queries={queries}
-					mutations={mutations}
-				/>
+					<ReservationManagement
+						user={user}
+						setVideo={setVideo}
+						video={video}
+						API={API}
+						queries={queries}
+						mutations={mutations}
+					/>
 			) : display === "Profile" ? (
 				<Profile user={user} setUser={setUser} API={API} queries={queries} mutations={mutations} />
 			) : (

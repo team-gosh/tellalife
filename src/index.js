@@ -4,23 +4,28 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import App from "./App";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
+import { Elements, StripeProvider } from "@stripe/react-stripe-js";
 
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+
 const stripePromise = loadStripe(
 	// stripe with public key (exposable)
 	"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
 	{
 		// this needs to be changed and get from DB
-		stripeAccount: "acct_1JAqYHRN8v3zy7ya",
+		stripeAccount: "acct_1JDe4ERPtTBKeA1Y",
+		// stripeAccount: user.stripeAccount,
 	}
 );
 
 ReactDOM.render(
-	<Elements stripe={stripePromise}>
-		<App />
-	</Elements>,
+	// <Elements stripe={stripePromise}>
+	<React.StrictMode>
+		<Elements stripe={stripePromise}>
+			<App />
+		</Elements>
+	</React.StrictMode>,
 	document.getElementById("root")
 );
 

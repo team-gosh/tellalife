@@ -55,8 +55,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Reservation (props) {
-	const stripe = useStripe();
-
 	const classes = useStyles();
 	const bull = <span className={classes.bullet}>•</span>;
 	const { user, data, status, view, setVideo, video } = props;
@@ -109,9 +107,7 @@ function Reservation (props) {
 							>
 								<DialogTitle id="form-dialog-title">Payment</DialogTitle>
 								<DialogContent>
-									<div>
-										<CheckoutForm />
-									</div>
+									<CheckoutForm user={user} />
 								</DialogContent>
 								<DialogActions>
 									<Button onClick={handleClose} color="primary">

@@ -10,8 +10,6 @@ import { AmplifyAuthenticator, AmplifySignOut, AmplifySignUp, AmplifySignIn } fr
 import awsconfig from "./aws-exports";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
-// console.log("awsconfig")
-// console.log(awsconfig)
 Amplify.configure(awsconfig);
 
 // Auth.configure(awsconfig)
@@ -31,24 +29,6 @@ function App () {
 			setUserAuth(authData);
 		});
 	}, []);
-
-	// create express account
-	const createAccount = () => {
-		console.log("clicked!!");
-		axios.post("/v1/accounts").then((res) => console.log(res));
-	};
-
-	// account link
-	const setLink = () => {
-		console.log("clicked!!");
-		axios.post("/v1/account_links").then((res) => console.log(res));
-	};
-
-	// make payment
-	const paymentIntent = () => {
-		console.log("clicked!!");
-		axios.post("/v1/payment_intents").then((res) => console.log(res));
-	};
 
 	// fetch the client secret with JavaScript on the client side (from Stripe example, so it should be secure)
 	const getSecret = async () => {
@@ -72,7 +52,6 @@ function App () {
 						graphqlOperation={graphqlOperation}
 					/>
 				) : (
-					// <Elements stripe={stripePromise}>
 					<MainPage
 						video={video}
 						setVideo={setVideo}
@@ -82,7 +61,6 @@ function App () {
 						Amplify={Amplify}
 						graphqlOperation={graphqlOperation}
 					/>
-					// </Elements>
 				)}
 			</div>
 		) : (
