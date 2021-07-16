@@ -18,6 +18,7 @@ import PauseCircleFilledIcon from "@material-ui/icons/PauseCircleFilled";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import HistoryIcon from "@material-ui/icons/History";
+import Badge from "@material-ui/core/Badge";
 import { API } from "aws-amplify";
 
 const temporaryReservation = [
@@ -25,9 +26,9 @@ const temporaryReservation = [
 		id: "werarweaa2322",
 		status: "approved",
 		tellerID: "3c32dcbc-ac4a-4de4-bd65-feb9a8c023c0",
-    userIDs: [ "3d308866-8206-47d6-8ed4-4fd66202daf0" ],
-    country: "Iceland",
-    city:"something"
+		userIDs: [ "3d308866-8206-47d6-8ed4-4fd66202daf0" ],
+		country: "Iceland",
+		city: "something",
 	},
 ];
 
@@ -88,8 +89,16 @@ function ReservationManagement (props) {
 
 	const { user, setVideo, video, API, queries, mutations } = props;
 	const [ view, setView ] = useState("listener");
-	const [ value, setValue ] = React.useState(0);
+	const [ value, setValue ] = useState(0);
 	const [ reservations, setReservations ] = useState([]);
+	const [ expanded1, setExpanded1 ] = useState(false);
+	const [ expanded2, setExpanded2 ] = useState(false);
+	const [ expanded3, setExpanded3 ] = useState(false);
+	const [ expanded4, setExpanded4 ] = useState(false);
+	const [ pendingCounts, setPendingCounts ] = useState(5);
+	const [ approveCounts, setApproveCounts ] = useState(6);
+	const [ confirmedCounts, setConfirmedCounts ] = useState(7);
+	const [ finishedCounts, setFinishedCounts ] = useState(8);
 
 	useEffect(async () => {
 		console.log("user in ReservationManagement.js");
@@ -120,10 +129,27 @@ function ReservationManagement (props) {
 		setValue(newValue);
 	}
 
+	const handleChangePanel1 = (panel) => (event, isExpanded) => {
+		setExpanded1(isExpanded ? panel : false);
+		setPendingCounts(1);
+	};
+	const handleChangePanel2 = (panel) => (event, isExpanded) => {
+		setExpanded2(isExpanded ? panel : false);
+		setApproveCounts(2);
+	};
+	const handleChangePanel3 = (panel) => (event, isExpanded) => {
+		setExpanded3(isExpanded ? panel : false);
+		setConfirmedCounts(3);
+	};
+	const handleChangePanel4 = (panel) => (event, isExpanded) => {
+		setExpanded4(isExpanded ? panel : false);
+		setFinishedCounts(4);
+	};
+
 	function createReservation (status) {
 		console.log("view in createReservation is", view);
-		console.log(temporaryReservation);
-		return temporaryReservation
+		console.log(reservations);
+		return reservations
 			.filter((e) => (view === "teller" ? e.tellerID === user.id : e.tellerID !== user.id))
 			.map((data, index) => {
 				// console.log(user.id)
@@ -198,25 +224,35 @@ function ReservationManagement (props) {
 					</Paper>
 				</div>
 				<br />
-				<Accordion>
+				<Accordion expanded={expanded1 === "panel1"} onChange={handleChangePanel1("panel1")}>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel1a-content"
 						id="panel1a-header"
 						className={classes.pending}
 					>
-						<Typography>
-							<PauseCircleFilledIcon color="primary" fontSize="large" /> Pending
-						</Typography>
+						<div>
+							<Badge color="secondary" badgeContent={pendingCounts}>
+								<PauseCircleFilledIcon color="primary" fontSize="large" />
+							</Badge>
+							Pending
+						</div>
 					</AccordionSummary>
 					<AccordionDetails>
 						<div>
-							<div className={classes.column}>{createReservation("pending")}</div>
+							<div className={classes.column}>
+								{createReservation("pending")}
+								{console.log(
+									createReservation("pending"),
+									createReservation("pending").length,
+									createReservation("pending")[0]
+								)}
+							</div>
 						</div>
 					</AccordionDetails>
 				</Accordion>
 
-				<Accordion>
+				<Accordion expanded={expanded2 === "panel2"} onChange={handleChangePanel2("panel2")}>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel2a-content"
@@ -224,7 +260,10 @@ function ReservationManagement (props) {
 						className={classes.approved}
 					>
 						<div>
-							<CheckCircleIcon className={classes.checkCircleIcon} fontSize="large" /> Approved
+							<Badge color="secondary" badgeContent={approveCounts}>
+								<CheckCircleIcon className={classes.checkCircleIcon} fontSize="large" />{" "}
+							</Badge>
+							Approved
 						</div>
 					</AccordionSummary>
 					<AccordionDetails>
@@ -232,7 +271,7 @@ function ReservationManagement (props) {
 					</AccordionDetails>
 				</Accordion>
 
-				<Accordion>
+				<Accordion expanded={expanded3 === "panel3"} onChange={handleChangePanel3("panel3")}>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel2a-content"
@@ -240,7 +279,10 @@ function ReservationManagement (props) {
 						className={classes.confirmed}
 					>
 						<div>
-							<MonetizationOnIcon color="error" fontSize="large" /> Payment Confirmed
+							<Badge color="secondary" badgeContent={confirmedCounts}>
+								<MonetizationOnIcon color="error" fontSize="large" />
+							</Badge>
+							Payment Confirmed
 						</div>
 					</AccordionSummary>
 					<AccordionDetails>
@@ -248,7 +290,7 @@ function ReservationManagement (props) {
 					</AccordionDetails>
 				</Accordion>
 
-				<Accordion>
+				<Accordion expanded={expanded4 === "panel4"} onChange={handleChangePanel4("panel4")}>
 					<AccordionSummary
 						expandIcon={<ExpandMoreIcon />}
 						aria-controls="panel2a-content"
@@ -256,7 +298,10 @@ function ReservationManagement (props) {
 						className={classes.finished}
 					>
 						<div>
-							<HistoryIcon color="action" fontSize="large" /> Finished
+							<Badge color="secondary" badgeContent={finishedCounts}>
+								<HistoryIcon color="action" fontSize="large" />
+							</Badge>
+							Finished
 						</div>
 					</AccordionSummary>
 					<AccordionDetails>
