@@ -65,10 +65,7 @@ export const createUser = /* GraphQL */ `
       current_country
       current_city
       stripeURL
-<<<<<<< HEAD
-=======
       avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
       createdAt
       updatedAt
     }
@@ -118,10 +115,7 @@ export const updateUser = /* GraphQL */ `
       current_country
       current_city
       stripeURL
-<<<<<<< HEAD
-=======
       avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
       createdAt
       updatedAt
     }
@@ -171,10 +165,7 @@ export const deleteUser = /* GraphQL */ `
       current_country
       current_city
       stripeURL
-<<<<<<< HEAD
-=======
       avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
       createdAt
       updatedAt
     }
@@ -211,10 +202,7 @@ export const createPost = /* GraphQL */ `
         current_country
         current_city
         stripeURL
-<<<<<<< HEAD
-=======
         avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
         createdAt
         updatedAt
       }
@@ -257,10 +245,7 @@ export const updatePost = /* GraphQL */ `
         current_country
         current_city
         stripeURL
-<<<<<<< HEAD
-=======
         avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
         createdAt
         updatedAt
       }
@@ -303,10 +288,7 @@ export const deletePost = /* GraphQL */ `
         current_country
         current_city
         stripeURL
-<<<<<<< HEAD
-=======
         avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
         createdAt
         updatedAt
       }
@@ -421,10 +403,7 @@ export const updateAttendingUsers = /* GraphQL */ `
         current_country
         current_city
         stripeURL
-<<<<<<< HEAD
-=======
         avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
         createdAt
         updatedAt
       }
@@ -480,10 +459,7 @@ export const deleteAttendingUsers = /* GraphQL */ `
         current_country
         current_city
         stripeURL
-<<<<<<< HEAD
-=======
         avatar
->>>>>>> 313fc3a2060a1392ebd46957393f944fb1ea7414
         createdAt
         updatedAt
       }
