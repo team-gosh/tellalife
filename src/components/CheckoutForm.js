@@ -6,9 +6,14 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
 import CardSection from "./CardSection";
+import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 
 export default function CheckoutForm (props) {
-	const { user } = props;
+	const { 
+    user,
+    approvedToConfirmed,
+    reservation
+  } = props;
 	const stripe = useStripe();
 	const elements = useElements();
 
@@ -23,6 +28,9 @@ export default function CheckoutForm (props) {
 			// Make sure to disable form submission until Stripe.js has loaded.
 			return;
 		}
+    console.log('before paymentIntentReturn')
+    console.log('user id')
+    console.log(reservation.stripeAccount)
 		const paymentIntentReturn = await API.graphql({
 			query: mutations.processOrder,
 			variables: {
@@ -31,20 +39,22 @@ export default function CheckoutForm (props) {
 					payment_method_type: [ "card" ],
 
 					// need to change here
-					amount: user.price,
+					// amount: user.price,
+					amount: reservation.price,
 					currency: "JPY",
 
 					// need to change here
 					application_fee_amount: 123,
 
 					//this should be the destination account
-					stripeAccount: user.stripeAccount,
+					stripeAccount: reservation.stripeAccount,
 				},
 			},
 		});
 
 		const secret = paymentIntentReturn.data.processOrder;
 
+    console.log("before confirmCardPayment")
 		const result = await stripe.confirmCardPayment(secret, {
 			payment_method: {
 				card: elements.getElement(CardElement),
@@ -56,11 +66,13 @@ export default function CheckoutForm (props) {
 		});
 
 		console.log(result);
-
+    console.log("before conditional")
 		if (result.error) {
 			// we actually need to figure out how to set the test account payable
 			console.log(result.error);
 			console.log("payment is succeeded?");
+      // Delete when working
+      approvedToConfirmed(reservation.id)
 			return {
 				status: "succeeded",
 				//status:"failed"
@@ -74,6 +86,7 @@ export default function CheckoutForm (props) {
 				// execution. Set up a webhook or plugin to listen for the
 				// payment_intent.succeeded event that handles any business critical
 				// post-payment actions.
+        approvedToConfirmed(reservation.id)
 				return {
 					status: "succeeded",
 				};
