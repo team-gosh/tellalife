@@ -19,7 +19,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import HistoryIcon from "@material-ui/icons/History";
 import Badge from "@material-ui/core/Badge";
-import { API } from "aws-amplify";
+// import { API } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 function ReservationManagement(props) {
   const classes = useStyles();
 
-  const { user, setVideo, video, API, queries, mutations } = props;
+  const { user, setUser, setVideo, video, API, queries, mutations } = props;
   const [view, setView] = useState("listener");
   const [value, setValue] = useState(0);
   const [reservations, setReservations] = useState([]);
@@ -255,10 +255,43 @@ function ReservationManagement(props) {
               setVideo={setVideo}
               video={video}
               user={user}
+              removeReservation={removeReservation}
             />
           );
         }
       });
+  }
+
+  async function removeReservation(reservationID) {
+    console.log('reservationId in removeReservation')
+    console.log(reservationID)
+    console.log("AttendingUsers in removeReservation")
+    const attendingUsers = (await API.graphql({
+      query: queries.listAttendingUsers,
+      filter: {reservationID: {eq: reservationID}}
+    })).data.listAttendingUsers.items
+    console.log(attendingUsers);
+    // await Promise.all(attendingUsers.forEach(async (e) => {
+    attendingUsers.forEach(async (e) => {
+      console.log("e.id")
+      console.log(e.id)
+      await API.graphql({
+        query: mutations.deleteAttendingUsers,
+        variables: { input: {id: e.id }}
+      });
+    // }))
+    });
+    await API.graphql({
+      query: mutations.deleteReservation,
+      variables: { input: {id: reservationID }}
+    });
+    const updatedUserData = await API.graphql({
+      query: queries.getUser,
+      variables: {
+        id: user.id,
+      },
+    });
+    setUser(updatedUserData.data.getUser)
   }
 
   return (
