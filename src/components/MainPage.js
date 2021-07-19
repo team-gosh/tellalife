@@ -130,7 +130,7 @@ function MainPage (props) {
 	const theme = useTheme();
 	const isBiggerScreen = useMediaQuery(theme.breakpoints.up("lg"));
 	const navBarProps = {
-		variant: isBiggerScreen ? "permanent" : "",
+		variant: isBiggerScreen ? "permanent" : "temporary",
 		width: isBiggerScreen ? 240 : "auto",
 		anchor: "left",
 	};
@@ -290,13 +290,7 @@ function MainPage (props) {
 							<MenuIcon size="large" />
 						</IconButton>
 					)}
-					<Drawer
-						{...navBarProps}
-						anchor={"left"}
-						open={state["left"]}
-						onClose={toggleDrawer("left", false)}
-						
-					>
+					<Drawer {...navBarProps} anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
 						{list("left")}
 					</Drawer>
 					<Typography variant="h6" className={classes.title}>
@@ -313,7 +307,7 @@ function MainPage (props) {
 				{display === "Reservation" ? (
 					<ReservationManagement
 						user={user}
-            setUser={setUser}
+						setUser={setUser}
 						setVideo={setVideo}
 						video={video}
 						API={API}

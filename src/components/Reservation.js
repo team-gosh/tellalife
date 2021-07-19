@@ -61,7 +61,7 @@ function Reservation (props) {
 	console.log("console.log after props");
 	console.log(user);
 
-	const [ open, setOpen ] = React.useState(false);
+	const [ open, setOpen ] = useState(false);
 	const handleClickOpen = () => {
 		setOpen(true);
 	};

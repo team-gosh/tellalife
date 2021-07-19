@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { useStripe, useElements } from "@stripe/react-stripe-js";
-
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-import { deepOrange } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import PublicIcon from "@material-ui/icons/Public";
-import LocationCityIcon from "@material-ui/icons/LocationCity";
-import TimerIcon from "@material-ui/icons/Timer";
-import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -178,29 +168,25 @@ function Profile (props) {
 	const { user, setUser, API, mutations } = props;
 
 	// Connect with DB
-	const [ nickName, setNickName ] = React.useState(user.name);
-	const [ home, setHome ] = React.useState();
-	const [ country, setCountry ] = React.useState();
-	const [ city, setCity ] = React.useState();
-	const [ value, setValue ] = React.useState(user.price ? user.price : 0);
-	const [ isEditing, setEdit ] = React.useState(false);
-	const [ registration, setRegistration ] = React.useState(false);
-	const [ error, setError ] = React.useState("");
-	const [ stripeObj, setStripeObj ] = React.useState({});
-	const [ stripeUrl, setUrl ] = React.useState("");
-	const [ charges_enabled, setCharges_enabled ] = React.useState(false);
+	const [ nickName, setNickName ] = useState(user.name);
+	const [ home, setHome ] = useState(user.home_country);
+	const [ country, setCountry ] = useState(user.current_country);
+	const [ city, setCity ] = useState(user.current_country);
+	const [ value, setValue ] = useState(user.price ? user.price : 0);
+	const [ isEditing, setEdit ] = useState(false);
+	const [ registration, setRegistration ] = useState(false);
+	const [ error, setError ] = useState("");
+	const [ stripeObj, setStripeObj ] = useState({});
+	const [ stripeUrl, setUrl ] = useState("");
+	const [ charges_enabled, setCharges_enabled ] = useState(false);
 
-	// From API
-	const [ countriesCitiesList, setLists ] = React.useState([]);
+	const [ countriesCitiesList, setLists ] = useState([]);
 
-	// From DB
-	const [ isTeller, setTeller ] = React.useState(false);
-
-	const bull = <span className={classes.bullet}>•</span>;
-
+	// get country and city from API
 	useEffect(async () => {
 		const responseObj = await axios.get("https://countriesnow.space/api/v0.1/countries");
 		const countriesArray = responseObj.data.data.map((data) => data);
+		countriesArray.push({ country: "Other", cities: "Other" });
 		setLists(countriesArray);
 	}, []);
 
@@ -209,7 +195,6 @@ function Profile (props) {
 	};
 
 	const handleCurrentCountryChange = (event) => {
-		console.log(event.target.value, " current country is set");
 		setCountry(event.target.value);
 	};
 
@@ -222,9 +207,11 @@ function Profile (props) {
 	};
 
 	const handleNameChange = (event) => {
-		console.log(event.target.value, "target value");
 		setNickName(event.target.value);
-		console.log(nickName);
+	};
+
+	const handleEdit = () => {
+		setEdit(!isEditing);
 	};
 
 	const updateUser = async () => {
@@ -245,8 +232,6 @@ function Profile (props) {
 			query: mutations.updateUser,
 			variables: { input: newData },
 		});
-		console.log("updated user");
-		console.log(response.data.updateUser);
 		setUser(response.data.updateUser);
 	};
 
@@ -268,13 +253,10 @@ function Profile (props) {
 			query: mutations.updateUser,
 			variables: { input: newData },
 		});
-		console.log("updated user");
-		console.log(response.data.updateUser);
 		setUser(response.data.updateUser);
 	};
 
 	const createUser = async () => {
-		// need to change later
 		const response = await API.graphql({
 			query: mutations.createStripeAccount,
 			variables: {
@@ -301,8 +283,6 @@ function Profile (props) {
 		});
 		const userObj = JSON.parse(response.data.getStripeAccount);
 
-		console.log(userObj);
-
 		if (userObj.charges_enabled === true) {
 			setCharges_enabled(true);
 		} else {
@@ -321,7 +301,7 @@ function Profile (props) {
 						color="primary"
 						onClick={() => {
 							account();
-							setEdit(true);
+							handleEdit();
 						}}
 					>
 						Edit
@@ -483,6 +463,7 @@ function Profile (props) {
 									}}
 									onChange={handleNameChange}
 									helperText="NickName"
+									defaultValue={""}
 								/>
 							</div>
 						)}
@@ -513,6 +494,7 @@ function Profile (props) {
 														FormHelperTextProps={{
 															className: classes.helperText,
 														}}
+														defaultValue={""}
 													/>
 												</div>
 											) : (
@@ -534,6 +516,7 @@ function Profile (props) {
 														FormHelperTextProps={{
 															className: classes.helperText,
 														}}
+														defaultValue={""}
 													/>
 												</div>
 											)}
@@ -556,6 +539,10 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
+												defaultValue={""}
+												multiline
+												rowsMin={2}
+												maxRows={4}
 											/>
 										</div>
 										<div className={classes.margin}>
@@ -575,6 +562,7 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
+												defaultValue={""}
 											/>
 										</div>
 										<div className={classes.margin}>
@@ -594,6 +582,7 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
+												defaultValue={""}
 											/>
 										</div>
 									</div>
@@ -619,6 +608,7 @@ function Profile (props) {
 															className: classes.helperText,
 														}}
 														helperText="Home Country"
+														defaultValue={""}
 													/>
 												</div>
 											) : (
@@ -639,6 +629,7 @@ function Profile (props) {
 														FormHelperTextProps={{
 															className: classes.helperText,
 														}}
+														defaultValue={""}
 													>
 														{countriesCitiesList.map((option) => (
 															<MenuItem key={option.country} value={option.country}>
@@ -667,6 +658,7 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
+												defaultValue={""}
 											>
 												{countriesCitiesList.map((option) => (
 													<MenuItem key={option.id} value={option.country}>
@@ -691,11 +683,18 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
+												defaultValue={""}
 											>
 												{country ? (
 													countriesCitiesList.map((option) => {
-														if (option.country === country) {
-															console.log("here", option.cities);
+														if (option.country === "Other") {
+															return (
+																<MenuItem key="other" value="Other">
+																	{option.cities}
+																</MenuItem>
+															);
+														} else if (option.country === country) {
+															console.log("happening");
 															return option.cities.map((city, index) => (
 																<MenuItem key={index} value={city}>
 																	{city}
@@ -724,6 +723,7 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
+												defaultValue={""}
 											/>
 										</div>
 									</div>
