@@ -76,7 +76,15 @@ const useStyles = makeStyles((theme) => ({
 function ReservationManagement(props) {
   const classes = useStyles();
 
-  const { user, setUser, setVideo, video, API, queries, mutations } = props;
+  const {
+    user,
+    setUser,
+    setVideo,
+    video,
+    API,
+    queries,
+    mutations
+  } = props;
   const [view, setView] = useState("listener");
   const [value, setValue] = useState(0);
   const [reservations, setReservations] = useState([]);
@@ -256,6 +264,9 @@ function ReservationManagement(props) {
               video={video}
               user={user}
               removeReservation={removeReservation}
+              pendingToApproved={pendingToApproved}
+              approvedToConfirmed={approvedToConfirmed}
+              confirmedToFinished={confirmedToFinished}
             />
           );
         }
@@ -268,7 +279,7 @@ function ReservationManagement(props) {
     console.log("AttendingUsers in removeReservation")
     const attendingUsers = (await API.graphql({
       query: queries.listAttendingUsers,
-      filter: {reservationID: {eq: reservationID}}
+      filter: { reservationID: { eq: reservationID } }
     })).data.listAttendingUsers.items
     console.log(attendingUsers);
     // await Promise.all(attendingUsers.forEach(async (e) => {
@@ -277,21 +288,113 @@ function ReservationManagement(props) {
       console.log(e.id)
       await API.graphql({
         query: mutations.deleteAttendingUsers,
-        variables: { input: {id: e.id }}
+        variables: { input: { id: e.id } }
       });
-    // }))
+      // }))
     });
     await API.graphql({
       query: mutations.deleteReservation,
-      variables: { input: {id: reservationID }}
+      variables: { input: { id: reservationID } }
     });
-    const updatedUserData = await API.graphql({
+
+    const updatedUserData = (await API.graphql({
       query: queries.getUser,
       variables: {
         id: user.id,
       },
+    })).data.getUser;
+    setUser(updatedUserData);
+
+    updateReservations(updatedUserData);
+  }
+
+  async function updateReservations(userData) {
+    const currentReservations = await Promise.all(
+      userData.reservations.items.map(async (e) => {
+        console.log("inside map");
+        console.log(e);
+        const reservation = (
+          await API.graphql({
+            query: queries.getReservation,
+            variables: {
+              id: e.reservationID
+            }
+          })
+        ).data.getReservation;
+        console.log(reservation);
+        return reservation;
+      })
+    );
+    setReservations(currentReservations)
+  }
+
+  async function pendingToApproved(reservationID) {
+    console.log('in pendingToApproved reservationID')
+    console.log(reservationID)
+    await API.graphql({
+      query: mutations.updateReservation,
+      variables: {
+        input: {
+          id: reservationID,
+          status: "approved",
+          stripeAccount: user.stripeAccount
+        }
+      }
     });
-    setUser(updatedUserData.data.getUser)
+
+    const updatedUserData = (await API.graphql({
+      query: queries.getUser,
+      variables: {
+        id: user.id,
+      },
+    })).data.getUser;
+    setUser(updatedUserData);
+
+    updateReservations(updatedUserData);
+  }
+
+  async function approvedToConfirmed(reservationID) {
+    await API.graphql({
+      query: mutations.updateReservation,
+      variables: {
+        input: {
+          id: reservationID,
+          status: "confirmed"
+        }
+      }
+    });
+
+    const updatedUserData = (await API.graphql({
+      query: queries.getUser,
+      variables: {
+        id: user.id,
+      },
+    })).data.getUser;
+    setUser(updatedUserData);
+
+    updateReservations(updatedUserData);
+  }
+
+  async function confirmedToFinished(reservationID) {
+    await API.graphql({
+      query: mutations.updateReservation,
+      variables: {
+        input: {
+          id: reservationID,
+          status: "finished"
+        }
+      }
+    });
+
+    const updatedUserData = (await API.graphql({
+      query: queries.getUser,
+      variables: {
+        id: user.id,
+      },
+    })).data.getUser;
+    setUser(updatedUserData);
+
+    updateReservations(updatedUserData);
   }
 
   return (
