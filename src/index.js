@@ -21,11 +21,11 @@ const stripePromise = loadStripe(
 
 ReactDOM.render(
 	// <Elements stripe={stripePromise}>
-	<React.StrictMode>
+	<React.Fragment>
 		<Elements stripe={stripePromise}>
 			<App />
 		</Elements>
-	</React.StrictMode>,
+	</React.Fragment>,
 	document.getElementById("root")
 );
 

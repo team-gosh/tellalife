@@ -494,7 +494,6 @@ function Profile (props) {
 														FormHelperTextProps={{
 															className: classes.helperText,
 														}}
-														defaultValue={""}
 													/>
 												</div>
 											) : (
@@ -516,7 +515,6 @@ function Profile (props) {
 														FormHelperTextProps={{
 															className: classes.helperText,
 														}}
-														defaultValue={""}
 													/>
 												</div>
 											)}
@@ -539,10 +537,6 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
-												defaultValue={""}
-												multiline
-												rowsMin={2}
-												maxRows={4}
 											/>
 										</div>
 										<div className={classes.margin}>
@@ -582,7 +576,6 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
-												defaultValue={""}
 											/>
 										</div>
 									</div>
@@ -608,7 +601,6 @@ function Profile (props) {
 															className: classes.helperText,
 														}}
 														helperText="Home Country"
-														defaultValue={""}
 													/>
 												</div>
 											) : (
