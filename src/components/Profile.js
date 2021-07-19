@@ -173,16 +173,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-// get from APIs
-const countries = [ "Japan", "China", "Australia", "UK", "Iceland" ];
-const cities = {
-	Japan: [ "Tokyo", "Osaka", "Nagoya" ],
-	China: [ "Beijing", "Shanghai" ],
-	Australia: [ "Sydney", "Perth" ],
-	UK: [ "London" ],
-	Iceland: [ "Reykjavík", "Kópavogur" ],
-};
-
 function Profile (props) {
 	const classes = useStyles();
 	const { user, setUser, API, mutations } = props;
@@ -200,16 +190,26 @@ function Profile (props) {
 	const [ stripeUrl, setUrl ] = React.useState("");
 	const [ charges_enabled, setCharges_enabled ] = React.useState(false);
 
+	// From API
+	const [ countriesCitiesList, setLists ] = React.useState([]);
+
 	// From DB
 	const [ isTeller, setTeller ] = React.useState(false);
 
 	const bull = <span className={classes.bullet}>•</span>;
+
+	useEffect(async () => {
+		const responseObj = await axios.get("https://countriesnow.space/api/v0.1/countries");
+		const countriesArray = responseObj.data.data.map((data) => data);
+		setLists(countriesArray);
+	}, []);
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
 	};
 
 	const handleCurrentCountryChange = (event) => {
+		console.log(event.target.value, " current country is set");
 		setCountry(event.target.value);
 	};
 
@@ -505,9 +505,9 @@ function Profile (props) {
 														className={classes.profile}
 														InputProps={{
 															classes: {
-																root: classes.rootTxt,
+																root: classes.selectText,
 																disabled: classes.disabled,
-																input: classes.inputText,
+																input: classes.selectText,
 															},
 														}}
 														FormHelperTextProps={{
@@ -519,29 +519,22 @@ function Profile (props) {
 												<div className={classes.margin}>
 													<TextField
 														id="homecountry"
-														select
 														helperText="Home country"
 														value={user.home_country}
 														onChange={handleHomeChange}
 														disabled={true}
-														className={classes.textField}
+														className={classes.profile}
 														InputProps={{
 															classes: {
-																root: classes.rootTxt,
+																root: classes.selectText,
 																disabled: classes.disabled,
-																input: classes.inputText,
+																input: classes.selectText,
 															},
 														}}
 														FormHelperTextProps={{
 															className: classes.helperText,
 														}}
-													>
-														{countries.map((option) => (
-															<MenuItem key={option} value={option}>
-																{option}
-															</MenuItem>
-														))}
-													</TextField>
+													/>
 												</div>
 											)}
 										</div>
@@ -557,7 +550,7 @@ function Profile (props) {
 													classes: {
 														root: classes.selectText,
 														disabled: classes.disabled,
-														input: classes.inputText,
+														input: classes.selectText,
 													},
 												}}
 												FormHelperTextProps={{
@@ -634,22 +627,22 @@ function Profile (props) {
 														id="homecountry"
 														select
 														onChange={handleHomeChange}
-														helperText="Please select your home country *This can't be changed"
+														helperText="Home country *This can't be changed"
 														className={classes.profile}
 														InputProps={{
 															classes: {
-																root: classes.rootTxt,
+																root: classes.selectText,
 																disabled: classes.disabled,
-																input: classes.inputText,
+																input: classes.selectText,
 															},
 														}}
 														FormHelperTextProps={{
 															className: classes.helperText,
 														}}
 													>
-														{countries.map((option) => (
-															<MenuItem key={option} value={option}>
-																{option}
+														{countriesCitiesList.map((option) => (
+															<MenuItem key={option.country} value={option.country}>
+																{option.country}
 															</MenuItem>
 														))}
 													</TextField>
@@ -675,9 +668,9 @@ function Profile (props) {
 													className: classes.helperText,
 												}}
 											>
-												{countries.map((option) => (
-													<MenuItem key={option} value={option}>
-														{option}
+												{countriesCitiesList.map((option) => (
+													<MenuItem key={option.id} value={option.country}>
+														{option.country}
 													</MenuItem>
 												))}
 											</TextField>
@@ -700,11 +693,16 @@ function Profile (props) {
 												}}
 											>
 												{country ? (
-													cities[country].map((option) => (
-														<MenuItem key={option} value={option}>
-															{option}
-														</MenuItem>
-													))
+													countriesCitiesList.map((option) => {
+														if (option.country === country) {
+															console.log("here", option.cities);
+															return option.cities.map((city, index) => (
+																<MenuItem key={index} value={city}>
+																	{city}
+																</MenuItem>
+															));
+														}
+													})
 												) : (
 													<MenuItem />
 												)}
