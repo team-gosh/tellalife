@@ -44,6 +44,7 @@ type AttendingUsers
 	userID: ID!
 	reservation: Reservation! @connection(fields: ["reservationID"])
 	user: User! @connection(fields: ["userID"])
+  seen: Boolean!
 }
 
 # Reservation Table
@@ -62,7 +63,6 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 	users: [AttendingUsers!]! @connection(keyName: "reservationAttendedBy", fields: ["id"])
 	# tellerID: ID!
 	tellerID: String!
-  seen: Boolean!
 }
 
 # Twilio Video Generator
