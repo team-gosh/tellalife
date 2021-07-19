@@ -39,7 +39,7 @@ function App () {
 			<div className="App">
 				{video.isActive ? (
 					<VideoChat
-						guestName={video.username}
+						guestName={video.identity}
 						guestRoom={video.roomName}
 						Amplify={Amplify}
 						graphqlOperation={graphqlOperation}

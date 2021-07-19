@@ -76,15 +76,7 @@ const useStyles = makeStyles((theme) => ({
 function ReservationManagement(props) {
   const classes = useStyles();
 
-  const {
-    user,
-    setUser,
-    setVideo,
-    video,
-    API,
-    queries,
-    mutations
-  } = props;
+  const { user, setUser, setVideo, video, API, queries, mutations } = props;
   const [view, setView] = useState("listener");
   const [value, setValue] = useState(0);
   const [reservations, setReservations] = useState([]);
@@ -94,6 +86,7 @@ function ReservationManagement(props) {
   const [expanded3, setExpanded3] = useState(false);
   const [expanded4, setExpanded4] = useState(false);
 
+  const [attendingUsers, setAttendingUsers] = useState("");
   const [pendingListenerCounts, setPendingListenerCounts] = useState("");
   const [approveListenerCounts, setApproveListenerCounts] = useState("");
   const [confirmedListenerCounts, setConfirmedListenerCounts] = useState("");
@@ -130,67 +123,156 @@ function ReservationManagement(props) {
     setReservations(currentReservations);
   }, []);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "pending")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id !== elm.tellerID);
+  useEffect(async () => {
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    setAttendingUsers(allAttendingUser);
+  }, [reservations]);
+
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "pending")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id !== elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "pending")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID !== e.reservation.tellerID);
     setPendingListenerCounts(arrayOfSeen.length);
   }, [reservations]);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "approved")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id !== elm.tellerID);
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "approved")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id !== elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "approved")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID !== e.reservation.tellerID);
     setApproveListenerCounts(arrayOfSeen.length);
   }, [reservations]);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "confirmed")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id !== elm.tellerID);
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "confirmed")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id !== elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "confirmed")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID !== e.reservation.tellerID);
     setConfirmedListenerCounts(arrayOfSeen.length);
   }, [reservations]);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "finished")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id !== elm.tellerID);
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "finished")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id !== elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "finished")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID !== e.reservation.tellerID);
     setFinishedListenerCounts(arrayOfSeen.length);
   }, [reservations]);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "pending")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id === elm.tellerID);
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "pending")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id === elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "pending")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID === e.reservation.tellerID);
     setPendingTellerCounts(arrayOfSeen.length);
   }, [reservations]);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "approved")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id === elm.tellerID);
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "approved")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id === elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "approved")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID === e.reservation.tellerID);
     setApproveTellerCounts(arrayOfSeen.length);
   }, [reservations]);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "confirmed")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id === elm.tellerID);
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "confirmed")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id === elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "confirmed")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID === e.reservation.tellerID);
     setConfirmedTellerCounts(arrayOfSeen.length);
   }, [reservations]);
 
-  useEffect(() => {
-    const arrayOfSeen = reservations
-      .filter((elm) => elm.status === "finished")
-      .filter((elm) => elm.seen === false)
-      .filter((elm) => user.id === elm.tellerID);
+  useEffect(async () => {
+    // const arrayOfSeen = reservations
+    //   .filter((elm) => elm.status === "finished")
+    //   .filter((elm) => elm.seen === false)
+    //   .filter((elm) => user.id === elm.tellerID);
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === "finished")
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID === e.reservation.tellerID);
     setFinishedTellerCounts(arrayOfSeen.length);
   }, [reservations]);
 
@@ -274,18 +356,20 @@ function ReservationManagement(props) {
   }
 
   async function removeReservation(reservationID) {
-    console.log('reservationId in removeReservation')
-    console.log(reservationID)
-    console.log("AttendingUsers in removeReservation")
-    const attendingUsers = (await API.graphql({
-      query: queries.listAttendingUsers,
-      filter: { reservationID: { eq: reservationID } }
-    })).data.listAttendingUsers.items
+    console.log("reservationId in removeReservation");
+    console.log(reservationID);
+    console.log("AttendingUsers in removeReservation");
+    const attendingUsers = (
+      await API.graphql({
+        query: queries.listAttendingUsers,
+        filter: { reservationID: { eq: reservationID } }
+      })
+    ).data.listAttendingUsers.items;
     console.log(attendingUsers);
     // await Promise.all(attendingUsers.forEach(async (e) => {
     attendingUsers.forEach(async (e) => {
-      console.log("e.id")
-      console.log(e.id)
+      console.log("e.id");
+      console.log(e.id);
       await API.graphql({
         query: mutations.deleteAttendingUsers,
         variables: { input: { id: e.id } }
@@ -297,12 +381,14 @@ function ReservationManagement(props) {
       variables: { input: { id: reservationID } }
     });
 
-    const updatedUserData = (await API.graphql({
-      query: queries.getUser,
-      variables: {
-        id: user.id,
-      },
-    })).data.getUser;
+    const updatedUserData = (
+      await API.graphql({
+        query: queries.getUser,
+        variables: {
+          id: user.id
+        }
+      })
+    ).data.getUser;
     setUser(updatedUserData);
 
     updateReservations(updatedUserData);
@@ -325,12 +411,12 @@ function ReservationManagement(props) {
         return reservation;
       })
     );
-    setReservations(currentReservations)
+    setReservations(currentReservations);
   }
 
   async function pendingToApproved(reservationID) {
-    console.log('in pendingToApproved reservationID')
-    console.log(reservationID)
+    console.log("in pendingToApproved reservationID");
+    console.log(reservationID);
     await API.graphql({
       query: mutations.updateReservation,
       variables: {
@@ -342,12 +428,14 @@ function ReservationManagement(props) {
       }
     });
 
-    const updatedUserData = (await API.graphql({
-      query: queries.getUser,
-      variables: {
-        id: user.id,
-      },
-    })).data.getUser;
+    const updatedUserData = (
+      await API.graphql({
+        query: queries.getUser,
+        variables: {
+          id: user.id
+        }
+      })
+    ).data.getUser;
     setUser(updatedUserData);
 
     updateReservations(updatedUserData);
@@ -364,12 +452,14 @@ function ReservationManagement(props) {
       }
     });
 
-    const updatedUserData = (await API.graphql({
-      query: queries.getUser,
-      variables: {
-        id: user.id,
-      },
-    })).data.getUser;
+    const updatedUserData = (
+      await API.graphql({
+        query: queries.getUser,
+        variables: {
+          id: user.id
+        }
+      })
+    ).data.getUser;
     setUser(updatedUserData);
 
     updateReservations(updatedUserData);
@@ -386,12 +476,14 @@ function ReservationManagement(props) {
       }
     });
 
-    const updatedUserData = (await API.graphql({
-      query: queries.getUser,
-      variables: {
-        id: user.id,
-      },
-    })).data.getUser;
+    const updatedUserData = (
+      await API.graphql({
+        query: queries.getUser,
+        variables: {
+          id: user.id
+        }
+      })
+    ).data.getUser;
     setUser(updatedUserData);
 
     updateReservations(updatedUserData);
