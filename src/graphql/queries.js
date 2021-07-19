@@ -14,6 +14,7 @@ export const getUser = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
@@ -184,7 +185,6 @@ export const getAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
-        seen
         createdAt
         updatedAt
       }
@@ -210,6 +210,7 @@ export const getAttendingUsers = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      seen
       createdAt
       updatedAt
     }
@@ -239,7 +240,6 @@ export const listAttendingUsers = /* GraphQL */ `
           description
           userIDs
           tellerID
-          seen
           createdAt
           updatedAt
         }
@@ -259,6 +259,7 @@ export const listAttendingUsers = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        seen
         createdAt
         updatedAt
       }
@@ -285,13 +286,13 @@ export const getReservation = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
         nextToken
       }
       tellerID
-      seen
       createdAt
       updatedAt
     }
@@ -320,7 +321,6 @@ export const listReservations = /* GraphQL */ `
           nextToken
         }
         tellerID
-        seen
         createdAt
         updatedAt
       }

@@ -14,6 +14,7 @@ export const onCreateUser = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
@@ -61,6 +62,7 @@ export const onUpdateUser = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
@@ -108,6 +110,7 @@ export const onDeleteUser = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
@@ -284,7 +287,6 @@ export const onCreateAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
-        seen
         createdAt
         updatedAt
       }
@@ -310,6 +312,7 @@ export const onCreateAttendingUsers = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      seen
       createdAt
       updatedAt
     }
@@ -337,7 +340,6 @@ export const onUpdateAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
-        seen
         createdAt
         updatedAt
       }
@@ -363,6 +365,7 @@ export const onUpdateAttendingUsers = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      seen
       createdAt
       updatedAt
     }
@@ -390,7 +393,6 @@ export const onDeleteAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
-        seen
         createdAt
         updatedAt
       }
@@ -416,6 +418,7 @@ export const onDeleteAttendingUsers = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      seen
       createdAt
       updatedAt
     }
@@ -440,13 +443,13 @@ export const onCreateReservation = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
         nextToken
       }
       tellerID
-      seen
       createdAt
       updatedAt
     }
@@ -471,13 +474,13 @@ export const onUpdateReservation = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
         nextToken
       }
       tellerID
-      seen
       createdAt
       updatedAt
     }
@@ -502,13 +505,13 @@ export const onDeleteReservation = /* GraphQL */ `
           id
           reservationID
           userID
+          seen
           createdAt
           updatedAt
         }
         nextToken
       }
       tellerID
-      seen
       createdAt
       updatedAt
     }
