@@ -57,7 +57,18 @@ const useStyles = makeStyles((theme) => ({
 function Reservation (props) {
 	const classes = useStyles();
 	const bull = <span className={classes.bullet}>•</span>;
-	const { user, data, status, view, setVideo, video, removeReservation } = props;
+	const {
+    user,
+    data,
+    status,
+    view,
+    setVideo,
+    video, 
+    removeReservation,
+    pendingToApproved,
+    approvedToConfirmed,
+    confirmedToFinished
+  } = props;
 	console.log("console.log after props");
 	console.log(user);
 
@@ -107,7 +118,7 @@ function Reservation (props) {
 							>
 								<DialogTitle id="form-dialog-title">Payment</DialogTitle>
 								<DialogContent>
-									<CheckoutForm user={user} />
+									<CheckoutForm user={user} approvedToConfirmed={approvedToConfirmed} reservation={data} />
 								</DialogContent>
 								<DialogActions>
 									<Button onClick={handleClose} color="primary">
@@ -149,7 +160,7 @@ function Reservation (props) {
 				) : status === "pending" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" className={classes.accept}>
+							<Button size="small" variant="outlined" className={classes.accept} onClick={() => pendingToApproved(data.id)}>
 								Accept
 							</Button>
 							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>

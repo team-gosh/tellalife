@@ -63,6 +63,7 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 	users: [AttendingUsers!]! @connection(keyName: "reservationAttendedBy", fields: ["id"])
 	# tellerID: ID!
 	tellerID: String!
+  stripeAccount: String
 }
 
 # Twilio Video Generator
