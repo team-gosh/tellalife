@@ -92,7 +92,8 @@ function Reservation (props) {
 						{"Teller ID: " + data.tellerID}
 					</Typography>
 					<Typography variant="body2" component="p" className={classes.text}>
-						{new Date(data.startDateTime).now}
+            {/* Need to clean up below in the database */}
+						{(new Date(Number(data.startDateTime))).toLocaleString()}
 					</Typography>
 				</CardContent>
 				{view === "listener" ? status === "pending" ? (
@@ -186,9 +187,15 @@ function Reservation (props) {
 								size="small"
 								variant="outlined"
 								color="primary"
-								onClick={() => {
-									video.isActive = true;
-									setVideo(video);
+								onClick={(e) => {
+									console.log("user");
+									console.log(user);
+									const newVideo = {
+										isActive: true,
+										identity: user.username,
+										roomName: data.id, // need to pass later
+									};
+									setVideo(newVideo);
 								}}
 							>
 								Go to video chat
