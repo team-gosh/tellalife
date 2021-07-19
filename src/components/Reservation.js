@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 function Reservation (props) {
 	const classes = useStyles();
 	const bull = <span className={classes.bullet}>•</span>;
-	const { user, data, status, view, setVideo, video } = props;
+	const { user, data, status, view, setVideo, video, removeReservation } = props;
 	console.log("console.log after props");
 	console.log(user);
 
@@ -87,7 +87,7 @@ function Reservation (props) {
 				{view === "listener" ? status === "pending" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Cancel
 							</Button>
 						</CardActions>
@@ -116,7 +116,7 @@ function Reservation (props) {
 								</DialogActions>
 							</Dialog>
 
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Cancel
 							</Button>
 						</CardActions>
@@ -152,7 +152,7 @@ function Reservation (props) {
 							<Button size="small" variant="outlined" className={classes.accept}>
 								Accept
 							</Button>
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Reject
 							</Button>
 						</CardActions>
@@ -163,7 +163,7 @@ function Reservation (props) {
 							<Typography size="small" className={classes.title} color="textSecondary" gutterBottom>
 								Waiting for the payment
 							</Typography>
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Cancel
 							</Button>
 						</CardActions>

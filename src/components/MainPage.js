@@ -313,6 +313,7 @@ function MainPage (props) {
 				{display === "Reservation" ? (
 					<ReservationManagement
 						user={user}
+            setUser={setUser}
 						setVideo={setVideo}
 						video={video}
 						API={API}

@@ -52,7 +52,8 @@ export default function AlertDialog(props) {
       variables: {
         input: {
           reservationID: newReservation.data.createReservation.id,
-          userID: user.id
+          userID: user.id,
+          seen: false
         }
       }
     });
@@ -61,7 +62,8 @@ export default function AlertDialog(props) {
       variables: {
         input: {
           reservationID: newReservation.data.createReservation.id,
-          userID: teller.id
+          userID: teller.id,
+          seen: false
         }
       }
     });
