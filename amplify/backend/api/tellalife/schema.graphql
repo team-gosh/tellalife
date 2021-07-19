@@ -1,92 +1,110 @@
 # User table
-# type Blog @model {
-type User @model @key(name: "byUserName", fields: ["username", "id"], queryField: "getUserByEmail") {
-	id: ID!
-	name: String!
-	username: String!
-	email: String!
-	home_country: String
-	# reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-	# reservations: [Reservation] @connection(keyName: "hasReservation", fields: ["id"]) # subscription for this?
-	reservations: [ID]
-	# reservations: [String]
-	# posts: [Post] @connection(keyName: "byBlog", fields: ["id"])
-	posts: [Post] @connection(keyName: "byUser", fields: ["id"])
-	#change above keyname to byUser
-	isTeller: Boolean!
-	price: Int
-	stripeAccount: String
-	current_country: String
-	current_city: String
+type User
+  @model
+  @key(
+    name: "byUserName"
+    fields: ["username", "id"]
+    queryField: "getUserByEmail"
+  ) {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+  home_country: String
+  reservations: [AttendingUsers]
+    @connection(keyName: "userIsAttending", fields: ["id"])
+  posts: [Post] @connection(keyName: "byUser", fields: ["id"])
+  isTeller: Boolean!
+  price: Int
+  stripeAccount: String
+  current_country: String
+  current_city: String
+  stripeURL: String
+  avatar: String
 }
 
 # Post Table
-# type Post @model @key(name: "byBlog", fields: ["blogID"]) {
 type Post @model @key(name: "byUser", fields: ["userID"]) {
-	id: ID!
-	title: String
-	userID: ID!
-	dateTime: String!
-	country: String!
-	city: String!
-	type: String!
-	# blog: Blog @connection(fields: ["blogID"])
-	user: User @connection(fields: ["userID"])
-	# comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
-	text: String
-	link: String
-	image: String
+  id: ID!
+  title: String
+  userID: ID!
+  dateTime: String!
+  country: String!
+  city: String!
+  type: String!
+  # blog: Blog @connection(fields: ["blogID"])
+  user: User @connection(fields: ["userID"])
+  # comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+  text: String
+  link: String
+  image: String
+}
+
+type AttendingUsers
+  @model
+  # @key(name: "userIsAttending", fields: ["userID", "reservationID"])
+  # @key(name: "reservationAttendedBy", fields: ["reservationID", "userID"]) {
+  @key(name: "userIsAttending", fields: ["userID"])
+  @key(name: "reservationAttendedBy", fields: ["reservationID"]) {
+  id: ID!
+  reservationID: ID!
+  userID: ID!
+  reservation: Reservation! @connection(fields: ["reservationID"])
+  user: User! @connection(fields: ["userID"])
+  seen: Boolean!
 }
 
 # Reservation Table
-# type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
-# type Reservation @model @key(name: "hasReservation", fields: ["postID", "content"]) {
 type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
-	# type Reservation @model {
-	id: ID!
-	# createdDateTime: String!
-	startDateTime: String!
-	duration: Int!
-	price: Int!
-	status: String!
-	type: String! #subscription for this?
-	# country: String!
-	# city: String!
-	country: String
-	city: String
-	title: String
-	description: String
-	userIDs: ID! #subscription for this?
-	tellerID: String!
-
-	# postID: ID!
-	# post: Post @connection(fields: ["postID"])
-	# content: String!
+  id: ID!
+  startDateTime: String!
+  duration: Int!
+  price: Int!
+  status: String!
+  type: String! #subscription for this?
+  country: String
+  city: String
+  title: String
+  description: String
+  userIDs: ID
+  users: [AttendingUsers!]!
+    @connection(keyName: "reservationAttendedBy", fields: ["id"])
+  # tellerID: ID!
+  tellerID: String!
+  stripeAccount: String
 }
 
 # Twilio Video Generator
-
 input PaymentIntent {
-	id: String!
-	payment_method_type: [String!]
-	amount: Int!
-	currency: String!
-	application_fee_amount: Int!
-	stripeAccount: String!
+  id: String!
+  payment_method_type: [String!]
+  amount: Int!
+  currency: String!
+  application_fee_amount: Int!
+  stripeAccount: String!
 }
 
 input VideoInput {
-	id: ID!
-	identity: String!
-	room: String!
+  id: ID!
+  identity: String!
+  room: String!
 }
 
 input AccountType {
-	type: String!
+  type: String!
+}
+
+input StripeAccount {
+  id: String!
 }
 
 type Mutation {
-	generateVideoToken(input: VideoInput!): String @function(name: "createVideoToken-${env}")
-	createStripeAccount(input: AccountType!): String @function(name: "createStripeAccount-${env}")
-	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
+  generateVideoToken(input: VideoInput!): String
+    @function(name: "createVideoToken")
+  createStripeAccount(input: AccountType!): String
+    @function(name: "createStripeAccount")
+  processOrder(input: PaymentIntent!): String
+    @function(name: "createPayment-${env}")
+  getStripeAccount(input: StripeAccount!): String
+    @function(name: "getStripeAccount-${env}")
 }

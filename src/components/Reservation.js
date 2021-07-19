@@ -55,15 +55,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Reservation (props) {
-	const stripe = useStripe();
-
 	const classes = useStyles();
 	const bull = <span className={classes.bullet}>•</span>;
-	const { user, data, status, view, setVideo, video } = props;
+	const {
+    user,
+    data,
+    status,
+    view,
+    setVideo,
+    video, 
+    removeReservation,
+    pendingToApproved,
+    approvedToConfirmed,
+    confirmedToFinished
+  } = props;
 	console.log("console.log after props");
 	console.log(user);
 
-	const [ open, setOpen ] = React.useState(false);
+	const [ open, setOpen ] = useState(false);
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -71,29 +80,26 @@ function Reservation (props) {
 		setOpen(false);
 	};
 
-
-
-
 	return (
-		<div className="Reservation">
+		<div className="Reservation" id={data.id}>
 			{/* consumer view */}
 			<Card className={classes.root}>
 				<CardContent>
 					<Typography className={classes.title} color="textSecondary" gutterBottom>
-						{data.teller}
+						{"Reservation ID: " + data.id}
 					</Typography>
 					<Typography variant="h5" component="h2">
-						{data.title}
+						{"Teller ID: " + data.tellerID}
 					</Typography>
 					<Typography variant="body2" component="p" className={classes.text}>
-						dsadfafsdasdfasdfasfd
-						{data.description}
+            {/* Need to clean up below in the database */}
+						{(new Date(Number(data.startDateTime))).toLocaleString()}
 					</Typography>
 				</CardContent>
 				{view === "listener" ? status === "pending" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Cancel
 							</Button>
 						</CardActions>
@@ -113,9 +119,7 @@ function Reservation (props) {
 							>
 								<DialogTitle id="form-dialog-title">Payment</DialogTitle>
 								<DialogContent>
-									<div>
-										<CheckoutForm />
-									</div>
+									<CheckoutForm user={user} approvedToConfirmed={approvedToConfirmed} reservation={data} />
 								</DialogContent>
 								<DialogActions>
 									<Button onClick={handleClose} color="primary">
@@ -124,7 +128,7 @@ function Reservation (props) {
 								</DialogActions>
 							</Dialog>
 
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Cancel
 							</Button>
 						</CardActions>
@@ -143,7 +147,7 @@ function Reservation (props) {
 									const newVideo = {
 										isActive: true,
 										identity: user.username,
-										roomName: "pluto", // need to pass later
+										roomName: data.id, // need to pass later
 									};
 									setVideo(newVideo);
 								}}
@@ -157,10 +161,10 @@ function Reservation (props) {
 				) : status === "pending" ? (
 					<div>
 						<CardActions>
-							<Button size="small" variant="outlined" className={classes.accept}>
+							<Button size="small" variant="outlined" className={classes.accept} onClick={() => pendingToApproved(data.id)}>
 								Accept
 							</Button>
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Reject
 							</Button>
 						</CardActions>
@@ -171,7 +175,7 @@ function Reservation (props) {
 							<Typography size="small" className={classes.title} color="textSecondary" gutterBottom>
 								Waiting for the payment
 							</Typography>
-							<Button size="small" variant="outlined" color="secondary">
+							<Button size="small" variant="outlined" color="secondary" onClick={() => removeReservation(data.id)}>
 								Cancel
 							</Button>
 						</CardActions>
@@ -183,9 +187,15 @@ function Reservation (props) {
 								size="small"
 								variant="outlined"
 								color="primary"
-								onClick={() => {
-									video.isActive = true;
-									setVideo(video);
+								onClick={(e) => {
+									console.log("user");
+									console.log(user);
+									const newVideo = {
+										isActive: true,
+										identity: user.username,
+										roomName: data.id, // need to pass later
+									};
+									setVideo(newVideo);
 								}}
 							>
 								Go to video chat

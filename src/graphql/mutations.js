@@ -16,6 +16,11 @@ export const processOrder = /* GraphQL */ `
     processOrder(input: $input)
   }
 `;
+export const getStripeAccount = /* GraphQL */ `
+  mutation GetStripeAccount($input: StripeAccount!) {
+    getStripeAccount(input: $input)
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -27,7 +32,17 @@ export const createUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          reservationID
+          userID
+          seen
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -50,6 +65,8 @@ export const createUser = /* GraphQL */ `
       stripeAccount
       current_country
       current_city
+      stripeURL
+      avatar
       createdAt
       updatedAt
     }
@@ -66,7 +83,17 @@ export const updateUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          reservationID
+          userID
+          seen
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -89,6 +116,8 @@ export const updateUser = /* GraphQL */ `
       stripeAccount
       current_country
       current_city
+      stripeURL
+      avatar
       createdAt
       updatedAt
     }
@@ -105,7 +134,17 @@ export const deleteUser = /* GraphQL */ `
       username
       email
       home_country
-      reservations
+      reservations {
+        items {
+          id
+          reservationID
+          userID
+          seen
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       posts {
         items {
           id
@@ -128,6 +167,8 @@ export const deleteUser = /* GraphQL */ `
       stripeAccount
       current_country
       current_city
+      stripeURL
+      avatar
       createdAt
       updatedAt
     }
@@ -152,7 +193,9 @@ export const createPost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -161,6 +204,8 @@ export const createPost = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -191,7 +236,9 @@ export const updatePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -200,6 +247,8 @@ export const updatePost = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
+        avatar
         createdAt
         updatedAt
       }
@@ -230,7 +279,9 @@ export const deletePost = /* GraphQL */ `
         username
         email
         home_country
-        reservations
+        reservations {
+          nextToken
+        }
         posts {
           nextToken
         }
@@ -239,12 +290,185 @@ export const deletePost = /* GraphQL */ `
         stripeAccount
         current_country
         current_city
+        stripeURL
+        avatar
         createdAt
         updatedAt
       }
       text
       link
       image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createAttendingUsers = /* GraphQL */ `
+  mutation CreateAttendingUsers(
+    $input: CreateAttendingUsersInput!
+    $condition: ModelAttendingUsersConditionInput
+  ) {
+    createAttendingUsers(input: $input, condition: $condition) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        stripeAccount
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatar
+        createdAt
+        updatedAt
+      }
+      seen
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateAttendingUsers = /* GraphQL */ `
+  mutation UpdateAttendingUsers(
+    $input: UpdateAttendingUsersInput!
+    $condition: ModelAttendingUsersConditionInput
+  ) {
+    updateAttendingUsers(input: $input, condition: $condition) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        stripeAccount
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatar
+        createdAt
+        updatedAt
+      }
+      seen
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteAttendingUsers = /* GraphQL */ `
+  mutation DeleteAttendingUsers(
+    $input: DeleteAttendingUsersInput!
+    $condition: ModelAttendingUsersConditionInput
+  ) {
+    deleteAttendingUsers(input: $input, condition: $condition) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        stripeAccount
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatar
+        createdAt
+        updatedAt
+      }
+      seen
       createdAt
       updatedAt
     }
@@ -267,7 +491,19 @@ export const createReservation = /* GraphQL */ `
       title
       description
       userIDs
+      users {
+        items {
+          id
+          reservationID
+          userID
+          seen
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       tellerID
+      stripeAccount
       createdAt
       updatedAt
     }
@@ -290,7 +526,19 @@ export const updateReservation = /* GraphQL */ `
       title
       description
       userIDs
+      users {
+        items {
+          id
+          reservationID
+          userID
+          seen
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       tellerID
+      stripeAccount
       createdAt
       updatedAt
     }
@@ -313,7 +561,19 @@ export const deleteReservation = /* GraphQL */ `
       title
       description
       userIDs
+      users {
+        items {
+          id
+          reservationID
+          userID
+          seen
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       tellerID
+      stripeAccount
       createdAt
       updatedAt
     }

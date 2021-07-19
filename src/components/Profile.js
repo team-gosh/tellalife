@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-import { deepOrange } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -22,37 +18,32 @@ const useStyles = makeStyles((theme) => ({
 			margin: theme.spacing(1),
 		},
 		justifyContent: "space-around",
-		flexDirection: "column",
+		flexDirection: "row",
 		[theme.breakpoints.up("md")]: {
 			flexDirection: "row",
 			alignItems: "flex-start",
 		},
-		alignItems: "center",
-		marginTop: 10,
+		marginTop: 3,
+		fontFamily: "Lato, sans-serif",
 	},
 	large: {
-		width: theme.spacing(20),
-		height: theme.spacing(20),
-		backgroundColor: deepOrange[700],
+		width: theme.spacing(15),
+		height: theme.spacing(15),
+		backgroundColor: "#FDBE0B",
+		fontSize: 20,
 		[theme.breakpoints.up("md")]: {
 			width: theme.spacing(30),
 			height: theme.spacing(30),
+			fontSize: 50,
 		},
 	},
-	username: {
-		fontSize: 15,
-		color: "#3F72AF",
-		textAlign: "center",
-	},
+
 	profile: {
-		fontSize: 40,
-	},
-	edit: {
-		fontSize: 30,
-		width: 200,
+		marginTop: 20,
+		width: 150,
 		[theme.breakpoints.up("md")]: {
-			fontSize: 40,
-			width: 240,
+			marginTop: 42,
+			width: 400,
 		},
 	},
 	info: {
@@ -62,87 +53,142 @@ const useStyles = makeStyles((theme) => ({
 	},
 	list_root: {
 		"& .MuiTextField-root": {
-			margin: theme.spacing(1),
-			width: "25ch",
+			margin: theme.spacing(0.5),
+			width: 150,
+			[theme.breakpoints.up("md")]: {
+				margin: theme.spacing(1),
+				width: 300,
+			},
 		},
 	},
 	margin: {
-		marginTop: 20,
+		marginTop: 10,
 		[theme.breakpoints.up("md")]: {
-			marginTop: 42,
+			marginTop: 20,
 		},
 	},
-	priceLabel: {
-		textAlign: "left",
-		fontSize: 12,
-	},
+
 	stripeNotice: {
 		fontSize: 10,
 	},
-}));
+	card_root: {
+		marginTop: "3rem",
+		minWidth: "60%",
+		maxWidth: "90%",
+		minHeight: "100%",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "aliceblue",
 
-// get from APIs
-const countries = [ "Japan", "China", "Australia", "UK", "Iceland" ];
-const cities = {
-	Japan: [ "Tokyo", "Osaka", "Nagoya" ],
-	China: [ "Beijing", "Shanghai" ],
-	Australia: [ "Sydney", "Perth" ],
-	UK: [ "London" ],
-	Iceland: [ "Reykjavík", "Kópavogur" ],
-};
+		[theme.breakpoints.up("md")]: {
+			minWidth: "70%",
+			minHeight: "100%",
+			justifyContent: "space-around",
+		},
+	},
+	profile_container: {
+		display: "flex",
+		flexDirection: "column",
+		textAlign: "center",
+		width: "100%",
+
+		[theme.breakpoints.up("md")]: {
+			minWidth: "100%",
+		},
+	},
+	card_content: {
+		flexGrow: "1",
+		[theme.breakpoints.up("md")]: {
+			flexGrow: "2",
+		},
+	},
+	button_container: {
+		display: "flex",
+		flexDirection: "column",
+		marginTop: "3rem",
+	},
+	buttons: {
+		marginLeft: 3,
+		margin: 10,
+		fontSize: "1rem",
+		color: "#28345A",
+		borderColor: "#28345A",
+		[theme.breakpoints.up("md")]: {
+			fontSize: "1.5rem",
+		},
+	},
+	inputText: {
+		color: "#28345A",
+		backgroundColor: "transparent",
+		fontSize: 20,
+		textAlign: "center",
+		[theme.breakpoints.up("md")]: {
+			backgroundColor: "transparent",
+			fontSize: 40,
+			textAlign: "center",
+		},
+	},
+	selectText: {
+		color: "#28345A",
+		alignItems: "center",
+		backgroundColor: "transparent",
+		fontSize: 20,
+		textAlign: "center",
+		[theme.breakpoints.up("md")]: {
+			backgroundColor: "transparent",
+			fontSize: 40,
+			textAlign: "center",
+		},
+	},
+	rootTxt: {
+		"&$disabled": {
+			color: "#28345A",
+			backgroundColor: "transparent",
+			fontSize: 20,
+			textAlign: "center",
+		},
+		[theme.breakpoints.up("md")]: {
+			"&$disabled": {
+				backgroundColor: "transparent",
+				fontSize: 40,
+				textAlign: "center",
+			},
+		},
+	},
+	disabled: {},
+	helperText: {
+		color: "#4F74BE !important",
+	},
+}));
 
 function Profile (props) {
 	const classes = useStyles();
-	const { user, setUser, API, queries, mutations } = props;
+	const { user, setUser, API, mutations } = props;
 
 	// Connect with DB
-	const [ nickName, setNickName ] = React.useState(user.name);
-	const [ home, setHome ] = React.useState();
-	const [ country, setCountry ] = React.useState();
-	const [ city, setCity ] = React.useState();
-	const [ value, setValue ] = React.useState(0);
-	const [ nameEditing, setNameEdit ] = React.useState(false);
-	const [ registration, setRegistration ] = React.useState(false);
-	const [ error, setError ] = React.useState("");
-	const [ stripeObj, setStripeObj ] = React.useState({});
+	const [ nickName, setNickName ] = useState(user.name);
+	const [ home, setHome ] = useState(user.home_country);
+	const [ country, setCountry ] = useState(user.current_country);
+	const [ city, setCity ] = useState(user.current_country);
+	const [ value, setValue ] = useState(user.price ? user.price : 0);
+	const [ isEditing, setEdit ] = useState(false);
+	const [ registration, setRegistration ] = useState(false);
+	const [ error, setError ] = useState("");
+	const [ stripeObj, setStripeObj ] = useState({});
+	const [ stripeUrl, setUrl ] = useState("");
+	const [ charges_enabled, setCharges_enabled ] = useState(false);
 
-	// From DB
-	const [ isTeller, setTeller ] = React.useState(false);
+	const [ countriesCitiesList, setLists ] = useState([]);
 
-	// stripe with public key
-	const stripePromise = loadStripe(
-		"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
-		{
-			// this stripe account get from DB
-			stripeAccount: "acct_1JAqYHRN8v3zy7ya",
-		}
-	);
-
-	// currency later
-	// const [ currency, setCurrency ] = React.useState("JPY");
-
-	// const currencies = [
-	// 	{
-	// 		value: "USD",
-	// 		label: "$",
-	// 	},
-	// 	{
-	// 		value: "EUR",
-	// 		label: "€",
-	// 	},
-	// 	{
-	// 		value: "BTC",
-	// 		label: "฿",
-	// 	},
-	// 	{
-	// 		value: "JPY",
-	// 		label: "¥",
-	// 	},
-	// ];
-
-	// const handleCurrencyChange = (event) => {
-	// 	setCurrency(event.target.value);
-	// };
+	// get country and city from API
+	useEffect(async () => {
+		const responseObj = await axios.get("https://countriesnow.space/api/v0.1/countries");
+		const countriesArray = responseObj.data.data.map((data) => data);
+		countriesArray.push({ country: "Other", cities: "Other" });
+		setLists(countriesArray);
+	}, []);
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
@@ -157,11 +203,15 @@ function Profile (props) {
 	};
 
 	const handleInputChange = (event) => {
-		setValue(event.target.value === "" ? "" : Number(event.target.value));
+		setValue(event.target.value);
 	};
 
 	const handleNameChange = (event) => {
 		setNickName(event.target.value);
+	};
+
+	const handleEdit = () => {
+		setEdit(!isEditing);
 	};
 
 	const updateUser = async () => {
@@ -171,8 +221,9 @@ function Profile (props) {
 			home_country: home,
 			current_country: country,
 			current_city: city,
-			price: value,
+			price: Number(value),
 			stripeAccount: stripeObj.id,
+			stripeURL: stripeUrl,
 			isTeller: true,
 		};
 		// logic to handle to timeout!!!!
@@ -181,23 +232,31 @@ function Profile (props) {
 			query: mutations.updateUser,
 			variables: { input: newData },
 		});
-		console.log("updated user");
-		console.log(response.data.updateUser);
 		setUser(response.data.updateUser);
 	};
 
+	const updateName = async () => {
+		const newData = {
+			id: user.id,
+			name: nickName,
+			home_country: home,
+			current_country: country,
+			current_city: city,
+			price: Number(value),
+			stripeAccount: stripeObj.id,
+			isTeller: false,
+			stripeURL: stripeUrl,
+		};
+		// logic to handle to timeout!!!!
 
-	// fetch the client secret with JavaScript on the client side (from Stripe example, so it should be secure)
-	const getSecret = async () => {
-		console.log("clicked!!");
-		const response = await fetch("/secret");
-		const { client_secret: clientSecret } = await response.json();
-
-		console.log(clientSecret);
+		const response = await API.graphql({
+			query: mutations.updateUser,
+			variables: { input: newData },
+		});
+		setUser(response.data.updateUser);
 	};
 
 	const createUser = async () => {
-		// need to change later
 		const response = await API.graphql({
 			query: mutations.createStripeAccount,
 			variables: {
@@ -209,141 +268,130 @@ function Profile (props) {
 		const stripeUser = response.data.createStripeAccount;
 		const jsonUser = JSON.parse(stripeUser);
 		setStripeObj(jsonUser);
-		console.log(jsonUser);
-		console.log(jsonUser.url);
+		setUrl(jsonUser.url);
 		window.open(jsonUser.url, "_blank");
-		console.log(stripeObj);
+	};
+
+	const account = async () => {
+		const response = await API.graphql({
+			query: mutations.getStripeAccount,
+			variables: {
+				input: {
+					id: user.stripeAccount,
+				},
+			},
+		});
+		const userObj = JSON.parse(response.data.getStripeAccount);
+
+		if (userObj.charges_enabled === true) {
+			setCharges_enabled(true);
+		} else {
+			console.log("Processs has not finished yet");
+		}
 	};
 
 	return (
 		<div className={classes.root}>
-			<div className={classes.info}>
-				<div>
-					<Avatar alt="Miho Ogura" src="" className={classes.large} />
-					<Typography className={classes.username}>{user.email}</Typography>
+			{isEditing === false ? (
+				<div className={classes.button_container}>
+					<Button
+						className={classes.buttons}
+						size="large"
+						variant="outlined"
+						color="primary"
+						onClick={() => {
+							account();
+							handleEdit();
+						}}
+					>
+						Edit
+					</Button>
+					<Button
+						className={classes.buttons}
+						size="medium"
+						variant="outlined"
+						color="primary"
+						disabled={true}
+					>
+						Save
+					</Button>
+					<Button
+						variant="outlined"
+						color="primary"
+						disabled={true}
+						className={classes.buttons}
+						size="medium"
+					>
+						Register
+					</Button>
+
+					<Button size="small" variant="outlined" color="primary" className={classes.buttons} disabled={true}>
+						Register Stripe Account
+					</Button>
+					<Button
+						size="medium"
+						variant="outlined"
+						color="secondary"
+						disabled={true}
+						className={classes.buttons}
+					>
+						Cancel
+					</Button>
 				</div>
-			</div>
-
-			<div className={classes.margin}>
-				{nameEditing === false ? (
-					<Typography className={classes.profile}>
-						{nickName}{" "}
+			) : (
+				<div className={classes.button_container}>
+					<Button className={classes.buttons} size="large" variant="outlined" color="primary" disabled={true}>
+						Edit
+					</Button>
+					<Button
+						className={classes.buttons}
+						size="medium"
+						variant="outlined"
+						color="primary"
+						onClick={() => {
+							if (charges_enabled === true) {
+								updateUser();
+							} else {
+								console.log("name only");
+								updateName();
+							}
+							setEdit(false);
+							setRegistration(false);
+						}}
+					>
+						Save
+					</Button>
+					<Button
+						variant="outlined"
+						color="primary"
+						onClick={() => {
+							setRegistration(true);
+						}}
+						className={classes.buttons}
+						size="medium"
+					>
+						Register
+					</Button>
+					{user.charges_enabled === true || registration === false ? (
 						<Button
 							size="small"
 							variant="outlined"
 							color="primary"
-							onClick={() => {
-								setNameEdit(true);
-							}}
+							className={classes.buttons}
+							disabled={true}
 						>
-							Edit
+							Register Stripe Account
 						</Button>
-					</Typography>
-				) : (
-					<div>
-						<Input id="name" value={nickName} onChange={handleNameChange} className={classes.edit} />
+					) : (
 						<Button
 							size="small"
 							variant="outlined"
 							color="primary"
-							onClick={() => {
-								setNameEdit(false);
-							}}
-						>
-							Save
-						</Button>
-					</div>
-				)}
-
-				{isTeller === true || registration ? (
-					<form className={classes.list_root} noValidate autoComplete="off">
-						<div className={classes.margin}>
-							<TextField
-								className={classes.margin}
-								id="homecountry"
-								select
-								label="Home Country"
-								value={home}
-								onChange={handleHomeChange}
-							>
-								{countries.map((option) => (
-									<MenuItem key={option} value={option}>
-										{option}
-									</MenuItem>
-								))}
-							</TextField>
-						</div>
-
-						<div className={classes.margin}>
-							<TextField
-								id="currentcountry"
-								select
-								label="Current Country"
-								value={country}
-								onChange={handleCurrentCountryChange}
-							>
-								{countries.map((option) => (
-									<MenuItem key={option} value={option}>
-										{option}
-									</MenuItem>
-								))}
-							</TextField>
-						</div>
-						<div className={classes.margin}>
-							<TextField
-								id="currentcity"
-								select
-								label="Current city"
-								value={city}
-								onChange={handleCurrentCityChange}
-							>
-								{country ? (
-									cities[country].map((option) => (
-										<MenuItem key={option} value={option}>
-											{option}
-										</MenuItem>
-									))
-								) : (
-									<MenuItem />
-								)}
-							</TextField>
-						</div>
-
-						<div className={classes.margin}>
-							<InputLabel htmlFor="price" className={classes.priceLabel}>
-								Price per hour
-							</InputLabel>
-
-							<Input
-								id="price"
-								value={value}
-								onChange={handleInputChange}
-								startAdornment={<InputAdornment position="start">¥</InputAdornment>}
-							/>
-						</div>
-						{error}
-					</form>
-				) : (
-					<div />
-				)}
-			</div>
-			<div className={classes.info}>
-				<Button size="medium" variant="outlined" color="primary">
-					Update
-				</Button>
-				<br />
-				{registration ? (
-					<div>
-						<Button
-							size="medium"
-							variant="outlined"
-							color="primary"
-							className={classes.margin}
+							className={classes.buttons}
 							onClick={
 								value !== 0 ? (
 									() => {
 										createUser();
-										updateUser();
 									}
 								) : (
 									() => {
@@ -352,40 +400,335 @@ function Profile (props) {
 								)
 							}
 						>
-							Continue
+							Register Stripe Account
 						</Button>
-						<br />
+					)}
 
-						<Button
-							size="medium"
-							variant="outlined"
-							color="secondary"
-							className={classes.margin}
-							onClick={() => setRegistration(false)}
-						>
-							Cancel
-						</Button>
-					</div>
-				) : (
 					<Button
 						size="medium"
 						variant="outlined"
-						color="primary"
-						className={classes.margin}
-						onClick={() => setRegistration(true)}
+						color="secondary"
+						onClick={() => {
+							setEdit(false);
+							setRegistration(false);
+						}}
+						className={classes.buttons}
 					>
-						Register
+						Cancel
 					</Button>
-				)}
-				{stripeObj.url ? (
-					<span className={classes.stripeNotice}>
-						Please access here to register <a href={stripeObj.url}>Go to Stripe</a>
-					</span>
-				) : (
-					<span />
-				)}
-				<br />
-			</div>
+				</div>
+			)}
+
+			<Card className={classes.card_root}>
+				<CardContent>
+					<Avatar alt={user.name} src="" className={classes.large} />
+				</CardContent>
+
+				<CardContent className={classes.card_content}>
+					<div>
+						{isEditing === false ? (
+							<div className={classes.info}>
+								<TextField
+									id="name"
+									value={user.name}
+									className={classes.profile}
+									disabled
+									FormHelperTextProps={{
+										className: classes.helperText,
+									}}
+									InputProps={{
+										classes: {
+											root: classes.rootTxt,
+											disabled: classes.disabled,
+											input: classes.inputText,
+										},
+									}}
+									helperText="NickName"
+								/>
+							</div>
+						) : (
+							// edit mode
+							<div className={classes.info}>
+								<TextField
+									id="name"
+									className={classes.profile}
+									FormHelperTextProps={{
+										className: classes.helperText,
+									}}
+									InputProps={{
+										classes: {
+											root: classes.rootTxt,
+											input: classes.inputText,
+										},
+									}}
+									onChange={handleNameChange}
+									helperText="NickName"
+									defaultValue={""}
+								/>
+							</div>
+						)}
+
+						{/* Other than name, countries and price to show */}
+						{user ? (
+							<form className={classes.list_root} noValidate autoComplete="off">
+								{isEditing === false ? (
+									<div>
+										<div className={classes.profile_container}>
+											{/* Home check */}
+											{user.home_country ? (
+												<div className={classes.margin}>
+													<TextField
+														id="homecountry"
+														value={user.home_country}
+														onChange={handleHomeChange}
+														disabled={true}
+														helperText="Home country"
+														className={classes.profile}
+														InputProps={{
+															classes: {
+																root: classes.selectText,
+																disabled: classes.disabled,
+																input: classes.selectText,
+															},
+														}}
+														FormHelperTextProps={{
+															className: classes.helperText,
+														}}
+													/>
+												</div>
+											) : (
+												<div className={classes.margin}>
+													<TextField
+														id="homecountry"
+														helperText="Home country"
+														value={user.home_country}
+														onChange={handleHomeChange}
+														disabled={true}
+														className={classes.profile}
+														InputProps={{
+															classes: {
+																root: classes.selectText,
+																disabled: classes.disabled,
+																input: classes.selectText,
+															},
+														}}
+														FormHelperTextProps={{
+															className: classes.helperText,
+														}}
+													/>
+												</div>
+											)}
+										</div>
+										<div className={classes.margin}>
+											<TextField
+												size="small"
+												id="currentcountry"
+												value={user.current_country}
+												className={classes.profile}
+												disabled
+												helperText="Current Country"
+												InputProps={{
+													classes: {
+														root: classes.selectText,
+														disabled: classes.disabled,
+														input: classes.selectText,
+													},
+												}}
+												FormHelperTextProps={{
+													className: classes.helperText,
+												}}
+											/>
+										</div>
+										<div className={classes.margin}>
+											<TextField
+												id="currentcity"
+												value={user.current_city}
+												disabled={true}
+												helperText="Current City"
+												className={classes.profile}
+												InputProps={{
+													classes: {
+														root: classes.selectText,
+														disabled: classes.disabled,
+														input: classes.inputText,
+													},
+												}}
+												FormHelperTextProps={{
+													className: classes.helperText,
+												}}
+												defaultValue={""}
+											/>
+										</div>
+										<div className={classes.margin}>
+											<TextField
+												id="price"
+												value={user.price}
+												type="number"
+												helperText="Price per hour (¥)"
+												disabled={true}
+												InputProps={{
+													classes: {
+														root: classes.selectText,
+														disabled: classes.disabled,
+														input: classes.selectText,
+													},
+												}}
+												FormHelperTextProps={{
+													className: classes.helperText,
+												}}
+											/>
+										</div>
+									</div>
+								) : (
+									<div>
+										<div className={classes.profile_container}>
+											{user.home_country ? (
+												<div className={classes.margin}>
+													<TextField
+														id="homecountry"
+														value={user.home_country}
+														onChange={handleHomeChange}
+														disabled={true}
+														className={classes.profile}
+														InputProps={{
+															classes: {
+																root: classes.rootTxt,
+																disabled: classes.disabled,
+																input: classes.inputText,
+															},
+														}}
+														FormHelperTextProps={{
+															className: classes.helperText,
+														}}
+														helperText="Home Country"
+													/>
+												</div>
+											) : (
+												<div className={classes.margin}>
+													<TextField
+														id="homecountry"
+														select
+														onChange={handleHomeChange}
+														helperText="Home country *This can't be changed"
+														className={classes.profile}
+														InputProps={{
+															classes: {
+																root: classes.selectText,
+																disabled: classes.disabled,
+																input: classes.selectText,
+															},
+														}}
+														FormHelperTextProps={{
+															className: classes.helperText,
+														}}
+														defaultValue={""}
+													>
+														{countriesCitiesList.map((option) => (
+															<MenuItem key={option.country} value={option.country}>
+																{option.country}
+															</MenuItem>
+														))}
+													</TextField>
+												</div>
+											)}
+										</div>
+
+										<div className={classes.margin}>
+											<TextField
+												size="small"
+												id="currentcountry"
+												select
+												onChange={handleCurrentCountryChange}
+												className={classes.profile}
+												InputProps={{
+													classes: {
+														root: classes.selectText,
+														input: classes.selectText,
+													},
+												}}
+												helperText="Current Country"
+												FormHelperTextProps={{
+													className: classes.helperText,
+												}}
+												defaultValue={""}
+											>
+												{countriesCitiesList.map((option) => (
+													<MenuItem key={option.id} value={option.country}>
+														{option.country}
+													</MenuItem>
+												))}
+											</TextField>
+										</div>
+										<div className={classes.margin}>
+											<TextField
+												id="currentcity"
+												select
+												onChange={handleCurrentCityChange}
+												helperText="Current City"
+												InputProps={{
+													classes: {
+														root: classes.selectText,
+														disabled: classes.disabled,
+														input: classes.selectText,
+													},
+												}}
+												FormHelperTextProps={{
+													className: classes.helperText,
+												}}
+												defaultValue={""}
+											>
+												{country ? (
+													countriesCitiesList.map((option) => {
+														if (option.country === "Other") {
+															return (
+																<MenuItem key="other" value="Other">
+																	{option.cities}
+																</MenuItem>
+															);
+														} else if (option.country === country) {
+															console.log("happening");
+															return option.cities.map((city, index) => (
+																<MenuItem key={index} value={city}>
+																	{city}
+																</MenuItem>
+															));
+														}
+													})
+												) : (
+													<MenuItem />
+												)}
+											</TextField>
+										</div>
+										<div className={classes.margin}>
+											<TextField
+												id="price"
+												type="number"
+												onChange={handleInputChange}
+												helperText="Price per hour"
+												InputProps={{
+													classes: {
+														root: classes.selectText,
+														disabled: classes.disabled,
+														input: classes.selectText,
+													},
+												}}
+												FormHelperTextProps={{
+													className: classes.helperText,
+												}}
+												defaultValue={""}
+											/>
+										</div>
+									</div>
+								)}
+
+								{error}
+							</form>
+						) : (
+							<div />
+						)}
+					</div>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

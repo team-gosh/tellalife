@@ -1,58 +1,78 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Amplify, { API, graphqlOperation } from "aws-amplify";
 import * as mutations from "../graphql/mutations";
+import { loadStripe } from "@stripe/stripe-js";
 
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 
 import CardSection from "./CardSection";
+import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
 
-export default function CheckoutForm () {
+export default function CheckoutForm (props) {
+	const { 
+    user,
+    approvedToConfirmed,
+    reservation
+  } = props;
 	const stripe = useStripe();
 	const elements = useElements();
 
 	const handleSubmit = async (event) => {
+		console.log(stripe.confirmCardPayment, " this is promise");
+
 		// We don't want to let default form submission happen here,
 		// which would refresh the page.
 		event.preventDefault();
-		// if (!stripe || !elements) {
+		if (!stripe || !elements) {
+			// Stripe.js has not yet loaded.
+			// Make sure to disable form submission until Stripe.js has loaded.
+			return;
+		}
+    console.log('before paymentIntentReturn')
+    console.log('user id')
+    console.log(reservation.stripeAccount)
 		const paymentIntentReturn = await API.graphql({
 			query: mutations.processOrder,
 			variables: {
 				input: {
-					id: "1",
+					id: user.id,
 					payment_method_type: [ "card" ],
 
 					// need to change here
-					amount: 1000,
+					// amount: user.price,
+					amount: reservation.price,
 					currency: "JPY",
 
 					// need to change here
 					application_fee_amount: 123,
-					stripeAccount: "acct_1JAqYHRN8v3zy7ya",
+
+					//this should be the destination account
+					stripeAccount: reservation.stripeAccount,
 				},
 			},
 		});
 
 		const secret = paymentIntentReturn.data.processOrder;
 
-		console.log(typeof secret, secret);
-
-		const result = await stripe.confirmCardPayment(`${secret}`, {
+    console.log("before confirmCardPayment")
+		const result = await stripe.confirmCardPayment(secret, {
 			payment_method: {
 				card: elements.getElement(CardElement),
 				billing_details: {
 					// need to change here
-					name: "Jenny Rosen",
+					name: user.name,
 				},
 			},
 		});
 
-		console.log(result, " before the result. error");
-
+		console.log(result);
+    console.log("before conditional")
 		if (result.error) {
 			// we actually need to figure out how to set the test account payable
 			console.log(result.error);
 			console.log("payment is succeeded?");
+      // Delete when working
+      approvedToConfirmed(reservation.id)
 			return {
 				status: "succeeded",
 				//status:"failed"
@@ -66,6 +86,7 @@ export default function CheckoutForm () {
 				// execution. Set up a webhook or plugin to listen for the
 				// payment_intent.succeeded event that handles any business critical
 				// post-payment actions.
+        approvedToConfirmed(reservation.id)
 				return {
 					status: "succeeded",
 				};
