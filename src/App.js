@@ -10,7 +10,9 @@ import { AmplifyAuthenticator, AmplifySignOut, AmplifySignUp, AmplifySignIn } fr
 import awsconfig from "./aws-exports";
 import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 
+
 Amplify.configure(awsconfig);
+
 
 // Auth.configure(awsconfig)
 function App () {
@@ -29,15 +31,6 @@ function App () {
 			setUserAuth(authData);
 		});
 	}, []);
-
-	// fetch the client secret with JavaScript on the client side (from Stripe example, so it should be secure)
-	const getSecret = async () => {
-		console.log("clicked!!");
-		const response = await fetch("/secret");
-		const { client_secret: clientSecret } = await response.json();
-
-		console.log(clientSecret);
-	};
 
 	return (
 		// Below line is for avoiding database duplicates, and undefined userAuth in MainPage.

@@ -21,17 +21,6 @@ import HistoryIcon from "@material-ui/icons/History";
 import Badge from "@material-ui/core/Badge";
 import { API } from "aws-amplify";
 
-const temporaryReservation = [
-	{
-		id: "werarweaa2322",
-		status: "approved",
-		tellerID: "3c32dcbc-ac4a-4de4-bd65-feb9a8c023c0",
-		userIDs: [ "3d308866-8206-47d6-8ed4-4fd66202daf0" ],
-		country: "Iceland",
-		city: "something",
-	},
-];
-
 const useStyles = makeStyles((theme) => ({
 	root: {
 		width: "100%",
