@@ -165,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile (props) {
 	const classes = useStyles();
-	const { user, setUser, API, mutations } = props;
+	const { user, setUser, API, mutations, countriesCitiesList } = props;
 
 	// Connect with DB
 	const [ nickName, setNickName ] = useState(user.name);
@@ -179,16 +179,6 @@ function Profile (props) {
 	const [ stripeObj, setStripeObj ] = useState({});
 	const [ stripeUrl, setUrl ] = useState("");
 	const [ charges_enabled, setCharges_enabled ] = useState(false);
-
-	const [ countriesCitiesList, setLists ] = useState([]);
-
-	// get country and city from API
-	useEffect(async () => {
-		const responseObj = await axios.get("https://countriesnow.space/api/v0.1/countries");
-		const countriesArray = responseObj.data.data.map((data) => data);
-		countriesArray.push({ country: "Other", cities: "Other" });
-		setLists(countriesArray);
-	}, []);
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
@@ -421,8 +411,44 @@ function Profile (props) {
 
 			<Card className={classes.card_root}>
 				<CardContent>
-					<Avatar alt={user.name} src="" className={classes.large} />
+					<Avatar alt={user.name} src={user.avatar} className={classes.large} />
 				</CardContent>
+
+        <input
+            accept="image/jpeg"
+            className={classes.input}
+            style={{ display: 'none' }}
+            id="upload-image"
+            type="file"
+            onChange={async (e) => {
+              const reader = new FileReader();
+
+              reader.addEventListener("load", async function () {
+                console.log(reader.result)
+                // setImage(reader.result)
+                const updatedUserResponse = await API.graphql({
+                  query: mutations.updateUser,
+                  variables: {
+                    input: {
+                      id: user.id,
+                      avatar: reader.result
+                    }
+                  }
+                });
+                console.log("updatedUserResponse")
+                setUser(updatedUserResponse.data.updateUser)
+              }, false);
+
+              if (e.target.files[0]) {
+                reader.readAsDataURL(e.target.files[0]);
+              }
+            }}
+          />
+          <label htmlFor="upload-image">
+            <Button color="primary" component="span" >
+              Upload Avatar
+            </Button>
+          </label>
 
 				<CardContent className={classes.card_content}>
 					<div>
@@ -686,7 +712,6 @@ function Profile (props) {
 																</MenuItem>
 															);
 														} else if (option.country === country) {
-															console.log("happening");
 															return option.cities.map((city, index) => (
 																<MenuItem key={index} value={city}>
 																	{city}
