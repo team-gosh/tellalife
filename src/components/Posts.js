@@ -27,7 +27,7 @@ function Posts (props) {
 
 	return (
 		<div className={classes.container}>
-			{posts.map((postData) => <Post postData={postData} user={user} />)}
+			{posts.map((postData) => <Post postData={postData} user={user} />).reverse()}
 		</div>
 	);
 

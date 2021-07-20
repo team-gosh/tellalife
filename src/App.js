@@ -43,6 +43,7 @@ function App () {
 						guestRoom={video.roomName}
 						Amplify={Amplify}
 						graphqlOperation={graphqlOperation}
+            setVideo={setVideo}
 					/>
 				) : (
 					<MainPage

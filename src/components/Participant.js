@@ -1,14 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const Participant = ({ participant }) => {
+const Participant = (props) => {
+  const {
+    participant,
+    roomType,
+    userType,
+    windowSize,
+    tellerHeight,
+    listenerHeight
+  } = props
 	const [ videoTracks, setVideoTracks ] = useState([]);
 	const [ audioTracks, setAudioTracks ] = useState([]);
+  const [ height, setHeight ] = useState(1)
 
 	const videoRef = useRef();
 	const audioRef = useRef();
 
 	const trackpubsToTracks = (trackMap) =>
 		Array.from(trackMap.values()).map((publication) => publication.track).filter((track) => track !== null);
+
+  useEffect(() => {
+    setHeight(windowSize ? windowSize.height : 1)
+  }, [])
 
 	useEffect(
 		() => {
@@ -71,10 +84,22 @@ const Participant = ({ participant }) => {
 		[ audioTracks ]
 	);
 
+  // console.log('tellerHeight')
+  // console.log(tellerHeight)
+  // console.log('listenerHeight')
+  // console.log(listenerHeight);
+  // console.log('windowSize')
+  // console.log(windowSize)
+
+
 	return (
 		<div className="participant">
 			{/* <h5>{participant.identity}</h5> */}
-			<video width="160" height="120" ref={videoRef} autoPlay={true} />
+			{/* <video width={userType === "remote" ? "640" : "160"} height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} /> */}
+			<video height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} />
+			{/* <video height={userType === "remote" ? tellerHeight : listenerHeight} ref={videoRef} autoPlay={true} /> */}
+			{/* <video height={windowSize ? Math.floor(windowSize.height * (userType === "remote" ? .75 : .15)) : "120"} ref={videoRef} autoPlay={true} /> */}
+			{/* <video height={Math.floor(height * (userType === "remote" ? .75 : .15))} ref={videoRef} autoPlay={true} /> */}
 			<audio ref={audioRef} autoPlay={true} />
 		</div>
 	);

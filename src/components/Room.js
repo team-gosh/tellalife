@@ -3,9 +3,26 @@ import Participant from "./Participant";
 
 const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
   const [participants, setParticipants] = useState([]);
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined
+  });
+
   const guestURL = window.location.protocol 
                    + "//" + window.location.host
                    + "/?guestRoom=" + guestRoom;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   useEffect(() => {
     const participantConnected = (participant) => {
@@ -28,20 +45,28 @@ const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
   }, [room]);
 
   const remoteParticipants = participants.map((participant) => (
-    <Participant key={participant.sid} participant={participant} />
+    <Participant key={participant.sid} participant={participant} roomType="pair" userType="remote"/>
   ));
+  console.log("Room participants");
+  console.log(participants);
 
   return (
     <div className="room">
-      <h4>Room: {roomName}</h4>
       
       {/* <h5>Remote Participants</h5> */}
-      <div className="remote-participants">{remoteParticipants}</div>
-      <div className="local-participant">
+      {/* <div className="remote-participants" style={{height: '480px'}}>{remoteParticipants}</div> */}
+      <div className="remote-participants" style={{height: `${Math.floor(windowSize.height * .75)}px`}}>{remoteParticipants}</div>
+      {/* <div className="local-participant" style={{height: '120px'}}> */}
+      <div className="local-participant" style={{height: `${Math.floor(windowSize.height * .15)}px`}}>
         {room ? (
           <Participant
             key={room.localParticipant.sid}
             participant={room.localParticipant}
+            roomType="pair"
+            userType="local"
+            windowSize={windowSize}
+            tellerHeight={Math.floor(windowSize * .75)}
+            listenerHeight={Math.floor(windowSize * .15)}
           />
         ) : (
           ""

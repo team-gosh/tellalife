@@ -6,6 +6,7 @@ import Amplify, { API, graphqlOperation } from "aws-amplify";
 // import { GetUserByEmail } from '../graphql/queries';
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
+import * as customQueries from "../graphql/customQueries";
 import Feed from "./Feed";
 import App from "../App";
 import CheckoutForm from "./CheckoutForm";
@@ -165,15 +166,17 @@ function MainPage (props) {
 					// If user exists, set to user
 
 					const currentUser = await API.graphql({
-						query: queries.getUser,
+						// query: queries.getUser,
+						query: customQueries.getUser,
 						variables: {
 							id: currentUserData[0].id,
 						},
 					});
 
-					setUser(currentUser.data.getUser);
 					console.log("!!!!!!HERE!!!!!!!!");
 					console.log(currentUser);
+					setUser(currentUser.data.getUser);
+					// setUser(currentUser.data.getUserWithReservations);
 					// console.log(currentUserData)
 					// setUser(currentUser.data.getUser);
 				} else if (!user) {
@@ -196,7 +199,8 @@ function MainPage (props) {
 					// console.log(response);
 					// setUser(response.data.createUser);
 					const newUser = await API.graphql({
-						query: queries.getUser,
+						// query: queries.getUser,
+						query: customQueries.getUser,
 						variables: {
 							id: newUserId,
 						},
@@ -205,6 +209,16 @@ function MainPage (props) {
 					console.log(newUser);
 					setUser(newUser.data.getUser);
 				}
+        /////test start
+        // const testUser = await API.graphql({
+        //   query: customQueries.getUserWithReservations,
+        //   variables: {
+        //     id: testID,
+        //   },
+        // });
+        // console.log("testUser in MainPage useEffect")
+        // console.log(testUser)
+        /////test end
 				console.log("after conditionals");
 				console.log(user, "this is because the react thing");
 			} catch (error) {

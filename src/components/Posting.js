@@ -24,6 +24,7 @@ function Posting(props) {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [disable, setDisable] = useState(true);
+  const [image, setImage] = useState("");
 
   const classes = useStyles();
 
@@ -90,6 +91,30 @@ function Posting(props) {
           />
         </DialogContent>
         <DialogActions>
+          <input
+            accept="image/jpeg"
+            className={classes.input}
+            style={{ display: 'none' }}
+            id="upload-image"
+            type="file"
+            onChange={async (e) => {
+              const reader = new FileReader();
+
+              reader.addEventListener("load", function () {
+                console.log(reader.result)
+                setImage(reader.result)
+              }, false);
+
+              if (e.target.files[0]) {
+                reader.readAsDataURL(e.target.files[0]);
+              }
+            }}
+          />
+          <label htmlFor="upload-image">
+            <Button color="primary" component="span" >
+              Upload Image
+            </Button>
+          </label>
           <Button
             color="primary"
             onClick={() => {
@@ -114,6 +139,7 @@ function Posting(props) {
               obj["city"] = user.current_city;
               obj["country"] = user.current_country;
               obj["dateTime"] = String((new Date()).getTime());
+              obj["image"] = image;
 
               setTitle("");
               setText("");

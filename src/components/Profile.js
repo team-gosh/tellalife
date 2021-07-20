@@ -421,8 +421,44 @@ function Profile (props) {
 
 			<Card className={classes.card_root}>
 				<CardContent>
-					<Avatar alt={user.name} src="" className={classes.large} />
+					<Avatar alt={user.name} src={user.avatar} className={classes.large} />
 				</CardContent>
+
+        <input
+            accept="image/jpeg"
+            className={classes.input}
+            style={{ display: 'none' }}
+            id="upload-image"
+            type="file"
+            onChange={async (e) => {
+              const reader = new FileReader();
+
+              reader.addEventListener("load", async function () {
+                console.log(reader.result)
+                // setImage(reader.result)
+                const updatedUserResponse = await API.graphql({
+                  query: mutations.updateUser,
+                  variables: {
+                    input: {
+                      id: user.id,
+                      avatar: reader.result
+                    }
+                  }
+                });
+                console.log("updatedUserResponse")
+                setUser(updatedUserResponse.data.updateUser)
+              }, false);
+
+              if (e.target.files[0]) {
+                reader.readAsDataURL(e.target.files[0]);
+              }
+            }}
+          />
+          <label htmlFor="upload-image">
+            <Button color="primary" component="span" >
+              Upload Avatar
+            </Button>
+          </label>
 
 				<CardContent className={classes.card_content}>
 					<div>
