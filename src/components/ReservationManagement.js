@@ -243,9 +243,11 @@ function ReservationManagement(props) {
     if (view === "listener") {
       setPendingListenerCounts(0);
       updateAttendingUsersForListener("pending");
+      handleStatusChange();
     } else {
       setPendingTellerCounts(0);
       updateAttendingUsersForTeller("pending");
+      handleStatusChange();
     }
   };
   const handleChangePanel2 = (panel) => (event, isExpanded) => {
@@ -253,9 +255,11 @@ function ReservationManagement(props) {
     if (view === "listener") {
       setApproveListenerCounts(0);
       updateAttendingUsersForListener("approved");
+      handleStatusChange();
     } else {
       setApproveTellerCounts(0);
       updateAttendingUsersForTeller("approved");
+      handleStatusChange();
     }
   };
   const handleChangePanel3 = (panel) => (event, isExpanded) => {
@@ -263,9 +267,11 @@ function ReservationManagement(props) {
     if (view === "listener") {
       setConfirmedListenerCounts(0);
       updateAttendingUsersForListener("confirmed");
+      handleStatusChange();
     } else {
       setConfirmedTellerCounts(0);
       updateAttendingUsersForTeller("confirmed");
+      handleStatusChange();
     }
   };
   const handleChangePanel4 = (panel) => (event, isExpanded) => {
@@ -521,6 +527,21 @@ function ReservationManagement(props) {
           variables: { input: newAttendingUsers }
         });
         console.log(response.data.updateAttendingUsers);
+      })
+    );
+  }
+
+  async function handleStatusChange() {
+    const allReservations = (
+      await API.graphql({
+        query: queries.listReservations
+      })
+    ).data.listReservations.items;
+    await Promise.all(
+      allReservations.map(async (e) => {
+        if (e.startDateTime - new Date().getTime() < 0) {
+          confirmedToFinished(e.id);
+        }
       })
     );
   }
