@@ -9,33 +9,27 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: "column",
 		justifyContent: "center",
 		marginTop: 20,
-		marginLeft: 45,
 	},
-
 }));
 
 function Posts (props) {
 	const classes = useStyles();
 
 	const { filter, posts, user } = props;
-	// const [posts, setPosts] = useState([]);
 
 	useEffect(async () => {
-		// const matchingPosts = (await axios.get(.....)).data
-		// setPosts(matchingPosts);
+		console.log(posts);
 	}, []);
 
 	return (
 		<div className={classes.container}>
-			{posts.map((postData) => <Post postData={postData} user={user} />)}
+			{posts
+				.filter((postData) => (filter.home ? filter.home === postData.user.home_country : true))
+				.filter((postData) => (filter.targetCountry ? filter.targetCountry === postData.country : true))
+				.filter((postData) => (filter.targetCity ? filter.targetCity === postData.city : true))
+				.map((postData) => <Post postData={postData} user={user} />)}
 		</div>
 	);
-
-	// function createPosts() {
-	//   return posts
-	//   .map(data => <Post data={data} />)
-	//   // return <Post />
-	// }
 }
 
 export default Posts;

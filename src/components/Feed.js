@@ -2,39 +2,43 @@ import React, { useState, useEffect } from "react";
 import Posts from "./Posts";
 import Input from "./Input";
 import Posting from "./Posting";
+import Filter from "./Filter";
+import { makeStyles } from "@material-ui/core/styles";
 
-function Feed(props) {
-  const { user, API, queries, mutations } = props;
-  const [filter, setFilter] = useState({});
-  const [posts, setPosts] = useState([]);
-  console.log("user in feed");
-  console.log(user);
+const useStyles = makeStyles((theme) => ({
+	feed: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		marginTop: 20,
+	},
+}));
 
-  useEffect(async () => {
-    const response = await API.graphql({
-      query: queries.listPosts
-    });
-    console.log("response in feed");
-    console.log(response);
-    setPosts(response.data.listPosts.items);
-  }, []);
+function Feed (props) {
+	const classes = useStyles();
 
-  return (
-    <div className="Feed">
-      {/* <h1>Feed</h1> */}
-      <div className="filter">
-        {/* <h2>Filter</h2> */}
-        {/* <Posting user={user} /> */}
-        {user && user.isTeller ? (
-          <Posting user={user} API={API} mutations={mutations} />
-        ) : (
-          <div></div>
-        )}
-      </div>
-      <Posts filter={filter} posts={posts} user={user} />
-      {/* <Input /> */}
-    </div>
-  );
+	const { user, API, queries, mutations, countriesCitiesList } = props;
+	const [ filter, setFilter ] = useState({
+		home: "",
+		targetCountry: "",
+		targetCity: "",
+	});
+	const [ posts, setPosts ] = useState([]);
+
+	useEffect(async () => {
+		const response = await API.graphql({
+			query: queries.listPosts,
+		});
+		setPosts(response.data.listPosts.items);
+	}, []);
+
+	return (
+		<div className={classes.feed}>
+			<Filter countriesCitiesList={countriesCitiesList} filter={filter} setFilter={setFilter} />
+			{user && user.isTeller ? <Posting user={user} API={API} mutations={mutations} /> : <div />}
+			<Posts filter={filter} posts={posts} user={user} />
+		</div>
+	);
 }
 
 export default Feed;
