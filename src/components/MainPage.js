@@ -33,13 +33,14 @@ import Typography from "@material-ui/core/Typography";
 import { useMediaQuery } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 
+const drawerWidth = 240;
+
 const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-		fontFamily: "Lato, sans-serif",
-	},
-	menuButton: {
-		marginRight: theme.spacing(2),
+	titleContainer: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	title: {
 		color: "#F9F7F7",
@@ -47,10 +48,6 @@ const useStyles = makeStyles((theme) => ({
 		fontFamily: "Lato, sans-serif",
 		fontWeight: "bold",
 		letterSpacing: 10,
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
 		[theme.breakpoints.up("md")]: {
 			color: "#F9F7F7",
 			fontSize: 40,
@@ -64,11 +61,13 @@ const useStyles = makeStyles((theme) => ({
 			fontFamily: "Lato, sans-serif",
 			fontWeight: "bold",
 			letterSpacing: 15,
-			justifyContent: "flex-start",
 		},
 	},
 	list: {
-		width: 250,
+		width: drawerWidth,
+		[theme.breakpoints.up("lg")]: {
+			width: drawerWidth,
+		},
 	},
 	fullList: {
 		width: "auto",
@@ -82,7 +81,8 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: "#28345A",
 		boxShadow: "none",
 		[theme.breakpoints.up("lg")]: {
-			marginLeft: 240,
+			width: `calc(100% - ${drawerWidth}px)`,
+			marginLeft: drawerWidth,
 		},
 	},
 	login: {
@@ -99,13 +99,14 @@ const useStyles = makeStyles((theme) => ({
 	toolbar: {
 		display: "flex",
 		justifyContent: "space-between",
+		padding: 0,
 		[theme.breakpoints.up("lg")]: {
 			justifyContent: "center",
 		},
 	},
 	marginLeft: {
 		[theme.breakpoints.up("lg")]: {
-			marginLeft: 240,
+			marginLeft: drawerWidth,
 		},
 	},
 	lists: {
@@ -135,12 +136,15 @@ function MainPage (props) {
 		width: isBiggerScreen ? 240 : "auto",
 		anchor: "left",
 	};
+	const [ countriesCitiesList, setLists ] = useState([]);
 
 	useEffect(async () => {
-		// while (!user) {
-		console.log("before if 77");
-		console.log("user");
-		console.log(user);
+		// get countries & cities
+		const responseObj = await axios.get("https://countriesnow.space/api/v0.1/countries");
+		const countriesArray = responseObj.data.data.map((data) => data);
+		countriesArray.push({ country: "Other", cities: "Other" });
+		setLists(countriesArray);
+
 		if (userAuth && userAuth.attributes) {
 			console.log("after if 77");
 			const userNameAndEmail = userAuth.attributes.email;
@@ -307,12 +311,12 @@ function MainPage (props) {
 					<Drawer {...navBarProps} anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
 						{list("left")}
 					</Drawer>
-					<Typography variant="h6" className={classes.title}>
-						<div>
+					<div className={classes.titleContainer}>
+						<Typography className={classes.title}>
 							TELLaLIFE
 							<p className={classes.login}>Logged in as {user ? user.name : ""}</p>
-						</div>
-					</Typography>
+						</Typography>
+					</div>
 					<div />
 				</Toolbar>
 			</AppBar>
@@ -329,9 +333,22 @@ function MainPage (props) {
 						mutations={mutations}
 					/>
 				) : display === "Profile" ? (
-					<Profile user={user} setUser={setUser} API={API} queries={queries} mutations={mutations} />
+					<Profile
+						user={user}
+						setUser={setUser}
+						API={API}
+						queries={queries}
+						mutations={mutations}
+						countriesCitiesList={countriesCitiesList}
+					/>
 				) : (
-					<Feed user={user} API={API} queries={queries} mutations={mutations} />
+					<Feed
+						user={user}
+						API={API}
+						queries={queries}
+						mutations={mutations}
+						countriesCitiesList={countriesCitiesList}
+					/>
 				)}
 			</div>
 		</div>

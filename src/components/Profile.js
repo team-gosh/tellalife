@@ -165,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile (props) {
 	const classes = useStyles();
-	const { user, setUser, API, mutations } = props;
+	const { user, setUser, API, mutations, countriesCitiesList } = props;
 
 	// Connect with DB
 	const [ nickName, setNickName ] = useState(user.name);
@@ -179,16 +179,6 @@ function Profile (props) {
 	const [ stripeObj, setStripeObj ] = useState({});
 	const [ stripeUrl, setUrl ] = useState("");
 	const [ charges_enabled, setCharges_enabled ] = useState(false);
-
-	const [ countriesCitiesList, setLists ] = useState([]);
-
-	// get country and city from API
-	useEffect(async () => {
-		const responseObj = await axios.get("https://countriesnow.space/api/v0.1/countries");
-		const countriesArray = responseObj.data.data.map((data) => data);
-		countriesArray.push({ country: "Other", cities: "Other" });
-		setLists(countriesArray);
-	}, []);
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
@@ -722,7 +712,6 @@ function Profile (props) {
 																</MenuItem>
 															);
 														} else if (option.country === country) {
-															console.log("happening");
 															return option.cities.map((city, index) => (
 																<MenuItem key={index} value={city}>
 																	{city}

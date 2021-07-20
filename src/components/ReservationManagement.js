@@ -86,7 +86,6 @@ function ReservationManagement(props) {
   const [expanded3, setExpanded3] = useState(false);
   const [expanded4, setExpanded4] = useState(false);
 
-  const [attendingUsers, setAttendingUsers] = useState("");
   const [pendingListenerCounts, setPendingListenerCounts] = useState("");
   const [approveListenerCounts, setApproveListenerCounts] = useState("");
   const [confirmedListenerCounts, setConfirmedListenerCounts] = useState("");
@@ -129,19 +128,6 @@ function ReservationManagement(props) {
         query: queries.listAttendingUsers
       })
     ).data.listAttendingUsers.items;
-    setAttendingUsers(allAttendingUser);
-  }, [reservations]);
-
-  useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "pending")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id !== elm.tellerID);
-    const allAttendingUser = (
-      await API.graphql({
-        query: queries.listAttendingUsers
-      })
-    ).data.listAttendingUsers.items;
     const arrayOfSeen = allAttendingUser
       .filter((e) => e.userID === user.id)
       .filter((e) => e.reservation.status === "pending")
@@ -151,10 +137,6 @@ function ReservationManagement(props) {
   }, [reservations]);
 
   useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "approved")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id !== elm.tellerID);
     const allAttendingUser = (
       await API.graphql({
         query: queries.listAttendingUsers
@@ -169,10 +151,6 @@ function ReservationManagement(props) {
   }, [reservations]);
 
   useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "confirmed")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id !== elm.tellerID);
     const allAttendingUser = (
       await API.graphql({
         query: queries.listAttendingUsers
@@ -187,10 +165,6 @@ function ReservationManagement(props) {
   }, [reservations]);
 
   useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "finished")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id !== elm.tellerID);
     const allAttendingUser = (
       await API.graphql({
         query: queries.listAttendingUsers
@@ -205,10 +179,6 @@ function ReservationManagement(props) {
   }, [reservations]);
 
   useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "pending")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id === elm.tellerID);
     const allAttendingUser = (
       await API.graphql({
         query: queries.listAttendingUsers
@@ -223,10 +193,6 @@ function ReservationManagement(props) {
   }, [reservations]);
 
   useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "approved")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id === elm.tellerID);
     const allAttendingUser = (
       await API.graphql({
         query: queries.listAttendingUsers
@@ -241,10 +207,6 @@ function ReservationManagement(props) {
   }, [reservations]);
 
   useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "confirmed")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id === elm.tellerID);
     const allAttendingUser = (
       await API.graphql({
         query: queries.listAttendingUsers
@@ -259,10 +221,6 @@ function ReservationManagement(props) {
   }, [reservations]);
 
   useEffect(async () => {
-    // const arrayOfSeen = reservations
-    //   .filter((elm) => elm.status === "finished")
-    //   .filter((elm) => elm.seen === false)
-    //   .filter((elm) => user.id === elm.tellerID);
     const allAttendingUser = (
       await API.graphql({
         query: queries.listAttendingUsers
@@ -282,27 +240,43 @@ function ReservationManagement(props) {
 
   const handleChangePanel1 = (panel) => (event, isExpanded) => {
     setExpanded1(isExpanded ? panel : false);
-    view === "listener"
-      ? setPendingListenerCounts(0)
-      : setPendingTellerCounts(0);
+    if (view === "listener") {
+      setPendingListenerCounts(0);
+      updateAttendingUsersForListener("pending");
+    } else {
+      setPendingTellerCounts(0);
+      updateAttendingUsersForTeller("pending");
+    }
   };
   const handleChangePanel2 = (panel) => (event, isExpanded) => {
     setExpanded2(isExpanded ? panel : false);
-    view === "listener"
-      ? setApproveListenerCounts(0)
-      : setApproveTellerCounts(0);
+    if (view === "listener") {
+      setApproveListenerCounts(0);
+      updateAttendingUsersForListener("approved");
+    } else {
+      setApproveTellerCounts(0);
+      updateAttendingUsersForTeller("approved");
+    }
   };
   const handleChangePanel3 = (panel) => (event, isExpanded) => {
     setExpanded3(isExpanded ? panel : false);
-    view === "listener"
-      ? setConfirmedListenerCounts(0)
-      : setConfirmedTellerCounts(0);
+    if (view === "listener") {
+      setConfirmedListenerCounts(0);
+      updateAttendingUsersForListener("confirmed");
+    } else {
+      setConfirmedTellerCounts(0);
+      updateAttendingUsersForTeller("confirmed");
+    }
   };
   const handleChangePanel4 = (panel) => (event, isExpanded) => {
     setExpanded4(isExpanded ? panel : false);
-    view === "listener"
-      ? setFinishedListenerCounts(0)
-      : setFinishedTellerCounts(0);
+    if (view === "listener") {
+      setFinishedListenerCounts(0);
+      updateAttendingUsersForListener("finished");
+    } else {
+      setFinishedTellerCounts(0);
+      updateAttendingUsersForTeller("finished");
+    }
   };
 
   function createReservation(status) {
@@ -487,6 +461,68 @@ function ReservationManagement(props) {
     setUser(updatedUserData);
 
     updateReservations(updatedUserData);
+  }
+
+  async function updateAttendingUsersForListener(status) {
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === status)
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID !== e.reservation.tellerID);
+    console.log(arrayOfSeen);
+    await Promise.all(
+      arrayOfSeen.map(async (e) => {
+        console.log("inside map");
+        console.log(e);
+        const newAttendingUsers = {
+          id: e.id,
+          reservationID: e.reservationID,
+          seen: true,
+          userID: e.userID
+        };
+        const response = await API.graphql({
+          query: mutations.updateAttendingUsers,
+          variables: { input: newAttendingUsers }
+        });
+        console.log(response.data.updateAttendingUsers);
+      })
+    );
+  }
+
+  async function updateAttendingUsersForTeller(status) {
+    const allAttendingUser = (
+      await API.graphql({
+        query: queries.listAttendingUsers
+      })
+    ).data.listAttendingUsers.items;
+    const arrayOfSeen = allAttendingUser
+      .filter((e) => e.userID === user.id)
+      .filter((e) => e.reservation.status === status)
+      .filter((e) => e.seen === false)
+      .filter((e) => e.userID === e.reservation.tellerID);
+    console.log(arrayOfSeen);
+    await Promise.all(
+      arrayOfSeen.map(async (e) => {
+        console.log("inside map");
+        console.log(e);
+        const newAttendingUsers = {
+          id: e.id,
+          reservationID: e.reservationID,
+          seen: true,
+          userID: e.userID
+        };
+        const response = await API.graphql({
+          query: mutations.updateAttendingUsers,
+          variables: { input: newAttendingUsers }
+        });
+        console.log(response.data.updateAttendingUsers);
+      })
+    );
   }
 
   return (
