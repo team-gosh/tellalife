@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import Post from "./Post";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -16,10 +15,6 @@ function Posts (props) {
 	const classes = useStyles();
 
 	const { filter, posts, user } = props;
-
-	useEffect(async () => {
-		console.log(posts);
-	}, []);
 
 	return (
 		<div className={classes.container}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Posts from "./Posts";
-import Input from "./Input";
+// import Input from "./Input"; // Faker code
 import Posting from "./Posting";
 import Filter from "./Filter";
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,15 +26,19 @@ function Feed (props) {
 	const [ posts, setPosts ] = useState([]);
 
 	useEffect(async () => {
-		const response = await API.graphql({
-			query: queries.listPosts,
-		});
-		setPosts(response.data.listPosts.items);
+    try {
+      const allPosts = (await API.graphql({
+        query: queries.listPosts,
+      })).data.listPosts.items;
+      setPosts(allPosts);
+    } catch (error) {
+      console.error(error.message);
+    }
 	}, []);
 
 	return (
 		<div className={classes.feed}>
-			<Filter countriesCitiesList={countriesCitiesList} filter={filter} setFilter={setFilter} />
+			<Filter countriesCitiesList={countriesCitiesList} setFilter={setFilter} />
 			{user && user.isTeller ? <Posting user={user} API={API} mutations={mutations} /> : <div />}
 			<Posts filter={filter} posts={posts} user={user} />
 		</div>

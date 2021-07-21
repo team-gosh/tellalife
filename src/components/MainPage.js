@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Profile from "./Profile";
 import ReservationManagement from "./ReservationManagement";
-import Amplify, { API, graphqlOperation } from "aws-amplify";
-// import { GetUserByEmail } from '../graphql/queries';
+import { API } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 import * as customQueries from "../graphql/customQueries";
 import Feed from "./Feed";
-import App from "../App";
-import CheckoutForm from "./CheckoutForm";
-import { Auth, Hub } from "aws-amplify";
+import { Hub } from "aws-amplify";
 
 //material ui
 import Drawer from "@material-ui/core/Drawer";
@@ -119,14 +116,11 @@ function MainPage (props) {
 		video,
 		setVideo,
 		userAuth,
-		AmplifySignOut,
 		Auth,
-		Amplify,
-		// user authentication
 	} = props;
 	const [ display, setDisplay ] = useState("Feed");
 	const [ user, setUser ] = useState();
-	const [ state, setState ] = React.useState(false);
+	const [ state, setState ] = useState(false);
 	const classes = useStyles();
 
 	const theme = useTheme();
@@ -146,45 +140,33 @@ function MainPage (props) {
 		setLists(countriesArray);
 
 		if (userAuth && userAuth.attributes) {
-			console.log("after if 77");
 			const userNameAndEmail = userAuth.attributes.email;
 			const name = userAuth.attributes.name;
 			try {
 				// Try to get user from database
-				console.log("before currntuserID");
 				const currentUserData = (await API.graphql({
 					query: queries.getUserByEmail,
 					variables: {
 						username: userNameAndEmail,
 					},
 				})).data.getUserByEmail.items;
-				console.log("before");
+        console.log("Is user in database")
 				console.log(currentUserData);
-				console.log("after");
 
-				// console.log("main page current user big Get");
-				// console.log(currentUser);
-				// if (currentUser.data.getUser) {
 				if (currentUserData.length) {
-					console.log("after if 94 (user exists)");
-					// If user exists, set to user
 
-					const currentUser = await API.graphql({
-						// query: queries.getUser,
+					const currentUser = (await API.graphql({
 						query: customQueries.getUser,
 						variables: {
 							id: currentUserData[0].id,
 						},
-					});
+					})).data.getUser;
 
-					console.log("!!!!!!HERE!!!!!!!!");
+					console.log("Full existing user data");
 					console.log(currentUser);
-					setUser(currentUser.data.getUser);
-					// setUser(currentUser.data.getUserWithReservations);
-					// console.log(currentUserData)
-					// setUser(currentUser.data.getUser);
+
+					setUser(currentUser);
 				} else if (!user) {
-					console.log("after else 99 (create new user)");
 					// If user doesn't exist, then create new user in database
 					const newUserRegistrationData = {
 						email: userNameAndEmail,
@@ -192,39 +174,21 @@ function MainPage (props) {
 						name: name,
 						isTeller: false,
 					};
-					console.log("newUserRegistrationData in useEffect Main Page 108");
-					console.log(newUserRegistrationData);
-					const newUserId = (await API.graphql({
+
+          const newUserId = (await API.graphql({
 						query: mutations.createUser,
 						variables: { input: newUserRegistrationData },
 					})).data.createUser.id;
-					// Retrieve new user data from database and set to user
-					// console.log("response");
-					// console.log(response);
-					// setUser(response.data.createUser);
-					const newUser = await API.graphql({
-						// query: queries.getUser,
+					const newUser = (await API.graphql({
 						query: customQueries.getUser,
 						variables: {
 							id: newUserId,
 						},
-					});
-					console.log("newUser");
+					})).data.getUser;
+					console.log("New user full data");
 					console.log(newUser);
-					setUser(newUser.data.getUser);
+					setUser(newUser);
 				}
-        /////test start
-        // const testUser = await API.graphql({
-        //   query: customQueries.getUserWithReservations,
-        //   variables: {
-        //     id: testID,
-        //   },
-        // });
-        // console.log("testUser in MainPage useEffect")
-        // console.log(testUser)
-        /////test end
-				console.log("after conditionals");
-				console.log(user, "this is because the react thing");
 			} catch (error) {
 				console.error(error.message);
 			}
@@ -287,7 +251,6 @@ function MainPage (props) {
 					<ListItem button key={text} onClick={handleSignOutButtonClick}>
 						<ListItemIcon>
 							<ExitToAppIcon />
-							{/* <AmplifySignOut /> */}
 						</ListItemIcon>
 						<ListItemText primary={text} />
 					</ListItem>
@@ -295,10 +258,8 @@ function MainPage (props) {
 			</List>
 		</div>
 	);
-	console.log(user);
 	return (
 		<div className="MainPage">
-			{/* <h1>{JSON.stringify(user)}</h1> */}
 			<AppBar position="static" className={classes.appbar}>
 				<Toolbar className={classes.toolbar}>
 					{isBiggerScreen ? (

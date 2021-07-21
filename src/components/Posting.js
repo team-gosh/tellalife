@@ -33,8 +33,6 @@ function Posting(props) {
 
 	const classes = useStyles();
 
-	const obj = {};
-
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -42,6 +40,32 @@ function Posting(props) {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
+  const uploadPost = async () => {
+    handleClose();
+    setDisable(true);
+    const postData = {
+      userID: String(user.id),
+      type: "post",
+      title: title,
+      text: text,
+      city: user.current_city,
+      country: user.current_country,
+      home_country: user.home_country,
+      dateTime: String(new Date().getTime()),
+      image: image
+    }
+    setTitle("");
+    setText("");
+    try {
+      await API.graphql({
+        query: mutations.createPost,
+        variables: { input: postData },
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
 	return (
 		<div className={classes.root}>
@@ -132,28 +156,7 @@ function Posting(props) {
 					<Button
 						color="primary"
 						disabled={disable}
-						onClick={async () => {
-							handleClose();
-							setDisable(true);
-							obj["userID"] = String(user.id);
-							obj["type"] = "post";
-							obj["title"] = title;
-							obj["text"] = text;
-							obj["city"] = user.current_city;
-							obj["country"] = user.current_country;
-							obj["dateTime"] = String(new Date().getTime());
-              obj["image"] = image
-
-							setTitle("");
-							setText("");
-							const response = await API.graphql({
-								query: mutations.createPost,
-								variables: { input: obj },
-							});
-							console.log(response);
-							console.log(obj);
-							console.log(user);
-						}}
+						onClick={uploadPost}
 					>
 						Subscribe
 					</Button>

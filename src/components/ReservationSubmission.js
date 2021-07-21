@@ -6,7 +6,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { API } from "aws-amplify";
-import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function AlertDialog (props) {
+export default function ReservationSubmission (props) {
 	const { setOpen, teller, date, setDate, user, duration, setDuration, disable } = props;
 	const [ dialog, setDialog ] = useState(false);
 

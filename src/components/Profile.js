@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-
 import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 
 const useStyles = makeStyles((theme) => ({
@@ -165,9 +161,14 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile (props) {
 	const classes = useStyles();
-	const { user, setUser, API, mutations, countriesCitiesList } = props;
+	const {
+    user,
+    setUser,
+    API,
+    mutations,
+    countriesCitiesList 
+  } = props;
 
-	// Connect with DB
 	const [ nickName, setNickName ] = useState(user.name);
 	const [ home, setHome ] = useState(user.home_country);
 	const [ country, setCountry ] = useState(user.current_country);
@@ -179,7 +180,7 @@ function Profile (props) {
 	const [ stripeObj, setStripeObj ] = useState({});
 	const [ stripeUrl, setUrl ] = useState("");
 	const [ charges_enabled, setCharges_enabled ] = useState(false);
-  const [ homeURL, setHomeURL] = useState(window.location.href);
+  const [ homeURL ] = useState(window.location.href);
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
@@ -206,82 +207,123 @@ function Profile (props) {
 	};
 
 	const updateUser = async () => {
-		const newData = {
-			id: user.id,
-			name: nickName,
-			home_country: home,
-			current_country: country,
-			current_city: city,
-			price: Number(value),
-			stripeAccount: stripeObj.id,
-			stripeURL: stripeUrl,
-			isTeller: true,
-		};
-		// logic to handle to timeout!!!!
-
-		const response = await API.graphql({
-			query: mutations.updateUser,
-			variables: { input: newData },
-		});
-		setUser(response.data.updateUser);
+    try {
+      const newData = {
+        id: user.id,
+        name: nickName,
+        home_country: home,
+        current_country: country,
+        current_city: city,
+        price: Number(value),
+        stripeAccount: stripeObj.id,
+        stripeURL: stripeUrl,
+        isTeller: true,
+      };
+      // logic to handle to timeout!!!!
+  
+      const response = await API.graphql({
+        query: mutations.updateUser,
+        variables: { input: newData },
+      });
+      setUser(response.data.updateUser);
+    } catch (error) {
+      console.error(error.message);
+    }
 	};
 
 	const updateName = async () => {
-		const newData = {
-			id: user.id,
-			name: nickName,
-			home_country: home,
-			current_country: country,
-			current_city: city,
-			price: Number(value),
-			stripeAccount: stripeObj.id,
-			isTeller: false,
-			stripeURL: stripeUrl,
-		};
-		// logic to handle to timeout!!!!
-
-		const response = await API.graphql({
-			query: mutations.updateUser,
-			variables: { input: newData },
-		});
-		setUser(response.data.updateUser);
+    try {
+      const newData = {
+        id: user.id,
+        name: nickName,
+        home_country: home,
+        current_country: country,
+        current_city: city,
+        price: Number(value),
+        stripeAccount: stripeObj.id,
+        isTeller: false,
+        stripeURL: stripeUrl,
+      };
+      // logic to handle to timeout!!!!
+  
+      const response = await API.graphql({
+        query: mutations.updateUser,
+        variables: { input: newData },
+      });
+      setUser(response.data.updateUser);
+    } catch (error) {
+      console.error(error.message);
+    }
 	};
 
 	const createUser = async () => {
-		const response = await API.graphql({
-			query: mutations.createStripeAccount,
-			variables: {
-				input: {
-					type: "express",
-          homeURL: homeURL
-				},
-			},
-		});
-		const stripeUser = response.data.createStripeAccount;
-		const jsonUser = JSON.parse(stripeUser);
-		setStripeObj(jsonUser);
-		setUrl(jsonUser.url);
-		window.open(jsonUser.url, "_blank");
+    try {
+      const response = await API.graphql({
+        query: mutations.createStripeAccount,
+        variables: {
+          input: {
+            type: "express",
+            homeURL: homeURL
+          },
+        },
+      });
+      const stripeUser = response.data.createStripeAccount;
+      const jsonUser = JSON.parse(stripeUser);
+      setStripeObj(jsonUser);
+      setUrl(jsonUser.url);
+      window.open(jsonUser.url, "_blank");
+    } catch (error) {
+      console.error(error.message);
+    }
 	};
 
 	const account = async () => {
-		const response = await API.graphql({
-			query: mutations.getStripeAccount,
-			variables: {
-				input: {
-					id: user.stripeAccount,
-				},
-			},
-		});
-		const userObj = JSON.parse(response.data.getStripeAccount);
-
-
-		if (userObj.charges_enabled === true) {
-			setCharges_enabled(true);
-		} else {
-			console.log("Processs has not finished yet");
-		}
+    try {
+      const response = await API.graphql({
+        query: mutations.getStripeAccount,
+        variables: {
+          input: {
+            id: user.stripeAccount,
+          },
+        },
+      });
+      const userObj = JSON.parse(response.data.getStripeAccount);
+  
+  
+      if (userObj.charges_enabled === true) {
+        setCharges_enabled(true);
+      } else {
+        console.log("Processs has not finished yet");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
 	};
+
+  const uploadAvatar = async (e) => {
+    try {
+      const reader = new FileReader();
+
+      reader.addEventListener("load", async function () {
+        const updatedUserResponse = await API.graphql({
+          query: mutations.updateUser,
+          variables: {
+            input: {
+              id: user.id,
+              avatar: reader.result
+            }
+          }
+        });
+        setUser(updatedUserResponse.data.updateUser)
+      }, false);
+
+      if (e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
 
 	return (
 		<div className={classes.root}>
@@ -423,29 +465,7 @@ function Profile (props) {
             style={{ display: 'none' }}
             id="upload-image"
             type="file"
-            onChange={async (e) => {
-              const reader = new FileReader();
-
-              reader.addEventListener("load", async function () {
-                console.log(reader.result)
-                // setImage(reader.result)
-                const updatedUserResponse = await API.graphql({
-                  query: mutations.updateUser,
-                  variables: {
-                    input: {
-                      id: user.id,
-                      avatar: reader.result
-                    }
-                  }
-                });
-                console.log("updatedUserResponse")
-                setUser(updatedUserResponse.data.updateUser)
-              }, false);
-
-              if (e.target.files[0]) {
-                reader.readAsDataURL(e.target.files[0]);
-              }
-            }}
+            onChange={(e) => uploadAvatar(e)}
           />
           <label htmlFor="upload-image">
             <Button color="primary" component="span" >

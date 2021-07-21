@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import MakeReservation from "./MakeReservation";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -37,11 +37,14 @@ function Post (props) {
 		<div className={classes.container}>
 			<Card className={classes.post}>
 				<CardActionArea>
-					{user && postData.userID === user.id ? (
-						<span />
-					) : (
-						<MakeReservation teller={postData.user} user={user} />
-					)}
+					{user && postData.userID === user.id 
+            ? (
+						  <span />
+					  )
+            : (
+						  <MakeReservation teller={postData.user} user={user} />
+					  )
+          }
 					<CardContent>
 						<Typography gutterBottom variant="h5" component="h3" align="left">
 							{postData.title}

@@ -26,6 +26,7 @@ export const getUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
@@ -89,6 +90,7 @@ export const getPost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type
@@ -134,6 +136,7 @@ export const listPosts = /* GraphQL */ `
         title
         userID
         dateTime
+        home_country
         country
         city
         type

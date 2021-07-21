@@ -26,6 +26,7 @@ export const onCreateUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
@@ -74,6 +75,7 @@ export const onUpdateUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
@@ -122,6 +124,7 @@ export const onDeleteUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
@@ -152,6 +155,7 @@ export const onCreatePost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type
@@ -192,6 +196,7 @@ export const onUpdatePost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type
@@ -232,6 +237,7 @@ export const onDeletePost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type

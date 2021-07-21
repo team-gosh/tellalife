@@ -8,10 +8,6 @@ const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
     height: undefined
   });
 
-  const guestURL = window.location.protocol 
-                   + "//" + window.location.host
-                   + "/?guestRoom=" + guestRoom;
-
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -47,8 +43,6 @@ const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
   const remoteParticipants = participants.map((participant) => (
     <Participant key={participant.sid} participant={participant} roomType="pair" userType="remote"/>
   ));
-  console.log("Room participants");
-  console.log(participants);
 
   return (
     <div className="room">
@@ -71,8 +65,6 @@ const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
         ) : (
           ""
         )}
-        {/* <p>Invite others to join at the following link</p>
-        <p>{guestURL}</p> */}
         <button onClick={handleLogout}>Leave Room</button>
       </div>
     </div>
