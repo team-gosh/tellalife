@@ -94,6 +94,7 @@ const Participant = (props) => {
 
 	return (
 		<div className="participant">
+      {/* look at line 20 profile.js for use of breakpoints in material ui */}
 			{/* <h5>{participant.identity}</h5> */}
 			{/* <video width={userType === "remote" ? "640" : "160"} height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} /> */}
 			<video height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} />

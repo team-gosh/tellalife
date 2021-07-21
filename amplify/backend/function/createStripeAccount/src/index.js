@@ -2,9 +2,9 @@ const secretKey = process.env.REACT_APP_STRIPE_API_SECRET;
 const stripe = require("stripe")(secretKey);
 
 exports.handler = async function (event, context, callback) {
-  const URL = process.env.DEPLOYED_ENV
-    ? "https://main.d29bbs0f2rju24.amplifyapp.com/"
-    : "http://localhost:3000"
+  // const URL = process.env.DEPLOYED_ENV
+  //   ? "https://main.d29bbs0f2rju24.amplifyapp.com/"
+  //   : "http://localhost:3000"
 
 	const account = await stripe.accounts.create({
 		type: "express",
@@ -12,8 +12,8 @@ exports.handler = async function (event, context, callback) {
 
 	const refreshFunc = await stripe.accountLinks.create({
 		account: account.id,
-		refresh_url: URL,
-		return_url: URL,
+		refresh_url: event.arguments.input.homeURL,
+		return_url: event.arguments.input.homeURL,
 		type: "account_onboarding",
 	});
   
@@ -24,7 +24,7 @@ exports.handler = async function (event, context, callback) {
 	const accountLink = await stripe.accountLinks.create({
 		account: account.id,
 		refresh_url: refreshFunc.url,
-		return_url: URL,
+		return_url: event.arguments.input.homeURL,
 		type: "account_onboarding",
 	});
 

@@ -179,6 +179,7 @@ function Profile (props) {
 	const [ stripeObj, setStripeObj ] = useState({});
 	const [ stripeUrl, setUrl ] = useState("");
 	const [ charges_enabled, setCharges_enabled ] = useState(false);
+  const [ homeURL, setHomeURL] = useState(window.location.href);
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
@@ -252,6 +253,7 @@ function Profile (props) {
 			variables: {
 				input: {
 					type: "express",
+          homeURL: homeURL
 				},
 			},
 		});
