@@ -31,7 +31,7 @@
       "function": {
         "createVideoToken": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",
-          "s3Key": "amplify-builds/createVideoToken-325a50476c767a686345-build.zip"
+          "s3Key": "amplify-builds/createVideoToken-38686775476733366b51-build.zip"
         },
         "createPayment": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",
