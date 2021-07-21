@@ -62,8 +62,8 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 	description: String
 	userIDs: ID
 	users: [AttendingUsers!]! @connection(keyName: "reservationAttendedBy", fields: ["id"])
-	# tellerID: ID!
 	tellerID: String!
+  tellerName: String #String! later 
 	stripeAccount: String
 }
 

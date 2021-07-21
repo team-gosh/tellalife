@@ -27,6 +27,7 @@ export default function ReservationSubmission (props) {
 			startDateTime: String(date),
 			status: "pending",
 			tellerID: teller.id,
+      tellerName: teller.username,
 			type: "pair",
 			// userIDs: user.id,
 		};
