@@ -273,6 +273,7 @@ function Profile (props) {
 		});
 		const userObj = JSON.parse(response.data.getStripeAccount);
 
+
 		if (userObj.charges_enabled === true) {
 			setCharges_enabled(true);
 		} else {

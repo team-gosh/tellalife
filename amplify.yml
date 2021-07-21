@@ -15,6 +15,7 @@ frontend:
         - echo "REACT_APP_TWILIO_APIKEY=$REACT_APP_TWILIO_APIKEY" >> .env
         - echo "REACT_APP_TWILIO_API_SECRET=$REACT_APP_TWILIO_API_SECRET" >> .env
         - echo "REACT_APP_STRIPE_API_SECRET=$REACT_APP_STRIPE_API_SECRET" >> .env
+        - echo "DEPLOYED_ENV" >> .env
   artifacts:
     baseDirectory: build
     files:
