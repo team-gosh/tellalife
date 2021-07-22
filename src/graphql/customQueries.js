@@ -57,6 +57,8 @@ export const getUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }

@@ -33,6 +33,8 @@ export const getUser = /* GraphQL */ `
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -45,6 +47,8 @@ export const getUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -76,6 +80,8 @@ export const listUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -113,12 +119,16 @@ export const getPost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -153,12 +163,16 @@ export const listPosts = /* GraphQL */ `
           current_city
           stripeURL
           avatar
+          avatarKey
+          avatarURL
           createdAt
           updatedAt
         }
         text
         link
         image
+        imageKey
+        imageURL
         createdAt
         updatedAt
       }
@@ -188,6 +202,7 @@ export const getAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -211,6 +226,8 @@ export const getAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -244,6 +261,7 @@ export const listAttendingUsers = /* GraphQL */ `
           description
           userIDs
           tellerID
+          tellerName
           stripeAccount
           createdAt
           updatedAt
@@ -261,6 +279,8 @@ export const listAttendingUsers = /* GraphQL */ `
           current_city
           stripeURL
           avatar
+          avatarKey
+          avatarURL
           createdAt
           updatedAt
         }
@@ -298,6 +318,7 @@ export const getReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -327,6 +348,7 @@ export const listReservations = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -371,6 +393,8 @@ export const getUserByEmail = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
