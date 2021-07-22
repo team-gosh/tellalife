@@ -124,7 +124,7 @@ function Posting(props) {
         </DialogContent>
         <DialogActions>
           <input
-            accept="image/jpeg"
+            accept="image/*"
             className={classes.input}
             style={{ display: 'none' }}
             id="upload-image"

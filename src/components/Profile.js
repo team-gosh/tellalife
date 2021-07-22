@@ -486,7 +486,7 @@ function Profile (props) {
 				</CardContent>
 
         <input
-            accept="image/jpeg"
+            accept="image/*"
             className={classes.input}
             style={{ display: 'none' }}
             id="upload-image"
