@@ -188,6 +188,7 @@ export const getAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -244,6 +245,7 @@ export const listAttendingUsers = /* GraphQL */ `
           description
           userIDs
           tellerID
+          tellerName
           stripeAccount
           createdAt
           updatedAt
@@ -298,6 +300,7 @@ export const getReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -327,6 +330,7 @@ export const listReservations = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt

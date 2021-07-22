@@ -334,6 +334,7 @@ export const createAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -391,6 +392,7 @@ export const updateAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -448,6 +450,7 @@ export const deleteAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -509,6 +512,7 @@ export const createReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -544,6 +548,7 @@ export const updateReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -579,6 +584,7 @@ export const deleteReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt

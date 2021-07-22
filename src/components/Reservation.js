@@ -68,7 +68,7 @@ function Reservation(props) {
     setVideo,
     removeReservation,
     pendingToApproved,
-    approvedToConfirmed,
+    approvedToConfirmed
   } = props;
 
   const [open, setOpen] = useState(false);
@@ -82,11 +82,12 @@ function Reservation(props) {
   return (
     <div className="Reservation" id={data.id}>
       {/* listener view */}
+      {console.log(data)}
       <Card className={classes.root}>
         <CardHeader
           title={
             <Typography variant="h5" gutterBottom>
-              {user.name}
+              {view === "listener" ? user.name : data.tellerName}
             </Typography>
           }
           subheader={new Date(Number(data.startDateTime)).toLocaleString()}

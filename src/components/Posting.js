@@ -131,7 +131,6 @@ function Posting(props) {
             type="file"
             onChange={async (e) => {
               const reader = new FileReader();
-
               reader.addEventListener(
                 "load",
                 function () {
