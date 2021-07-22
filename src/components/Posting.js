@@ -13,19 +13,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(3),
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   dialog: {
-    padding: 0,
-  },
+    padding: 0
+  }
 }));
 
 function Posting(props) {
-  const {
-    user,
-    API,
-    mutations
-  } = props;
+  const { user, API, mutations } = props;
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
@@ -59,25 +55,34 @@ function Posting(props) {
       // image: image
       imageKey: imageKey,
       imageURL: imageURL
-    }
+    };
     setTitle("");
     setText("");
     try {
       await API.graphql({
         query: mutations.createPost,
-        variables: { input: postData },
+        variables: { input: postData }
       });
     } catch (error) {
       console.error(error.message);
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
-      <Button variant="contained" color="primary" onClick={handleClickOpen} size="large">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleClickOpen}
+        size="large"
+      >
         New Post
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Posting Screen</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -90,7 +95,7 @@ function Posting(props) {
             fullWidth
             margin="normal"
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             onChange={(event) => {
               setTitle(event.target.value);
@@ -110,7 +115,7 @@ function Posting(props) {
             fullWidth
             margin="normal"
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             onChange={(event) => {
               setText(event.target.value);
@@ -126,7 +131,7 @@ function Posting(props) {
           <input
             accept="image/*"
             className={classes.input}
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             id="upload-image"
             type="file"
             onChange={async (e) => {
@@ -153,7 +158,7 @@ function Posting(props) {
             }}
           />
           <label htmlFor="upload-image">
-            <Button color="primary" component="span" >
+            <Button color="primary" component="span">
               Upload Image
             </Button>
           </label>
@@ -168,11 +173,7 @@ function Posting(props) {
           >
             Cancel
           </Button>
-          <Button
-            color="primary"
-            disabled={disable}
-            onClick={uploadPost}
-          >
+          <Button color="primary" disabled={disable} onClick={uploadPost}>
             Subscribe
           </Button>
         </DialogActions>
