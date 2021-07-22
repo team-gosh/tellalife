@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import { Storage } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +27,8 @@ function Posting(props) {
   const [text, setText] = useState("");
   const [disable, setDisable] = useState(true);
   const [image, setImage] = useState("");
+  const [imageKey, setImageKey] = useState("");
+  const [imageURL, setImageURL] = useState("");
 
   const classes = useStyles();
 
@@ -49,7 +52,9 @@ function Posting(props) {
       country: user.current_country,
       home_country: user.home_country,
       dateTime: String(new Date().getTime()),
-      image: image
+      // image: image
+      imageKey: imageKey,
+      imageURL: imageURL
     };
     setTitle("");
     setText("");
@@ -124,24 +129,33 @@ function Posting(props) {
         </DialogContent>
         <DialogActions>
           <input
-            accept="image/jpeg"
+            accept="image/*"
             className={classes.input}
             style={{ display: "none" }}
             id="upload-image"
             type="file"
             onChange={async (e) => {
-              const reader = new FileReader();
-              reader.addEventListener(
-                "load",
-                function () {
-                  console.log(reader.result);
-                  setImage(reader.result);
-                },
-                false
-              );
+              // const reader = new FileReader();
+
+              // reader.addEventListener("load", function () {
+              //   console.log(reader.result)
+              //   setImage(reader.result)
+              // }, false);
 
               if (e.target.files[0]) {
-                reader.readAsDataURL(e.target.files[0]);
+                // reader.readAsDataURL(e.target.files[0]);
+                const file = e.target.files[0];
+                const fileName = `${user.id}_${new Date().getTime()}_${
+                  file.name
+                }`;
+                const putResponse = await Storage.put(fileName, file);
+                // console.log("putResponse from put");
+                // console.log(putResponse)
+                const getResponse = await Storage.get(putResponse.key);
+                // console.log('getResponse');
+                // console.log(getResponse)
+                setImageKey(putResponse.key);
+                setImageURL(getResponse);
               }
             }}
           />

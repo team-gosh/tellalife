@@ -46,11 +46,17 @@ function Post(props) {
           <CardActionArea className={classes.area}>
             {user && postData.userID === user.id ? (
               <div>
-                <Avatar aria-label="avatar">L</Avatar>
+                <Avatar
+                  aria-label="avatar"
+                  src={postData.user.avatarURL}
+                ></Avatar>
               </div>
             ) : (
               <div className={classes.avatar}>
-                <Avatar aria-label="avatar">L</Avatar>
+                <Avatar
+                  aria-label="avatar"
+                  src={postData.user.avatarURL}
+                ></Avatar>
                 <MakeReservation teller={postData.user} user={user} />
               </div>
             )}
@@ -58,11 +64,11 @@ function Post(props) {
               <Typography gutterBottom variant="h5" component="h3" align="left">
                 {postData.title}
               </Typography>
-              {postData.image ? (
+              {postData.imageURL ? (
                 <CardMedia
                   className={classes.media}
                   component="img"
-                  src={postData.image}
+                  src={postData.imageURL}
                   title={postData.title}
                 />
               ) : (

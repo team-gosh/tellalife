@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Reservation from "./Reservation";
+import * as customQueries from "../graphql/customQueries";
 
 //material ui
 import Accordion from "@material-ui/core/Accordion";
@@ -73,15 +74,7 @@ const useStyles = makeStyles((theme) => ({
 function ReservationManagement(props) {
   const classes = useStyles();
 
-  const {
-    user,
-    setUser,
-    setVideo,
-    video,
-    API,
-    queries,
-    mutations
-  } = props;
+  const { user, setUser, setVideo, video, API, queries, mutations } = props;
   const [view, setView] = useState("listener");
   const [value, setValue] = useState(0);
   const [reservations, setReservations] = useState([]);
@@ -321,7 +314,8 @@ function ReservationManagement(props) {
   function createReservation(status) {
     return reservations
       .filter((e) =>
-        view === "teller" ? e.tellerID === user.id : e.tellerID !== user.id)
+        view === "teller" ? e.tellerID === user.id : e.tellerID !== user.id
+      )
       .map((data, index) => {
         if (data.status === status) {
           return (
@@ -349,29 +343,29 @@ function ReservationManagement(props) {
           filter: { reservationID: { eq: reservationID } }
         })
       ).data.listAttendingUsers.items;
-  
+
       attendingUsers.forEach(async (e) => {
         await API.graphql({
           query: mutations.deleteAttendingUsers,
           variables: { input: { id: e.id } }
         });
       });
-  
+
       await API.graphql({
         query: mutations.deleteReservation,
         variables: { input: { id: reservationID } }
       });
-  
+
       const updatedUserData = (
         await API.graphql({
-          query: queries.getUser,
+          query: customQueries.getUser,
           variables: {
             id: user.id
           }
         })
       ).data.getUser;
       setUser(updatedUserData);
-  
+
       updateReservations(updatedUserData);
     } catch (error) {
       console.error(error.message);
@@ -411,17 +405,17 @@ function ReservationManagement(props) {
           }
         }
       });
-  
+
       const updatedUserData = (
         await API.graphql({
-          query: queries.getUser,
+          query: customQueries.getUser,
           variables: {
             id: user.id
           }
         })
       ).data.getUser;
       setUser(updatedUserData);
-  
+
       updateReservations(updatedUserData);
     } catch (error) {
       console.error(error.message);
@@ -439,17 +433,17 @@ function ReservationManagement(props) {
           }
         }
       });
-  
+
       const updatedUserData = (
         await API.graphql({
-          query: queries.getUser,
+          query: customQueries.getUser,
           variables: {
             id: user.id
           }
         })
       ).data.getUser;
       setUser(updatedUserData);
-  
+
       updateReservations(updatedUserData);
     } catch (error) {
       console.error(error.message);
@@ -467,17 +461,17 @@ function ReservationManagement(props) {
           }
         }
       });
-  
+
       const updatedUserData = (
         await API.graphql({
-          query: queries.getUser,
+          query: customQueries.getUser,
           variables: {
             id: user.id
           }
         })
       ).data.getUser;
       setUser(updatedUserData);
-  
+
       updateReservations(updatedUserData);
     } catch (error) {
       console.error(error.message);

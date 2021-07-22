@@ -33,6 +33,8 @@ export const onCreateUser = /* GraphQL */ `
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -45,6 +47,8 @@ export const onCreateUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -82,6 +86,8 @@ export const onUpdateUser = /* GraphQL */ `
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -94,6 +100,8 @@ export const onUpdateUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -131,6 +139,8 @@ export const onDeleteUser = /* GraphQL */ `
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -143,6 +153,8 @@ export const onDeleteUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -178,12 +190,16 @@ export const onCreatePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -219,12 +235,16 @@ export const onUpdatePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -260,12 +280,16 @@ export const onDeletePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -317,6 +341,8 @@ export const onCreateAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -372,6 +398,8 @@ export const onUpdateAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -427,6 +455,8 @@ export const onDeleteAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
