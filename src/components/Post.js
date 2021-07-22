@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between"
   },
   area: {
-    width: 275
+    width: "100%"
   }
 }));
 
