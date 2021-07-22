@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { Storage } from 'aws-amplify';
+import { Storage } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -162,13 +162,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile (props) {
 	const classes = useStyles();
-	const {
-    user,
-    setUser,
-    API,
-    mutations,
-    countriesCitiesList 
-  } = props;
+	const { user, setUser, API, mutations, countriesCitiesList } = props;
 
 	const [ nickName, setNickName ] = useState(user.name);
 	const [ home, setHome ] = useState(user.home_country);
@@ -176,12 +170,40 @@ function Profile (props) {
 	const [ city, setCity ] = useState(user.current_country);
 	const [ value, setValue ] = useState(user.price ? user.price : 0);
 	const [ isEditing, setEdit ] = useState(false);
-	const [ registration, setRegistration ] = useState(false);
 	const [ error, setError ] = useState("");
 	const [ stripeObj, setStripeObj ] = useState({});
 	const [ stripeUrl, setUrl ] = useState("");
 	const [ charges_enabled, setCharges_enabled ] = useState(false);
-  const [ homeURL ] = useState(window.location.href);
+	const [ homeURL ] = useState(window.location.href);
+
+	useEffect(async () => {
+		try {
+			if (user.stripeAccount) {
+				const response = (await API.graphql({
+					query: mutations.getStripeAccount,
+					variables: {
+						input: {
+							id: user.stripeAccount,
+						},
+					},
+				})).data.getStripeAccount;
+				const userObj = JSON.parse(response);
+
+				// probably move this check to the main.js
+				if (userObj.charges_enabled === true) {
+					console.log("charges_enabled");
+					setCharges_enabled(true);
+					updateUser();
+				} else {
+					console.log("Processs has not finished yet");
+				}
+			} else {
+				console.log("No stripe account");
+			}
+		} catch (error) {
+			console.error(error.message);
+		}
+	}, []);
 
 	const handleHomeChange = (event) => {
 		setHome(event.target.value);
@@ -189,6 +211,7 @@ function Profile (props) {
 
 	const handleCurrentCountryChange = (event) => {
 		setCountry(event.target.value);
+		setCity("");
 	};
 
 	const handleCurrentCityChange = (event) => {
@@ -208,150 +231,128 @@ function Profile (props) {
 	};
 
 	const updateUser = async () => {
-    try {
-      const newData = {
-        id: user.id,
-        name: nickName,
-        home_country: home,
-        current_country: country,
-        current_city: city,
-        price: Number(value),
-        stripeAccount: stripeObj.id,
-        stripeURL: stripeUrl,
-        isTeller: true,
-      };
-      // logic to handle to timeout!!!!
-  
-      const response = await API.graphql({
-        query: mutations.updateUser,
-        variables: { input: newData },
-      });
-      setUser(response.data.updateUser);
-    } catch (error) {
-      console.error(error.message);
-    }
+		try {
+			const newData = {
+				id: user.id,
+				name: nickName,
+				home_country: home,
+				current_country: country,
+				current_city: city,
+				price: Number(value),
+				stripeAccount: stripeObj.id,
+				stripeURL: stripeUrl,
+				isTeller: true,
+			};
+			// logic to handle to timeout!!!!
+
+			const response = await API.graphql({
+				query: mutations.updateUser,
+				variables: { input: newData },
+			});
+			setUser(response.data.updateUser);
+		} catch (error) {
+			console.error(error.message);
+		}
 	};
 
 	const updateName = async () => {
-    try {
-      const newData = {
-        id: user.id,
-        name: nickName,
-        home_country: home,
-        current_country: country,
-        current_city: city,
-        price: Number(value),
-        stripeAccount: stripeObj.id,
-        isTeller: false,
-        stripeURL: stripeUrl,
-      };
-      // logic to handle to timeout!!!!
-  
-      const response = await API.graphql({
-        query: mutations.updateUser,
-        variables: { input: newData },
-      });
-      setUser(response.data.updateUser);
-    } catch (error) {
-      console.error(error.message);
-    }
+		try {
+			const newData = {
+				id: user.id,
+				name: nickName,
+				home_country: home,
+				current_country: country,
+				current_city: city,
+				price: Number(value),
+				stripeAccount: stripeObj.id,
+				isTeller: false,
+				stripeURL: stripeUrl,
+			};
+			// logic to handle to timeout!!!!
+
+			const response = await API.graphql({
+				query: mutations.updateUser,
+				variables: { input: newData },
+			});
+			setUser(response.data.updateUser);
+		} catch (error) {
+			console.error(error.message);
+		}
 	};
 
 	const createUser = async () => {
-    try {
-      const response = await API.graphql({
-        query: mutations.createStripeAccount,
-        variables: {
-          input: {
-            type: "express",
-            homeURL: homeURL
-          },
-        },
-      });
-      const stripeUser = response.data.createStripeAccount;
-      const jsonUser = JSON.parse(stripeUser);
-      setStripeObj(jsonUser);
-      setUrl(jsonUser.url);
-      window.open(jsonUser.url, "_blank");
-    } catch (error) {
-      console.error(error.message);
-    }
+		try {
+			const response = await API.graphql({
+				query: mutations.createStripeAccount,
+				variables: {
+					input: {
+						type: "express",
+						homeURL: homeURL,
+					},
+				},
+			});
+			const stripeUser = response.data.createStripeAccount;
+			const jsonUser = JSON.parse(stripeUser);
+			setStripeObj(jsonUser);
+			setUrl(jsonUser.url);
+			window.open(jsonUser.url, "_blank");
+		} catch (error) {
+			console.error(error.message);
+		}
 	};
 
-	const account = async () => {
-    try {
-      const response = await API.graphql({
-        query: mutations.getStripeAccount,
-        variables: {
-          input: {
-            id: user.stripeAccount,
-          },
-        },
-      });
-      const userObj = JSON.parse(response.data.getStripeAccount);
-  
-  
-      if (userObj.charges_enabled === true) {
-        setCharges_enabled(true);
-      } else {
-        console.log("Processs has not finished yet");
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
+	const uploadAvatar = async (e) => {
+		try {
+			// const reader = new FileReader();
+
+			// reader.addEventListener("load", async function () {
+			//   console.log("reader file name in Profile.js")
+			//   console.log(reader)
+			//   const updatedUserResponse = await API.graphql({
+			//     query: mutations.updateUser,
+			//     variables: {
+			//       input: {
+			//         id: user.id,
+			//         avatar: reader.result
+			//       }
+			//     }
+			//   });
+			//   setUser(updatedUserResponse.data.updateUser)
+			// }, false);
+
+			if (e.target.files[0]) {
+				const file = e.target.files[0];
+				const fileName = `${user.id}_${new Date().getTime()}_${file.name}`;
+				const putResponse = await Storage.put(fileName, file);
+				// console.log("putResponse from put");
+				// console.log(putResponse)
+				if (user.avatarKey) {
+					await Storage.remove(user.avatarKey);
+				}
+				const getResponse = await Storage.get(putResponse.key);
+				// console.log('getResponse');
+				// console.log(getResponse)
+				const updateUserResponse = await API.graphql({
+					query: mutations.updateUser,
+					variables: {
+						input: {
+							id: user.id,
+							avatarKey: putResponse.key,
+							avatarURL: getResponse,
+						},
+					},
+				});
+				setUser(updateUserResponse.data.updateUser);
+				// reader.readAsDataURL(e.target.files[0]);
+			}
+		} catch (error) {
+			console.error(error.message);
+		}
 	};
-
-  const uploadAvatar = async (e) => {
-    try {
-      // const reader = new FileReader();
-
-      // reader.addEventListener("load", async function () {
-      //   console.log("reader file name in Profile.js")
-      //   console.log(reader)
-      //   const updatedUserResponse = await API.graphql({
-      //     query: mutations.updateUser,
-      //     variables: {
-      //       input: {
-      //         id: user.id,
-      //         avatar: reader.result
-      //       }
-      //     }
-      //   });
-      //   setUser(updatedUserResponse.data.updateUser)
-      // }, false);
-
-      if (e.target.files[0]) {
-        const file = e.target.files[0];
-        const fileName = `${user.id}_${(new Date()).getTime()}_${file.name}`;
-        const putResponse = await Storage.put(fileName, file);
-        // console.log("putResponse from put");
-        // console.log(putResponse)
-        if (user.avatarKey) {
-          await Storage.remove(user.avatarKey);
-        }
-        const getResponse = await Storage.get(putResponse.key);
-        // console.log('getResponse');
-        // console.log(getResponse)
-        const updateUserResponse = await API.graphql({
-          query: mutations.updateUser,
-          variables: {
-            input: {
-              id: user.id,
-              avatarKey: putResponse.key,
-              avatarURL: getResponse
-            }
-          }
-        })
-        setUser(updateUserResponse.data.updateUser)
-        // reader.readAsDataURL(e.target.files[0]);
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
 
 	return (
 		<div className={classes.root}>
+			{user.current_city}
 			{isEditing === false ? (
 				<div className={classes.button_container}>
 					<Button
@@ -360,7 +361,6 @@ function Profile (props) {
 						variant="outlined"
 						color="primary"
 						onClick={() => {
-							account();
 							handleEdit();
 						}}
 					>
@@ -374,15 +374,6 @@ function Profile (props) {
 						disabled={true}
 					>
 						Save
-					</Button>
-					<Button
-						variant="outlined"
-						color="primary"
-						disabled={true}
-						className={classes.buttons}
-						size="medium"
-					>
-						Register
 					</Button>
 
 					<Button size="small" variant="outlined" color="primary" className={classes.buttons} disabled={true}>
@@ -409,30 +400,14 @@ function Profile (props) {
 						variant="outlined"
 						color="primary"
 						onClick={() => {
-							if (charges_enabled === true) {
-								updateUser();
-							} else {
-								console.log("name only");
-								updateName();
-							}
+							updateName();
 							setEdit(false);
-							setRegistration(false);
 						}}
 					>
 						Save
 					</Button>
-					<Button
-						variant="outlined"
-						color="primary"
-						onClick={() => {
-							setRegistration(true);
-						}}
-						className={classes.buttons}
-						size="medium"
-					>
-						Register
-					</Button>
-					{user.charges_enabled === true || registration === false ? (
+
+					{user.isTeller === true ? (
 						<Button
 							size="small"
 							variant="outlined"
@@ -440,7 +415,7 @@ function Profile (props) {
 							className={classes.buttons}
 							disabled={true}
 						>
-							Register Stripe Account
+							Register Stripe Account this
 						</Button>
 					) : (
 						<Button
@@ -452,6 +427,7 @@ function Profile (props) {
 								value !== 0 ? (
 									() => {
 										createUser();
+										updateName();
 									}
 								) : (
 									() => {
@@ -460,7 +436,7 @@ function Profile (props) {
 								)
 							}
 						>
-							Register Stripe Account
+							Register Stripe Account this
 						</Button>
 					)}
 
@@ -470,7 +446,6 @@ function Profile (props) {
 						color="secondary"
 						onClick={() => {
 							setEdit(false);
-							setRegistration(false);
 						}}
 						className={classes.buttons}
 					>
@@ -485,19 +460,19 @@ function Profile (props) {
 					<Avatar alt={user.name} src={user.avatarURL} className={classes.large} />
 				</CardContent>
 
-        <input
-            accept="image/*"
-            className={classes.input}
-            style={{ display: 'none' }}
-            id="upload-image"
-            type="file"
-            onChange={(e) => uploadAvatar(e)}
-          />
-          <label htmlFor="upload-image">
-            <Button color="primary" component="span" >
-              Upload Avatar
-            </Button>
-          </label>
+				<input
+					accept="image/*"
+					className={classes.input}
+					style={{ display: "none" }}
+					id="upload-image"
+					type="file"
+					onChange={(e) => uploadAvatar(e)}
+				/>
+				<label htmlFor="upload-image">
+					<Button color="primary" component="span">
+						Upload Avatar
+					</Button>
+				</label>
 
 				<CardContent className={classes.card_content}>
 					<div>
@@ -631,7 +606,6 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
-												defaultValue={""}
 											/>
 										</div>
 										<div className={classes.margin}>
@@ -725,7 +699,7 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
-												defaultValue={""}
+												defaultValue={user.current_country}
 											>
 												{countriesCitiesList.map((option) => (
 													<MenuItem key={option.id} value={option.country}>
@@ -750,7 +724,7 @@ function Profile (props) {
 												FormHelperTextProps={{
 													className: classes.helperText,
 												}}
-												defaultValue={""}
+												defaultValue={user.current_city}
 											>
 												{country ? (
 													countriesCitiesList.map((option) => {
@@ -766,6 +740,8 @@ function Profile (props) {
 																	{city}
 																</MenuItem>
 															));
+														} else {
+															<MenuItem value={""} />;
 														}
 													})
 												) : (

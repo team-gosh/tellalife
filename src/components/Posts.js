@@ -16,14 +16,16 @@ function Posts (props) {
 
 	const { filter, posts, user } = props;
 
+	console.log(posts);
+
 	return (
 		<div className={classes.container}>
 			{posts
-				.filter((postData) => (filter.home ? filter.home === postData.user.home_country : true))
+				.filter((postData) => (filter.home ? filter.home === postData.home_country : true))
 				.filter((postData) => (filter.targetCountry ? filter.targetCountry === postData.country : true))
 				.filter((postData) => (filter.targetCity ? filter.targetCity === postData.city : true))
 				.map((postData) => <Post postData={postData} user={user} />)
-        .reverse()}
+				.reverse()}
 		</div>
 	);
 }
