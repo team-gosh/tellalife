@@ -49,11 +49,11 @@ function Post (props) {
 						<Typography gutterBottom variant="h5" component="h3" align="left">
 							{postData.title}
 						</Typography>
-            {postData.image
+            {postData.imageURL
               ? <CardMedia
                   className={classes.media}
                   component="img"
-                  src={postData.image}
+                  src={postData.imageURL}
                   title={postData.title}
                 />
               : <></>

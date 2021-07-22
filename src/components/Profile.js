@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import { Storage } from 'aws-amplify';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -302,23 +303,47 @@ function Profile (props) {
 
   const uploadAvatar = async (e) => {
     try {
-      const reader = new FileReader();
+      // const reader = new FileReader();
 
-      reader.addEventListener("load", async function () {
-        const updatedUserResponse = await API.graphql({
+      // reader.addEventListener("load", async function () {
+      //   console.log("reader file name in Profile.js")
+      //   console.log(reader)
+      //   const updatedUserResponse = await API.graphql({
+      //     query: mutations.updateUser,
+      //     variables: {
+      //       input: {
+      //         id: user.id,
+      //         avatar: reader.result
+      //       }
+      //     }
+      //   });
+      //   setUser(updatedUserResponse.data.updateUser)
+      // }, false);
+
+      if (e.target.files[0]) {
+        const file = e.target.files[0];
+        const fileName = `${user.id}_${(new Date()).getTime()}_${file.name}`;
+        const putResponse = await Storage.put(fileName, file);
+        // console.log("putResponse from put");
+        // console.log(putResponse)
+        if (user.avatarKey) {
+          await Storage.remove(user.avatarKey);
+        }
+        const getResponse = await Storage.get(putResponse.key);
+        // console.log('getResponse');
+        // console.log(getResponse)
+        const updateUserResponse = await API.graphql({
           query: mutations.updateUser,
           variables: {
             input: {
               id: user.id,
-              avatar: reader.result
+              avatarKey: putResponse.key,
+              avatarURL: getResponse
             }
           }
-        });
-        setUser(updatedUserResponse.data.updateUser)
-      }, false);
-
-      if (e.target.files[0]) {
-        reader.readAsDataURL(e.target.files[0]);
+        })
+        setUser(updateUserResponse.data.updateUser)
+        // reader.readAsDataURL(e.target.files[0]);
       }
     } catch (error) {
       console.error(error.message);
@@ -456,7 +481,8 @@ function Profile (props) {
 
 			<Card className={classes.card_root}>
 				<CardContent>
-					<Avatar alt={user.name} src={user.avatar} className={classes.large} />
+					{/* <Avatar alt={user.name} src={user.avatar} className={classes.large} /> */}
+					<Avatar alt={user.name} src={user.avatarURL} className={classes.large} />
 				</CardContent>
 
         <input

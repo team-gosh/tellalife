@@ -13,7 +13,9 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
 	current_country: String
 	current_city: String
 	stripeURL: String
-	avatar: String
+	avatar: String   # May not need anymore
+  avatarKey: String
+  avatarURL: String
 }
 
 # Post Table
@@ -31,7 +33,9 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 	# comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
 	text: String
 	link: String
-	image: String
+	image: String   # May not need anymore
+  imageKey: String
+  imageURL: String
 }
 
 type AttendingUsers

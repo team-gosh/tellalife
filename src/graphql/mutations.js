@@ -56,6 +56,8 @@ export const createUser = /* GraphQL */ `
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -68,6 +70,8 @@ export const createUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -108,6 +112,8 @@ export const updateUser = /* GraphQL */ `
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -120,6 +126,8 @@ export const updateUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -160,6 +168,8 @@ export const deleteUser = /* GraphQL */ `
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -172,6 +182,8 @@ export const deleteUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -210,12 +222,16 @@ export const createPost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -254,12 +270,16 @@ export const updatePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -298,12 +318,16 @@ export const deletePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -334,6 +358,7 @@ export const createAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -357,6 +382,8 @@ export const createAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -391,6 +418,7 @@ export const updateAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -414,6 +442,8 @@ export const updateAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -448,6 +478,7 @@ export const deleteAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -471,6 +502,8 @@ export const deleteAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -509,6 +542,7 @@ export const createReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -544,6 +578,7 @@ export const updateReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -579,6 +614,7 @@ export const deleteReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
