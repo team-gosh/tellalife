@@ -1,5 +1,3 @@
-// const secretKey = process.env.REACT_APP_STRIPE_API_SECRET;
-
 const secretKey = process.env.REACT_APP_STRIPE_API_SECRET;
 
 const stripe = require("stripe")(secretKey);

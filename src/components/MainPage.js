@@ -8,6 +8,7 @@ import * as mutations from "../graphql/mutations";
 import * as customQueries from "../graphql/customQueries";
 import Feed from "./Feed";
 import { Hub } from "aws-amplify";
+import Banner from "../banner.png";
 
 //material ui
 import Drawer from "@material-ui/core/Drawer";
@@ -84,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	login: {
 		fontSize: 15,
-		color: "#BFD0DA",
+		color: "#4CF3BA",
 		fontFamily: "Lato, sans-serif",
 		letterSpacing: 0,
 		fontWeight: "thin",
@@ -109,15 +110,18 @@ const useStyles = makeStyles((theme) => ({
 	lists: {
 		fontSize: 50,
 	},
+	bannerPic: {
+		width: 300,
+		height: 50,
+		[theme.breakpoints.up("md")]: {
+			width: 540,
+			height: 90,
+		},
+	},
 }));
 
 function MainPage (props) {
-	const {
-		video,
-		setVideo,
-		userAuth,
-		Auth,
-	} = props;
+	const { video, setVideo, userAuth, Auth } = props;
 	const [ display, setDisplay ] = useState("Feed");
 	const [ user, setUser ] = useState();
 	const [ state, setState ] = useState(false);
@@ -150,11 +154,10 @@ function MainPage (props) {
 						username: userNameAndEmail,
 					},
 				})).data.getUserByEmail.items;
-        console.log("Is user in database")
+				console.log("Is user in database");
 				console.log(currentUserData);
 
 				if (currentUserData.length) {
-
 					const currentUser = (await API.graphql({
 						query: customQueries.getUser,
 						variables: {
@@ -175,7 +178,7 @@ function MainPage (props) {
 						isTeller: false,
 					};
 
-          const newUserId = (await API.graphql({
+					const newUserId = (await API.graphql({
 						query: mutations.createUser,
 						variables: { input: newUserRegistrationData },
 					})).data.createUser.id;
@@ -273,8 +276,8 @@ function MainPage (props) {
 						{list("left")}
 					</Drawer>
 					<div className={classes.titleContainer}>
+						<img src={Banner} className={classes.bannerPic} />
 						<Typography className={classes.title}>
-							TELLaLIFE
 							<p className={classes.login}>Logged in as {user ? user.name : ""}</p>
 						</Typography>
 					</div>

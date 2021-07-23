@@ -44,7 +44,20 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: "center",
 	},
 	flag: {
-		fontSize: 30,
+		fontSize: 20,
+		[theme.breakpoints.up("md")]: {
+			fontSize: 35,
+		},
+	},
+	icon: {
+		marginLeft: 2,
+		marginRight: 2,
+		height: 20,
+		weight: 20,
+		[theme.breakpoints.up("md")]: {
+			height: 30,
+			weight: 30,
+		},
 	},
 	submitButton: {
 		display: "flex",
@@ -106,7 +119,7 @@ function Post (props) {
 					<div className={classes.flagContainer}>
 						<span className={classes.flag}>{uniHomeFlag} </span>
 						<span />
-						<img src={Airplane} height={20} width={20} />
+						--- <img src={Airplane} className={classes.icon} /> -->
 						<span className={classes.flag}>{uniCountryFlag} </span>
 					</div>
 
