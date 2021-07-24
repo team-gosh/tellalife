@@ -79,6 +79,7 @@ input PaymentIntent {
 	currency: String!
 	application_fee_amount: Int!
 	stripeAccount: String!
+  payment_method: String!
 }
 
 input VideoInput {

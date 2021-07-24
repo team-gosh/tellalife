@@ -82,9 +82,9 @@ function Reservation(props) {
   return (
     <div className="Reservation" id={data.id}>
       {/* listener view */}
-      {console.log("--------------------------")}
-      {console.log(data)}
-      {console.log(user)}
+      {/* {console.log("--------------------------")} */}
+      {/* {console.log(data)} */}
+      {/* {console.log(user)} */}
       <Card className={classes.root}>
         <CardHeader
           title={

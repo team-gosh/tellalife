@@ -473,7 +473,7 @@ function ReservationManagement(props) {
       ).data.getUser;
       setUser(updatedUserData);
 
-      // updateReservations(updatedUserData);
+      updateReservations(updatedUserData);
     } catch (error) {
       console.error(error.message);
     }
@@ -501,7 +501,7 @@ function ReservationManagement(props) {
       ).data.getUser;
       setUser(updatedUserData);
 
-      // updateReservations(updatedUserData);
+      updateReservations(updatedUserData);
     } catch (error) {
       console.error(error.message);
     }
@@ -529,7 +529,7 @@ function ReservationManagement(props) {
       ).data.getUser;
       setUser(updatedUserData);
 
-      // updateReservations(updatedUserData);
+      updateReservations(updatedUserData);
     } catch (error) {
       console.error(error.message);
     }
