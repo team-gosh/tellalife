@@ -167,7 +167,7 @@ function Profile (props) {
 	const [ nickName, setNickName ] = useState(user.name);
 	const [ home, setHome ] = useState(user.home_country);
 	const [ country, setCountry ] = useState(user.current_country);
-	const [ city, setCity ] = useState(user.current_country);
+	const [ city, setCity ] = useState(user.current_city);
 	const [ value, setValue ] = useState(user.price ? user.price : 0);
 	const [ isEditing, setEdit ] = useState(false);
 	const [ error, setError ] = useState("");
@@ -231,17 +231,20 @@ function Profile (props) {
 	};
 
 	const updateUser = async () => {
+		console.log("updateUser");
 		try {
+			console.log(nickName, user, home, country, city, value, stripeObj, stripeUrl);
 			const newData = {
 				id: user.id,
 				name: nickName,
+				username: user.email,
 				home_country: home,
 				current_country: country,
 				current_city: city,
 				price: Number(value),
-				stripeAccount: stripeObj.id,
-				stripeURL: stripeUrl,
+				stripeAccount: user.stripeAccount,
 				isTeller: true,
+				stripeURL: user.stripeURL,
 			};
 			// logic to handle to timeout!!!!
 
@@ -249,6 +252,7 @@ function Profile (props) {
 				query: mutations.updateUser,
 				variables: { input: newData },
 			});
+
 			setUser(response.data.updateUser);
 		} catch (error) {
 			console.error(error.message);
@@ -256,10 +260,13 @@ function Profile (props) {
 	};
 
 	const updateName = async () => {
+		console.log("updateName");
+
 		try {
 			const newData = {
 				id: user.id,
 				name: nickName,
+				username: user.email,
 				home_country: home,
 				current_country: country,
 				current_city: city,
@@ -269,7 +276,7 @@ function Profile (props) {
 				stripeURL: stripeUrl,
 			};
 			// logic to handle to timeout!!!!
-
+			console.log(newData, "this is newData");
 			const response = await API.graphql({
 				query: mutations.updateUser,
 				variables: { input: newData },
@@ -293,9 +300,34 @@ function Profile (props) {
 			});
 			const stripeUser = response.data.createStripeAccount;
 			const jsonUser = JSON.parse(stripeUser);
-			setStripeObj(jsonUser);
-			setUrl(jsonUser.url);
-			window.open(jsonUser.url, "_blank");
+			console.log(stripeUser, jsonUser, "stripeUser & jsonUser ");
+
+			// setStripeObj(jsonUser);
+			// setUrl(jsonUser.url);
+
+			const newData = {
+				id: user.id,
+				name: nickName,
+				username: user.email,
+				home_country: home,
+				current_country: country,
+				current_city: city,
+				price: Number(value),
+				stripeAccount: jsonUser.id,
+				isTeller: false,
+				stripeURL: jsonUser.url,
+			};
+
+			const addStripeAccount = await API.graphql({
+				query: mutations.updateUser,
+				variables: { input: newData },
+			});
+			setUser(addStripeAccount.data.updateUser);
+			setEdit(false);
+
+			console.log(addStripeAccount, " addStripeAccount");
+
+			window.open(jsonUser.url);
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -303,23 +335,6 @@ function Profile (props) {
 
 	const uploadAvatar = async (e) => {
 		try {
-			// const reader = new FileReader();
-
-			// reader.addEventListener("load", async function () {
-			//   console.log("reader file name in Profile.js")
-			//   console.log(reader)
-			//   const updatedUserResponse = await API.graphql({
-			//     query: mutations.updateUser,
-			//     variables: {
-			//       input: {
-			//         id: user.id,
-			//         avatar: reader.result
-			//       }
-			//     }
-			//   });
-			//   setUser(updatedUserResponse.data.updateUser)
-			// }, false);
-
 			if (e.target.files[0]) {
 				const file = e.target.files[0];
 				const fileName = `${user.id}_${new Date().getTime()}_${file.name}`;
@@ -352,7 +367,6 @@ function Profile (props) {
 
 	return (
 		<div className={classes.root}>
-			{user.current_city}
 			{isEditing === false ? (
 				<div className={classes.button_container}>
 					<Button
@@ -427,7 +441,6 @@ function Profile (props) {
 								value !== 0 ? (
 									() => {
 										createUser();
-										updateName();
 									}
 								) : (
 									() => {
@@ -453,7 +466,6 @@ function Profile (props) {
 					</Button>
 				</div>
 			)}
-
 			<Card className={classes.card_root}>
 				<CardContent>
 					{/* <Avatar alt={user.name} src={user.avatar} className={classes.large} /> */}
@@ -629,14 +641,15 @@ function Profile (props) {
 										</div>
 									</div>
 								) : (
+									// editing
 									<div>
 										<div className={classes.profile_container}>
 											{user.home_country ? (
+												// home_country exists
 												<div className={classes.margin}>
 													<TextField
 														id="homecountry"
 														value={user.home_country}
-														onChange={handleHomeChange}
 														disabled={true}
 														className={classes.profile}
 														InputProps={{
@@ -653,6 +666,7 @@ function Profile (props) {
 													/>
 												</div>
 											) : (
+												// home_country does not exist
 												<div className={classes.margin}>
 													<TextField
 														id="homecountry"

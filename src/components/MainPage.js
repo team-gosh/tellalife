@@ -30,10 +30,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { useMediaQuery } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const drawerWidth = 240;
+ß;
 
 const useStyles = makeStyles((theme) => ({
+	root: {
+		display: "flex",
+		justifyContent: "center",
+	},
+	circle: {
+		marginTop: "15%",
+		color: "#28345A",
+	},
 	titleContainer: {
 		display: "flex",
 		flexDirection: "column",
@@ -125,6 +135,7 @@ function MainPage (props) {
 	const [ display, setDisplay ] = useState("Feed");
 	const [ user, setUser ] = useState();
 	const [ state, setState ] = useState(false);
+	const [ isLoading, setLoading ] = useState(true);
 	const classes = useStyles();
 
 	const theme = useTheme();
@@ -192,6 +203,7 @@ function MainPage (props) {
 					console.log(newUser);
 					setUser(newUser);
 				}
+				setLoading(false);
 			} catch (error) {
 				console.error(error.message);
 			}
@@ -221,101 +233,152 @@ function MainPage (props) {
 		}
 	};
 
-	const list = (anchor) => (
-		<div
-			className={clsx(classes.list, {
-				[classes.fullList]: anchor === "top" || anchor === "bottom",
-			})}
-			role="presentation"
-			onClick={toggleDrawer(anchor, false)}
-			onKeyDown={toggleDrawer(anchor, false)}
-		>
-			<List>
-				{[ "Reservation", "Feed", "Profile" ].map((text, index) => (
-					<ListItem button key={text} onClick={() => setDisplay(text)} className={classes.lists}>
-						<ListItemIcon>
-							{index === 0 ? (
-								<VideoCallIcon />
-							) : index === 1 ? (
-								<DescriptionIcon />
-							) : index === 2 ? (
-								<AccountCircleIcon />
-							) : (
-								<ExitToAppIcon />
-							)}
-						</ListItemIcon>
-						<ListItemText primary={text} />
-					</ListItem>
-				))}
-			</List>
-			<Divider />
-			<List>
-				{[ "Logout" ].map((text, index) => (
-					<ListItem button key={text} onClick={handleSignOutButtonClick}>
-						<ListItemIcon>
-							<ExitToAppIcon />
-						</ListItemIcon>
-						<ListItemText primary={text} />
-					</ListItem>
-				))}
-			</List>
-		</div>
-	);
-	return (
-		<div className="MainPage">
-			<AppBar position="static" className={classes.appbar}>
-				<Toolbar className={classes.toolbar}>
-					{isBiggerScreen ? (
-						<span />
-					) : (
-						<IconButton onClick={toggleDrawer("left", true)} color="inherit">
-							<MenuIcon size="large" />
-						</IconButton>
-					)}
-					<Drawer {...navBarProps} anchor={"left"} open={state["left"]} onClose={toggleDrawer("left", false)}>
-						{list("left")}
-					</Drawer>
-					<div className={classes.titleContainer}>
-						<img src={Banner} className={classes.bannerPic} />
-						<Typography className={classes.title}>
-							<p className={classes.login}>Logged in as {user ? user.name : ""}</p>
-						</Typography>
-					</div>
-					<div />
-				</Toolbar>
-			</AppBar>
+	const list = (anchor) => {
+		if (isLoading === true) {
+			return (
+				<div
+					className={clsx(classes.list, {
+						[classes.fullList]: anchor === "top" || anchor === "bottom",
+					})}
+					role="presentation"
+					onClick={toggleDrawer(anchor, false)}
+					onKeyDown={toggleDrawer(anchor, false)}
+				>
+					<List />
+				</div>
+			);
+		} else {
+			return (
+				<div
+					className={clsx(classes.list, {
+						[classes.fullList]: anchor === "top" || anchor === "bottom",
+					})}
+					role="presentation"
+					onClick={toggleDrawer(anchor, false)}
+					onKeyDown={toggleDrawer(anchor, false)}
+				>
+					<List>
+						{[ "Reservation", "Feed", "Profile" ].map((text, index) => (
+							<ListItem button key={text} onClick={() => setDisplay(text)} className={classes.lists}>
+								<ListItemIcon>
+									{index === 0 ? (
+										<VideoCallIcon />
+									) : index === 1 ? (
+										<DescriptionIcon />
+									) : index === 2 ? (
+										<AccountCircleIcon />
+									) : (
+										<ExitToAppIcon />
+									)}
+								</ListItemIcon>
+								<ListItemText primary={text} />
+							</ListItem>
+						))}
+					</List>
+					<Divider />
+					<List>
+						{[ "Logout" ].map((text, index) => (
+							<ListItem button key={text} onClick={handleSignOutButtonClick}>
+								<ListItemIcon>
+									<ExitToAppIcon />
+								</ListItemIcon>
+								<ListItemText primary={text} />
+							</ListItem>
+						))}
+					</List>
+				</div>
+			);
+		}
+	};
 
-			<div className={classes.marginLeft}>
-				{display === "Reservation" ? (
-					<ReservationManagement
-						user={user}
-						setUser={setUser}
-						setVideo={setVideo}
-						video={video}
-						API={API}
-						queries={queries}
-						mutations={mutations}
-					/>
-				) : display === "Profile" ? (
-					<Profile
-						user={user}
-						setUser={setUser}
-						API={API}
-						queries={queries}
-						mutations={mutations}
-						countriesCitiesList={countriesCitiesList}
-					/>
-				) : (
-					<Feed
-						user={user}
-						API={API}
-						queries={queries}
-						mutations={mutations}
-						countriesCitiesList={countriesCitiesList}
-					/>
-				)}
-			</div>
-		</div>
+	return (
+		<React.Fragment>
+			{isLoading ? (
+				<div className="MainPage">
+					<AppBar position="static" className={classes.appbar}>
+						<Toolbar className={classes.toolbar}>
+							{isBiggerScreen ? (
+								<span />
+							) : (
+								<IconButton onClick={toggleDrawer("left", true)} color="inherit">
+									<MenuIcon size="large" />
+								</IconButton>
+							)}
+							<Drawer {...navBarProps}>{list("left")}</Drawer>
+							<div className={classes.titleContainer}>
+								<img src={Banner} className={classes.bannerPic} />
+								<Typography className={classes.title}>
+									<p className={classes.login}>Logged in as {user ? user.name : ""}</p>
+								</Typography>
+							</div>
+							<div />
+						</Toolbar>
+					</AppBar>
+					<div className={classes.marginLeft}>
+						<CircularProgress size={100} className={classes.circle} />
+					</div>
+				</div>
+			) : (
+				<div className="MainPage">
+					<AppBar position="static" className={classes.appbar}>
+						<Toolbar className={classes.toolbar}>
+							{isBiggerScreen ? (
+								<span />
+							) : (
+								<IconButton onClick={toggleDrawer("left", true)} color="inherit">
+									<MenuIcon size="large" />
+								</IconButton>
+							)}
+							<Drawer
+								{...navBarProps}
+								anchor={"left"}
+								open={state["left"]}
+								onClose={toggleDrawer("left", false)}
+							>
+								{list("left")}
+							</Drawer>
+							<div className={classes.titleContainer}>
+								<img src={Banner} className={classes.bannerPic} />
+								<Typography className={classes.title}>
+									<p className={classes.login}>Logged in as {user ? user.name : ""}</p>
+								</Typography>
+							</div>
+							<div />
+						</Toolbar>
+					</AppBar>
+					<div className={classes.marginLeft}>
+						{display === "Reservation" ? (
+							<ReservationManagement
+								user={user}
+								setUser={setUser}
+								setVideo={setVideo}
+								video={video}
+								API={API}
+								queries={queries}
+								mutations={mutations}
+							/>
+						) : display === "Profile" ? (
+							<Profile
+								user={user}
+								setUser={setUser}
+								API={API}
+								queries={queries}
+								mutations={mutations}
+								countriesCitiesList={countriesCitiesList}
+							/>
+						) : (
+							<Feed
+								user={user}
+								API={API}
+								queries={queries}
+								mutations={mutations}
+								countriesCitiesList={countriesCitiesList}
+							/>
+						)}
+					</div>
+				</div>
+			)}
+		</React.Fragment>
 	);
 }
 
