@@ -38,7 +38,7 @@ function EventPosting(props) {
   const [date, setDate] = useState("");
   const [duration, setDuration] = useState("");
   const [title, setTitle] = useState("");
-  const [contents, setContents] = useState("");
+  const [text, setText] = useState("");
   const [disable, setDisable] = useState(true);
   const [image, setImage] = useState("");
   const [imageKey, setImageKey] = useState("");
@@ -57,25 +57,30 @@ function EventPosting(props) {
   const uploadPost = async () => {
     handleClose();
     setDisable(true);
-    const postData = {
+    const eventData = {
       userID: String(user.id),
-      type: "post",
+      type: "event",
       title: title,
-      // text: text,
+      text: text,
       city: user.current_city,
       country: user.current_country,
       home_country: user.home_country,
+      startDateTime: date,
+      duration: duration
       // dateTime: String(new Date().getTime()),
       // image: image
-      imageKey: imageKey,
-      imageURL: imageURL
+      // imageKey: imageKey,
+      // imageURL: imageURL
     };
+    console.log(eventData);
     setTitle("");
-    // setText("");
+    setText("");
+    setDate("");
+    setDuration("");
     try {
       await API.graphql({
-        query: mutations.createPost,
-        variables: { input: postData }
+        query: mutations.createEvent,
+        variables: { input: eventData }
       });
     } catch (error) {
       console.error(error.message);
@@ -115,7 +120,7 @@ function EventPosting(props) {
               setTitle(event.target.value);
               if (
                 event.target.value.length > 0 &&
-                contents.length > 0 &&
+                text.length > 0 &&
                 date &&
                 duration.length > 0
               ) {
@@ -137,7 +142,7 @@ function EventPosting(props) {
               shrink: true
             }}
             onChange={(event) => {
-              setContents(event.target.value);
+              setText(event.target.value);
               if (
                 title.length > 0 &&
                 event.target.value.length > 0 &&
@@ -172,7 +177,7 @@ function EventPosting(props) {
                   setDate(millisecond);
                   if (
                     title.length > 0 &&
-                    contents.length > 0 &&
+                    text.length > 0 &&
                     duration.length > 0
                   )
                     setDisable(false);
@@ -191,13 +196,13 @@ function EventPosting(props) {
                 value={duration}
                 onChange={(event) => {
                   console.log("title: ", title, title.length);
-                  console.log("text: ", contents, contents.length);
+                  console.log("text: ", text, text.length);
                   console.log("date: ", date, String(date).length);
                   console.log("duration: ", event.target.value);
                   setDuration(event.target.value);
                   if (
                     title.length > 0 &&
-                    contents.length > 0 &&
+                    text.length > 0 &&
                     date &&
                     duration.length > 0
                   )
@@ -264,7 +269,7 @@ function EventPosting(props) {
               handleClose();
               setDisable(true);
               setTitle("");
-              setContents("");
+              setText("");
               setDate("");
               setDuration("");
             }}

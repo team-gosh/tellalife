@@ -12,7 +12,7 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import ReservationSubmission from "./ReservationSubmission";
+import EventSubmission from "./EventSubmission";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -122,7 +122,7 @@ function MakeEvent(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <ReservationSubmission
+          <EventSubmission
             setOpen={setOpen}
             teller={teller}
             date={date}
