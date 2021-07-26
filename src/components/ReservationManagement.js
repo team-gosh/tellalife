@@ -114,6 +114,9 @@ function ReservationManagement(props) {
       );
       setReservations(currentReservations);
 
+      console.log(currentReservations, 'this is reservation')
+
+
     } catch (error) {
       console.error(error.message);
     }
