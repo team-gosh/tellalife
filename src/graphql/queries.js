@@ -8,6 +8,7 @@ export const getUser = /* GraphQL */ `
       name
       username
       email
+      isTeller
       home_country
       reservations {
         items {
@@ -23,16 +24,14 @@ export const getUser = /* GraphQL */ `
       posts {
         items {
           id
-          title
           userID
-          dateTime
           home_country
           country
           city
           type
+          title
           text
           link
-          image
           imageKey
           imageURL
           createdAt
@@ -40,13 +39,31 @@ export const getUser = /* GraphQL */ `
         }
         nextToken
       }
-      isTeller
+      events {
+        items {
+          id
+          userID
+          home_country
+          country
+          city
+          type
+          startDateTime
+          duration
+          title
+          text
+          link
+          imageKey
+          imageURL
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       price
       stripeAccount
       current_country
       current_city
       stripeURL
-      avatar
       avatarKey
       avatarURL
       createdAt
@@ -66,6 +83,7 @@ export const listUsers = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -73,13 +91,14 @@ export const listUsers = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
@@ -93,9 +112,7 @@ export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
       id
-      title
       userID
-      dateTime
       home_country
       country
       city
@@ -105,6 +122,7 @@ export const getPost = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -112,21 +130,22 @@ export const getPost = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
         updatedAt
       }
+      title
       text
       link
-      image
       imageKey
       imageURL
       createdAt
@@ -143,9 +162,7 @@ export const listPosts = /* GraphQL */ `
     listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
         userID
-        dateTime
         home_country
         country
         city
@@ -155,22 +172,113 @@ export const listPosts = /* GraphQL */ `
           name
           username
           email
-          home_country
           isTeller
+          home_country
           price
           stripeAccount
           current_country
           current_city
           stripeURL
-          avatar
           avatarKey
           avatarURL
           createdAt
           updatedAt
         }
+        title
         text
         link
-        image
+        imageKey
+        imageURL
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getEvent = /* GraphQL */ `
+  query GetEvent($id: ID!) {
+    getEvent(id: $id) {
+      id
+      userID
+      home_country
+      country
+      city
+      type
+      startDateTime
+      duration
+      user {
+        id
+        name
+        username
+        email
+        isTeller
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        events {
+          nextToken
+        }
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatarKey
+        avatarURL
+        createdAt
+        updatedAt
+      }
+      title
+      text
+      link
+      imageKey
+      imageURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listEvents = /* GraphQL */ `
+  query ListEvents(
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        home_country
+        country
+        city
+        type
+        startDateTime
+        duration
+        user {
+          id
+          name
+          username
+          email
+          isTeller
+          home_country
+          price
+          stripeAccount
+          current_country
+          current_city
+          stripeURL
+          avatarKey
+          avatarURL
+          createdAt
+          updatedAt
+        }
+        title
+        text
+        link
         imageKey
         imageURL
         createdAt
@@ -212,6 +320,7 @@ export const getAttendingUsers = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -219,13 +328,14 @@ export const getAttendingUsers = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
@@ -271,14 +381,13 @@ export const listAttendingUsers = /* GraphQL */ `
           name
           username
           email
-          home_country
           isTeller
+          home_country
           price
           stripeAccount
           current_country
           current_city
           stripeURL
-          avatar
           avatarKey
           avatarURL
           createdAt
@@ -379,6 +488,7 @@ export const getUserByEmail = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -386,13 +496,14 @@ export const getUserByEmail = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
@@ -446,14 +557,13 @@ export const getAttendingUsersByReservationID = /* GraphQL */ `
           name
           username
           email
-          home_country
           isTeller
+          home_country
           price
           stripeAccount
           current_country
           current_city
           stripeURL
-          avatar
           avatarKey
           avatarURL
           createdAt
