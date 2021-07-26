@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
+import Video from "twilio/lib/rest/Video";
 import Participant from "./Participant";
 
-const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
+const Room = (props) => {
+  const {
+    roomName,
+    username,
+    room,
+    handleLogout,
+    guestRoom,
+    video
+  } = props;
   const [participants, setParticipants] = useState([]);
   const [windowSize, setWindowSize] = useState({
     width: undefined,
@@ -40,9 +49,14 @@ const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
     };
   }, [room]);
 
-  const remoteParticipants = participants.map((participant) => (
-    <Participant key={participant.sid} participant={participant} roomType="pair" userType="remote"/>
-  ));
+  const remoteParticipants = participants.map((participant) => {
+      return (
+      <Participant key={participant.sid} participant={participant} roomType={video.type} userType="remote"/>
+      );
+  });
+  
+  console.log('video type in room')
+  console.log(video.type)
 
   return (
     <div className="room">
@@ -52,11 +66,12 @@ const Room = ({ roomName, username, room, handleLogout, guestRoom }) => {
       <div className="remote-participants" style={{height: `${Math.floor(windowSize.height * .75)}px`}}>{remoteParticipants}</div>
       {/* <div className="local-participant" style={{height: '120px'}}> */}
       <div className="local-participant" style={{height: `${Math.floor(windowSize.height * .15)}px`}}>
-        {room ? (
+        {/* {room ? ( */}
+        {room && (video.type !== "tour" || video.userID === video.tellerID) ? (
           <Participant
             key={room.localParticipant.sid}
             participant={room.localParticipant}
-            roomType="pair"
+            roomType={video.type}
             userType="local"
             windowSize={windowSize}
             tellerHeight={Math.floor(windowSize * .75)}

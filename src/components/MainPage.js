@@ -174,8 +174,32 @@ function MainPage (props) {
     setUser(currentUser);
   }
 
-  useEffect(async () => {
+  const resetReservations = async () => {
+    const attending = (await API.graphql({
+      query: queries.listAttendingUsers,
+    })).data.listAttendingUsers.items;
+    console.log("attending to delete")
+    console.log(attending);
+    await Promise.all(attending.forEach(async (e) => await API.graphql({
+      query: mutations.deleteAttendingUsers,
+      variables: { input: { id: e.id } }
+    })));
 
+    const reservations = (await API.graphql({
+      query: queries.listReservations,
+    })).data.listReservations.items;
+    console.log("reservations to delete")
+    console.log(reservations)
+    await Promise.all(reservations.forEach(async (e) => await API.graphql({
+      query: mutations.deleteReservation,
+      variables: { input: {id: e.id } }
+    })));
+  }
+
+  useEffect(async () => {
+    // Clear all reservations and attending users
+    // USE WITH CAUTION!!!
+    // resetReservations();
 
     // get countries & cities
     const responseObj = await axios.get(
@@ -190,6 +214,7 @@ function MainPage (props) {
 			const name = userAuth.attributes.name;
 			try {
 				// Try to get user from database
+        console.log("try to get user data")
 				const currentUserData = (await API.graphql({
 					query: queries.getUserByEmail,
 					variables: {

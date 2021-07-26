@@ -7,7 +7,8 @@ const Participant = (props) => {
     userType,
     windowSize,
     tellerHeight,
-    listenerHeight
+    listenerHeight,
+    video
   } = props
 	const [ videoTracks, setVideoTracks ] = useState([]);
 	const [ audioTracks, setAudioTracks ] = useState([]);

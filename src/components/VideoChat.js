@@ -12,6 +12,7 @@ const VideoChat = (props) => {
 	const {
     guestName,
     guestRoom,
+    video,
     setVideo
   } = props;
 	const [ username ] = useState(guestName ? guestName : "");
@@ -73,6 +74,9 @@ const VideoChat = (props) => {
       isActive: false,
       username: "",
       roomName: "",
+      type: "",
+      userID: "",
+      tellerID: ""
     })
 	}, []);
 
@@ -129,6 +133,7 @@ const VideoChat = (props) => {
         room={room}
         handleLogout={handleLogout}
         guestRoom={guestRoom}
+        video={video}
       />
     )
     : <div></div>

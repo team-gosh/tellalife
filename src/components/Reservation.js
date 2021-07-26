@@ -188,7 +188,8 @@ function Reservation(props) {
                     const newVideo = {
                       isActive: true,
                       identity: user.username,
-                      roomName: data.id // need to pass later
+                      roomName: data.id, // need to pass later
+                      type: data.type
                     };
                     setVideo(newVideo);
                   }}

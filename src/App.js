@@ -15,6 +15,9 @@ function App () {
 		isActive: false,
 		username: "",
 		roomName: "",
+    type: "",
+    userID: "",
+    tellerID: ""
 	});
 	const [ authState, setAuthState ] = useState();
 	const [ userAuth, setUserAuth ] = useState();
@@ -38,6 +41,7 @@ function App () {
 						guestRoom={video.roomName}
 						Amplify={Amplify}
 						graphqlOperation={graphqlOperation}
+            video={video}
             setVideo={setVideo}
 					/>
 				) : (
