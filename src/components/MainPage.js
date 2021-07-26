@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Profile from "./Profile";
 import ReservationManagement from "./ReservationManagement";
-import { API, graphqlOperation } from "aws-amplify";
+import { API } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
-import * as subscriptions from "../graphql/subscriptions";
 import * as customQueries from "../graphql/customQueries";
 import Feed from "./Feed";
 import Event from "./Event";
@@ -241,21 +240,16 @@ function MainPage(props) {
         console.log(currentUserData);
 
         if (currentUserData.length) {
-          // const currentUser = (
-          //   await API.graphql({
-          //     query: customQueries.getUser,
-          //     variables: {
-          //       id: currentUserData[0].id
-          //     }
-          //   })
-          // ).data.getUser;
+          const currentUser = (
+            await API.graphql({
+              query: customQueries.getUser,
+              variables: {
+                id: currentUserData[0].id
+              }
+            })
+          ).data.getUser;
 
-          // console.log("Full existing user data");
-          // console.log(currentUser);
-
-          // setUser(currentUser);
-          userID = currentUserData[0].id;
-          getUserData();
+          setUser(currentUser);
         } else if (!user) {
           // If user doesn't exist, then create new user in database
           const newUserRegistrationData = {
@@ -271,109 +265,24 @@ function MainPage(props) {
               variables: { input: newUserRegistrationData }
             })
           ).data.createUser.id;
-          // const newUser = (
-          //   await API.graphql({
-          //     query: customQueries.getUser,
-          //     variables: {
-          //       id: newUserId
-          //     }
-          //   })
-          // ).data.getUser;
-          // console.log("New user full data");
-          // console.log(newUser);
-          // setUser(newUser);
-          userID = newUserId;
-          getUserData();
+          const newUser = (
+            await API.graphql({
+              query: customQueries.getUser,
+              variables: {
+                id: newUserId
+              }
+            })
+          ).data.getUser;
+          console.log("New user full data");
+          console.log(newUser);
+          setUser(newUser);
         }
       } catch (error) {
         console.error(error.message);
       }
     }
-    // }
-    // subscriptions
-    // reservationCreateSubscription = API.graphql(
-    //   graphqlOperation(subscriptions.onCreateReservation)
-    // ).subscribe({
-    //   next: (reservationData) => {
-    //     console.log('created reservation data');
-    //     console.log(reservationData);
-    //     getUserData();
-    //   }
-    // });
-
-    reservationUpdateSubscription = API.graphql(
-      graphqlOperation(subscriptions.onUpdateReservation)
-    ).subscribe({
-      next: (reservationData) => {
-        console.log("updated reservation data");
-        console.log(reservationData);
-        getUserData();
-      }
-    });
-
-    // reservationDeleteSubscription = API.graphql(
-    //   graphqlOperation(subscriptions.onDeleteReservation)
-    // ).subscribe({
-    //   next: (reservationData) => {
-    //     console.log('deleted reservation data');
-    //     console.log(reservationData);
-    //     getUserData();
-    //   }
-    // });
-
-    attendingCreateSubscription = API.graphql(
-      graphqlOperation(subscriptions.onCreateAttendingUsers)
-    ).subscribe({
-      next: (attendingData) => {
-        console.log("created attending data");
-        console.log(attendingData);
-        getUserData();
-      }
-    });
-
-    // API.graphql({
-    //   query: subscriptions.onCreateAttending,
-    //   variables: {
-    //     'userID': userID
-    //   }
-    // }).subscribe({
-    //   next: (attendingData) => {
-    //     console.log('created attending data');
-    //     console.log(attendingData);
-    //     getUserData();
-    //   }
-    // });
-
-    // attendingUpdateSubscription = API.graphql(
-    //   graphqlOperation(subscriptions.onUpdateAttendingUsers)
-    // ).subscribe({
-    //   next: (attendingData) => {
-    //     console.log('updated attending data');
-    //     console.log(attendingData);
-    //     getUserData();
-    //   }
-    // });
-
-    attendingDeleteSubscription = API.graphql(
-      graphqlOperation(subscriptions.onDeleteAttendingUsers)
-    ).subscribe({
-      next: (attendingData) => {
-        console.log("deleted attending data");
-        console.log(attendingData);
-        getUserData();
-      }
-    });
-
     setLoading(false);
-
-    return () => {
-      // reservationCreateSubscription.unsubscribe();
-      reservationUpdateSubscription.unsubscribe();
-      // reservationDeleteSubscription.unsubscribe();
-      attendingCreateSubscription.unsubscribe();
-      // attendingUpdateSubscription.unsubscribe();
-      attendingDeleteSubscription.unsubscribe();
-    };
+    // }
   }, []);
 
   // material ui drawer

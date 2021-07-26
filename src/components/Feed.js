@@ -26,14 +26,15 @@ function Feed (props) {
 	const [ posts, setPosts ] = useState([]);
 
 	useEffect(async () => {
-    try {
-      const allPosts = (await API.graphql({
-        query: queries.listPosts,
-      })).data.listPosts.items;
-      setPosts(allPosts);
-    } catch (error) {
-      console.error(error.message);
-    }
+		try {
+			const allPosts = (await API.graphql({
+				query: queries.listPosts,
+			})).data.listPosts.items;
+			allPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+			setPosts(allPosts);
+		} catch (error) {
+			console.error(error.message);
+		}
 	}, []);
 
 	return (
