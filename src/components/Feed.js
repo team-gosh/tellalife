@@ -4,7 +4,6 @@ import Posts from "./Posts";
 import Posting from "./Posting";
 import Filter from "./Filter";
 import { makeStyles } from "@material-ui/core/styles";
-import EventPosting from "./EventPosting";
 
 const useStyles = makeStyles((theme) => ({
   feed: {
@@ -52,7 +51,6 @@ function Feed(props) {
         <div />
       )}
       <Posts filter={filter} posts={posts} user={user} />
-      <EventPosting />
     </div>
   );
 }
