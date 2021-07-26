@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CheckoutForm from "./CheckoutForm";
+import { API } from "aws-amplify";
+import * as queries from "../graphql/queries";
 
 // material ui
 import Card from "@material-ui/core/Card";
@@ -72,6 +74,13 @@ function Reservation(props) {
   } = props;
 
   const [open, setOpen] = useState(false);
+  const [partnerName, setPartnerName] = useState("");
+
+  useEffect(() => {
+    getAttendingUserName();
+    console.log(partnerName);
+  }, [user, data, getAttendingUserName, partnerName]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -79,17 +88,44 @@ function Reservation(props) {
     setOpen(false);
   };
 
+  async function getAttendingUserName() {
+    try {
+      const allAttendingUser = (
+        await API.graphql({
+          query: queries.listAttendingUsers
+        })
+      ).data.listAttendingUsers.items;
+      const arrayOfUserID = allAttendingUser.map((e) => e.userID);
+      const name = (
+        await API.graphql({
+          query: queries.getUser,
+          variables: {
+            id: arrayOfUserID[0]
+          }
+        })
+      ).data.getUser.name;
+      const anotherName = (
+        await API.graphql({
+          query: queries.getUser,
+          variables: {
+            id: arrayOfUserID[1]
+          }
+        })
+      ).data.getUser.name;
+      if (user.name !== name) setPartnerName(name);
+      if (user.name !== anotherName) setPartnerName(anotherName);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   return (
     <div className="Reservation" id={data.id}>
-      {/* listener view */}
-      {/* {console.log("--------------------------")} */}
-      {/* {console.log(data)} */}
-      {/* {console.log(user)} */}
       <Card className={classes.root}>
         <CardHeader
           title={
             <Typography variant="h5" gutterBottom>
-              {view === "listener" ? data.tellerName : user.name}
+              {partnerName}
             </Typography>
           }
           subheader={new Date(Number(data.startDateTime)).toLocaleString()}
@@ -188,13 +224,8 @@ function Reservation(props) {
                     const newVideo = {
                       isActive: true,
                       identity: user.username,
-                      roomName: data.id, // need to pass later
-                      type: data.type,
-                      userID: user.id,
-                      tellerID: data.tellerID
+                      roomName: data.id // need to pass later
                     };
-                    console.log("new video")
-                    console.log(newVideo)
                     setVideo(newVideo);
                   }}
                 >
@@ -260,10 +291,7 @@ function Reservation(props) {
                   const newVideo = {
                     isActive: true,
                     identity: user.username,
-                    roomName: data.id, // need to pass later
-                    type: data.type,
-                    userID: user.id,
-                    tellerID: data.tellerID
+                    roomName: data.id // need to pass later
                   };
                   setVideo(newVideo);
                 }}
