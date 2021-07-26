@@ -188,8 +188,13 @@ function Reservation(props) {
                     const newVideo = {
                       isActive: true,
                       identity: user.username,
-                      roomName: data.id // need to pass later
+                      roomName: data.id, // need to pass later
+                      type: data.type,
+                      userID: user.id,
+                      tellerID: data.tellerID
                     };
+                    console.log("new video")
+                    console.log(newVideo)
                     setVideo(newVideo);
                   }}
                 >
@@ -255,7 +260,10 @@ function Reservation(props) {
                   const newVideo = {
                     isActive: true,
                     identity: user.username,
-                    roomName: data.id // need to pass later
+                    roomName: data.id, // need to pass later
+                    type: data.type,
+                    userID: user.id,
+                    tellerID: data.tellerID
                   };
                   setVideo(newVideo);
                 }}

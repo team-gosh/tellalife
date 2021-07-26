@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Video from "twilio/lib/rest/Video";
 import Participant from "./Participant";
 
-const Room = (props) => {
+const RoomTour = (props) => {
   const {
     roomName,
     username,
@@ -50,23 +50,45 @@ const Room = (props) => {
   }, [room]);
 
   const remoteParticipants = participants.map((participant) => {
-      return (
-      <Participant key={participant.sid} participant={participant} roomType={video.type} userType="remote" video={video}/>
-      );
+    return (
+      <Participant key={participant.sid} participant={participant} roomType={video.type} userType="remote" />
+    );
   });
-  
-  console.log('video type in room')
-  console.log(video.type)
+
+  const tourView = () => {
+    if (video.userID === video.tellerID) {
+      console.log("this is the teller")
+      return (
+        <Participant
+          key={room.localParticipant.sid}
+          participant={room.localParticipant}
+          roomType={video.type}
+          userType="local"
+          windowSize={windowSize}
+          tellerHeight={Math.floor(windowSize * .75)}
+          listenerHeight={Math.floor(windowSize * .15)}
+          video={video}
+        />
+      );
+    } else {
+      console.log("this is a listener")
+      return participants.map((participant) => {
+        return (
+          <Participant key={participant.sid} participant={participant} roomType={video.type} userType="remote" video={video} />
+        );
+      })
+    }
+  }
+
+  console.log('video in room')
+  console.log(video)
 
   return (
     <div className="room">
-      
-      {/* <h5>Remote Participants</h5> */}
-      {/* <div className="remote-participants" style={{height: '480px'}}>{remoteParticipants}</div> */}
-      <div className="remote-participants" style={{height: `${Math.floor(windowSize.height * .75)}px`}}>{remoteParticipants}</div>
-      {/* <div className="local-participant" style={{height: '120px'}}> */}
-      <div className="local-participant" style={{height: `${Math.floor(windowSize.height * .15)}px`}}>
-        {/* {room && (video.type !== "tour" || video.userID === video.tellerID) ? ( */}
+
+      <div className="remote-participants" style={{ height: `${Math.floor(windowSize.height * .75)}px` }}>
+        {tourView()}
+        {/* <div className="local-participant" style={{height: `${Math.floor(windowSize.height * .15)}px`}}>
         {room ? (
           <Participant
             key={room.localParticipant.sid}
@@ -76,15 +98,14 @@ const Room = (props) => {
             windowSize={windowSize}
             tellerHeight={Math.floor(windowSize * .75)}
             listenerHeight={Math.floor(windowSize * .15)}
-            video={video}
           />
         ) : (
           ""
-        )}
+        )} */}
         <button onClick={handleLogout}>Leave Room</button>
       </div>
     </div>
   );
 };
 
-export default Room;
+export default RoomTour;

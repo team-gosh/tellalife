@@ -7,7 +7,8 @@ const Participant = (props) => {
     userType,
     windowSize,
     tellerHeight,
-    listenerHeight
+    listenerHeight,
+    video
   } = props
 	const [ videoTracks, setVideoTracks ] = useState([]);
 	const [ audioTracks, setAudioTracks ] = useState([]);
@@ -89,7 +90,7 @@ const Participant = (props) => {
       {/* look at line 20 profile.js for use of breakpoints in material ui */}
 			{/* <h5>{participant.identity}</h5> */}
 			{/* <video width={userType === "remote" ? "640" : "160"} height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} /> */}
-			<video height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} />
+			<video height={userType === "remote" || video.type === "tour" ? "480" : "120"} ref={videoRef} autoPlay={true} />
 			{/* <video height={userType === "remote" ? tellerHeight : listenerHeight} ref={videoRef} autoPlay={true} /> */}
 			{/* <video height={windowSize ? Math.floor(windowSize.height * (userType === "remote" ? .75 : .15)) : "120"} ref={videoRef} autoPlay={true} /> */}
 			{/* <video height={Math.floor(height * (userType === "remote" ? .75 : .15))} ref={videoRef} autoPlay={true} /> */}

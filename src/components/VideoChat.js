@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import Video from "twilio-video";
 // import Lobby from "./Lobby";
 import Room from "./Room";
+import RoomTour from "./RoomTour";
 import axios from "axios";
 import { API } from "aws-amplify";
 import * as queries from "../graphql/queries";
@@ -12,6 +13,7 @@ const VideoChat = (props) => {
 	const {
     guestName,
     guestRoom,
+    video,
     setVideo
   } = props;
 	const [ username ] = useState(guestName ? guestName : "");
@@ -73,6 +75,9 @@ const VideoChat = (props) => {
       isActive: false,
       username: "",
       roomName: "",
+      type: "",
+      userID: "",
+      tellerID: ""
     })
 	}, []);
 
@@ -102,11 +107,14 @@ const VideoChat = (props) => {
         });
   
         // console.log(response.data.generateVideoToken, " this is token");
+        
   
         Video.connect(response.data.generateVideoToken, {
           name: roomName,
-          audio: true,
-          video: true,
+          // audio: true,
+          // video: true,
+          audio: video.userID === video.tellerID || video.type !== "tour",
+          video: video.userID === video.tellerID || video.type !== "tour",
         })
           .then((room) => {
             // setConnecting(false);
@@ -122,15 +130,27 @@ const VideoChat = (props) => {
 	);
 
   return room 
-   ? (
-      <Room
-        roomName={roomName}
-        username={username}
-        room={room}
-        handleLogout={handleLogout}
-        guestRoom={guestRoom}
-      />
-    )
+    ? video.type === "pair" 
+      ? (
+        <Room
+          roomName={roomName}
+          username={username}
+          room={room}
+          handleLogout={handleLogout}
+          guestRoom={guestRoom}
+          video={video}
+        />
+      )
+      : (
+        <RoomTour
+          roomName={roomName}
+          username={username}
+          room={room}
+          handleLogout={handleLogout}
+          guestRoom={guestRoom}
+          video={video}
+        />
+      )
     : <div></div>
 };
 

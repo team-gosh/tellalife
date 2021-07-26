@@ -149,7 +149,65 @@ function MainPage (props) {
 	};
 	const [ countriesCitiesList, setLists ] = useState([]);
 
+	let userID,
+		reservationCreateSubscription,
+		reservationUpdateSubscription,
+		reservationDeleteSubscription,
+		attendingCreateSubscription,
+		attendingUpdateSubscription,
+		attendingDeleteSubscription;
+
+	const getUserData = async () => {
+		const currentUser = (await API.graphql({
+			query: customQueries.getUser,
+			variables: {
+				id: userID,
+			},
+		})).data.getUser;
+
+		console.log("current user data");
+		console.log(currentUser);
+
+		setUser(currentUser);
+	};
+
+	const resetReservations = async () => {
+		const attending = (await API.graphql({
+			query: queries.listAttendingUsers,
+		})).data.listAttendingUsers.items;
+		console.log("attending to delete");
+		console.log(attending);
+		await Promise.all(
+			attending.forEach(
+				async (e) =>
+					await API.graphql({
+						query: mutations.deleteAttendingUsers,
+						variables: { input: { id: e.id } },
+					})
+			)
+		);
+
+		const reservations = (await API.graphql({
+			query: queries.listReservations,
+		})).data.listReservations.items;
+		console.log("reservations to delete");
+		console.log(reservations);
+		await Promise.all(
+			reservations.forEach(
+				async (e) =>
+					await API.graphql({
+						query: mutations.deleteReservation,
+						variables: { input: { id: e.id } },
+					})
+			)
+		);
+	};
+
 	useEffect(async () => {
+		// Clear all reservations and attending users
+		// USE WITH CAUTION!!!
+		// resetReservations();
+
 		// get countries & cities
 		const responseObj = await axios.get("https://countriesnow.space/api/v0.1/countries");
 		const countriesArray = responseObj.data.data.map((data) => data);
@@ -161,6 +219,7 @@ function MainPage (props) {
 			const name = userAuth.attributes.name;
 			try {
 				// Try to get user from database
+				console.log("try to get user data");
 				const currentUserData = (await API.graphql({
 					query: queries.getUserByEmail,
 					variables: {
