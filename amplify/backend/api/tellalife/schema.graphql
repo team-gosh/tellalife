@@ -42,6 +42,7 @@ type AttendingUsers
 	@model
 	# @key(name: "userIsAttending", fields: ["userID", "reservationID"])
 	# @key(name: "reservationAttendedBy", fields: ["reservationID", "userID"]) {
+  @key(name: "byReservationID", fields: ["reservationID", "id"], queryField: "getAttendingUsersByReservationID")
 	@key(name: "userIsAttending", fields: ["userID"])
 	@key(name: "reservationAttendedBy", fields: ["reservationID"]) {
 	id: ID!
@@ -79,7 +80,7 @@ input PaymentIntent {
 	currency: String!
 	application_fee_amount: Int!
 	stripeAccount: String!
-  payment_method: String!
+  # payment_method: String!
 }
 
 input VideoInput {
@@ -102,4 +103,10 @@ type Mutation {
 	createStripeAccount(input: AccountType!): String @function(name: "createStripeAccount-${env}")
 	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
 	getStripeAccount(input: StripeAccount!): String @function(name: "getStripeAccount-${env}")
+}
+
+
+type Subscription {
+  onCreateAttending(userID: ID!): AttendingUsers
+    @aws_subscribe(mutations: ["createAttendingUsers"])
 }

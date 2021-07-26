@@ -402,3 +402,68 @@ export const getUserByEmail = /* GraphQL */ `
     }
   }
 `;
+export const getAttendingUsersByReservationID = /* GraphQL */ `
+  query GetAttendingUsersByReservationID(
+    $reservationID: ID
+    $id: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAttendingUsersFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getAttendingUsersByReservationID(
+      reservationID: $reservationID
+      id: $id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        reservationID
+        userID
+        reservation {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          userIDs
+          tellerID
+          tellerName
+          stripeAccount
+          createdAt
+          updatedAt
+        }
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          stripeURL
+          avatar
+          avatarKey
+          avatarURL
+          createdAt
+          updatedAt
+        }
+        seen
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

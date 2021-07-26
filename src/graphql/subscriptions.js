@@ -1,6 +1,63 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateAttending = /* GraphQL */ `
+  subscription OnCreateAttending($userID: ID!) {
+    onCreateAttending(userID: $userID) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        tellerName
+        stripeAccount
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatar
+        avatarKey
+        avatarURL
+        createdAt
+        updatedAt
+      }
+      seen
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {

@@ -40,18 +40,6 @@ export default function CheckoutForm (props) {
 			return;
 		}
     try {
-      const returnedCardElement = elements.getElement(CardElement);
-      console.log("returnedCardElement")
-      console.log(returnedCardElement)
-      // const paymentMethodReq = await stripe.createPaymentMethod({
-      //   type: 'card',
-      //   // card: returnedCardElement,
-      // });
-      // console.log("paymentMethodReq")
-      // console.log(paymentMethodReq)
-
-      console.log("reservation price")
-      console.log(reservation.price)
       const paymentIntentClientSecret = await API.graphql({
         query: mutations.processOrder,
         variables: {
@@ -62,14 +50,9 @@ export default function CheckoutForm (props) {
             currency: "jpy",
             application_fee_amount: 123,
             stripeAccount: reservation.stripeAccount,
-            // payment_method: JSON.stringify(paymentMethodReq.paymentMethod)
-            payment_method: "hi"
           },
         },
       });
-
-      console.log("paymentIntentClientSecret")
-      console.log(paymentIntentClientSecret)
 
       const result = await stripe.confirmCardPayment(paymentIntentClientSecret.data.processOrder, {
         payment_method: {
@@ -77,53 +60,9 @@ export default function CheckoutForm (props) {
         }
       });
 
-      console.log("result")
-      console.log(result)
-
-
-
-
-
-
-      // console.log("cardElement")
-      // console.log(elements.getElement(CardElement))
-  
-      // const secret = paymentIntentReturn.data.processOrder;
-   
-      // const paymentMethodReq = await stripe.createPaymentMethod({
-      //   type: 'card',
-      //   // card: CardElement,
-      //   card: elements.getElement(CardElement),
-      //   billing_details: {
-      //     name: "Jenny Rosen"
-      //   }
-      // });
-
-      // console.log("paymentMethodReq")
-      // console.log(paymentMethodReq)
-
-      // const result = await stripe.confirmCardPayment(secret, {
-        // payment_method: {
-        //   card: elements.getElement(CardElement),
-        //   billing_details: {
-        //     // name: user.name,
-        //     name: "Jenny Rosen",
-        //   },
-        // payment_method: paymentMethodReq.paymentMethod.id
-        // },
-      // );
-
-      // console.log('result')
-      // console.log(result)
-      // const result = {error: true}
       if (result.error) {
-        // we actually need to figure out how to set the test account payable
-        console.log(result.error);
         console.log("payment has failed");
-        // Delete when working
-        // approvedToConfirmed(reservation.id)
         return {
-          // status: "succeeded",
           status:"failed"
         };
       } else {
