@@ -68,7 +68,7 @@ function EventPosting(props) {
       startDateTime: date,
       duration: duration
       // dateTime: String(new Date().getTime()),
-      // image: image
+      // image: image,
       // imageKey: imageKey,
       // imageURL: imageURL
     };

@@ -284,7 +284,6 @@ function Profile (props) {
 				current_city: city,
 				price: Number(value),
 				stripeAccount: stripeObj.id,
-				isTeller: false,
 				stripeURL: stripeUrl,
 			};
 			// logic to handle to timeout!!!!

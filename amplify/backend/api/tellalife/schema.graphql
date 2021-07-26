@@ -67,6 +67,7 @@ type AttendingUsers
 	reservation: Reservation! @connection(fields: ["reservationID"])
 	user: User! @connection(fields: ["userID"])
 	seen: Boolean!
+  # status: String
 }
 
 # Reservation Table

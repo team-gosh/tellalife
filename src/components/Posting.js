@@ -51,8 +51,6 @@ function Posting(props) {
       city: user.current_city,
       country: user.current_country,
       home_country: user.home_country,
-      // dateTime: String(new Date().getTime()),
-      // image: image
       imageKey: imageKey,
       imageURL: imageURL
     };
