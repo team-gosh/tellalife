@@ -1,13 +1,5 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import Amplify, { API, graphqlOperation } from "aws-amplify";
-import * as mutations from "../graphql/mutations";
-
-import axios from "axios";
-import App from "../App";
+import React, { useState } from "react";
 import CheckoutForm from "./CheckoutForm";
-
-import { useStripe } from "@stripe/react-stripe-js";
 
 // material ui
 import Card from "@material-ui/core/Card";
@@ -16,15 +8,12 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Badge from "@material-ui/core/Badge";
 import CardHeader from "@material-ui/core/CardHeader";
-import Avatar from "@material-ui/core/Avatar";
 import AccessTimeOutlinedIcon from "@material-ui/icons/AccessTimeOutlined";
 import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
@@ -71,21 +60,16 @@ const useStyles = makeStyles((theme) => ({
 
 function Reservation(props) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
   const {
     user,
     data,
     status,
     view,
     setVideo,
-    video,
     removeReservation,
     pendingToApproved,
-    approvedToConfirmed,
-    confirmedToFinished
+    approvedToConfirmed
   } = props;
-  console.log("console.log after props");
-  console.log(user);
 
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
@@ -97,17 +81,15 @@ function Reservation(props) {
 
   return (
     <div className="Reservation" id={data.id}>
-      {/* consumer view */}
+      {/* listener view */}
+      {/* {console.log("--------------------------")} */}
+      {/* {console.log(data)} */}
+      {/* {console.log(user)} */}
       <Card className={classes.root}>
         <CardHeader
-          // avatar={
-          //   <Avatar aria-label="avatar" className={classes.avatar}>
-          //     {view === "listener" ? "L" : "T"}
-          //   </Avatar>
-          // }
           title={
             <Typography variant="h5" gutterBottom>
-              {user.name}
+              {view === "listener" ? data.tellerName : user.name}
             </Typography>
           }
           subheader={new Date(Number(data.startDateTime)).toLocaleString()}
@@ -206,7 +188,8 @@ function Reservation(props) {
                     const newVideo = {
                       isActive: true,
                       identity: user.username,
-                      roomName: data.id // need to pass later
+                      roomName: data.id, // need to pass later
+                      type: data.type
                     };
                     setVideo(newVideo);
                   }}

@@ -12,7 +12,7 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import AlertDialog from "./AlertDialog";
+import ReservationSubmission from "./ReservationSubmission";
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -57,7 +57,7 @@ function MakeReservation (props) {
 				Reservation
 			</Button>
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-				<DialogTitle id="form-dialog-title">MakeReservation</DialogTitle>
+				<DialogTitle id="form-dialog-title">Make Reservation</DialogTitle>
 				<DialogContent>
 					<DialogContentText>If you want to chat, please enter your preferred time</DialogContentText>
 					<form className={classes.container} noValidate>
@@ -73,7 +73,6 @@ function MakeReservation (props) {
 							onChange={(event) => {
 								const millisecond = new Date(
 									Number(event.target.value.slice(0, 4)),
-									// Date ConstructorのmonthIndexは0-11
 									Number(event.target.value.slice(5, 7) - 1),
 									Number(event.target.value.slice(8, 10)),
 									Number(event.target.value.slice(11, 13)),
@@ -89,7 +88,7 @@ function MakeReservation (props) {
 							}}
 						/>
 						<FormControl className={classes.formControl}>
-							<InputLabel shrink htmlFor="age-native-label-placeholder">
+							<InputLabel shrink htmlFor="duration">
 								Duration
 							</InputLabel>
 							<NativeSelect
@@ -99,8 +98,8 @@ function MakeReservation (props) {
 									if (date) setDisable(false);
 								}}
 								inputProps={{
-									name: "age",
-									id: "age-native-label-placeholder",
+									name: "duration",
+									id: "duration",
 								}}
 							>
 								<option value="">None</option>
@@ -117,7 +116,7 @@ function MakeReservation (props) {
 					</form>
 				</DialogContent>
 				<DialogActions>
-					<AlertDialog
+					<ReservationSubmission
 						setOpen={setOpen}
 						teller={teller}
 						date={date}

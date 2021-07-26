@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Posting(props) {
+function EventPosting(props) {
   const { user, API, mutations } = props;
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -184,4 +184,4 @@ function Posting(props) {
   );
 }
 
-export default Posting;
+export default EventPosting;

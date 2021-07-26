@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import Post from "./Post";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -17,18 +16,16 @@ function Posts (props) {
 
 	const { filter, posts, user } = props;
 
-	useEffect(async () => {
-		console.log(posts);
-	}, []);
+	console.log(posts);
 
 	return (
 		<div className={classes.container}>
 			{posts
-				.filter((postData) => (filter.home ? filter.home === postData.user.home_country : true))
+				.filter((postData) => (filter.home ? filter.home === postData.home_country : true))
 				.filter((postData) => (filter.targetCountry ? filter.targetCountry === postData.country : true))
 				.filter((postData) => (filter.targetCity ? filter.targetCity === postData.city : true))
 				.map((postData) => <Post postData={postData} user={user} />)
-        .reverse()}
+				.reverse()}
 		</div>
 	);
 }

@@ -9,18 +9,19 @@ import { Elements, StripeProvider } from "@stripe/react-stripe-js";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 
-const stripePromise = loadStripe(
-	// stripe with public key (exposable)
-	"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
-	{
-		// this needs to be changed and get from DB
-		stripeAccount: "acct_1JDe4ERPtTBKeA1Y",
-		// stripeAccount: user.stripeAccount,
-	}
-);
+// const stripePromise = loadStripe(
+// 	// stripe with public key (exposable)
+// 	"pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX",
+// 	{
+// 		// this needs to be changed and get from DB
+// 		stripeAccount: "acct_1JDe4ERPtTBKeA1Y",
+// 		// stripeAccount: user.stripeAccount,
+// 	}
+// );
+
+const stripePromise = loadStripe("pk_test_51J9oYtITm2RX3fVqVcbPzL8t0rjLQYaTkdYZSooASIcFqg56B1xV3pJbBgGfzIgjT77M1FepHmUzyeF7yaIUInni00D8L42SUX");
 
 ReactDOM.render(
-	// <Elements stripe={stripePromise}>
 	<React.Fragment>
 		<Elements stripe={stripePromise}>
 			<App />

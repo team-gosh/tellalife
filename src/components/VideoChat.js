@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import Video from "twilio-video";
-import Lobby from "./Lobby";
+// import Lobby from "./Lobby";
 import Room from "./Room";
 import axios from "axios";
 import { API } from "aws-amplify";
@@ -12,12 +12,13 @@ const VideoChat = (props) => {
 	const {
     guestName,
     guestRoom,
+    video,
     setVideo
   } = props;
-	const [ username, setUsername ] = useState(guestName ? guestName : "");
-	const [ roomName, setRoomName ] = useState(guestRoom ? guestRoom : "");
+	const [ username ] = useState(guestName ? guestName : "");
+	const [ roomName ] = useState(guestRoom ? guestRoom : "");
 	const [ room, setRoom ] = useState(null);
-	const [ connecting, setConnecting ] = useState(false);
+	// const [ connecting, setConnecting ] = useState(false);
 
 	// const handleUsernameChange = useCallback((event) => {
 	// 	setUsername(event.target.value);
@@ -73,6 +74,9 @@ const VideoChat = (props) => {
       isActive: false,
       username: "",
       roomName: "",
+      type: "",
+      userID: "",
+      tellerID: ""
     })
 	}, []);
 
@@ -101,7 +105,7 @@ const VideoChat = (props) => {
           },
         });
   
-        console.log(response.data.generateVideoToken, " this is token");
+        // console.log(response.data.generateVideoToken, " this is token");
   
         Video.connect(response.data.generateVideoToken, {
           name: roomName,
@@ -109,43 +113,30 @@ const VideoChat = (props) => {
           video: true,
         })
           .then((room) => {
-            setConnecting(false);
+            // setConnecting(false);
             setRoom(room);
           })
           .catch((err) => {
             console.error(err);
-            setConnecting(false);
+            // setConnecting(false);
           });
       }
 		},
 		[ room, handleLogout ]
 	);
 
-	let render;
-	if (room) {
-		render = (
-			<Room
-				roomName={roomName}
-				username={username}
-				room={room}
-				handleLogout={handleLogout}
-				guestRoom={guestRoom}
-			/>
-		);
-	} else {
-		render = (
-			// <Lobby
-			// 	username={username}
-			// 	roomName={roomName}
-			// 	handleUsernameChange={handleUsernameChange}
-			// 	handleRoomNameChange={handleRoomNameChange}
-			// 	handleSubmit={handleSubmit}
-			// 	connecting={connecting}
-			// />
-      <div></div>
-		);
-	}
-	return render;
+  return room 
+   ? (
+      <Room
+        roomName={roomName}
+        username={username}
+        room={room}
+        handleLogout={handleLogout}
+        guestRoom={guestRoom}
+        video={video}
+      />
+    )
+    : <div></div>
 };
 
 export default VideoChat;

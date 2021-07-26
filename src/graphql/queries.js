@@ -26,12 +26,15 @@ export const getUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -44,6 +47,8 @@ export const getUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -75,6 +80,8 @@ export const listUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -89,6 +96,7 @@ export const getPost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type
@@ -111,12 +119,16 @@ export const getPost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -134,6 +146,7 @@ export const listPosts = /* GraphQL */ `
         title
         userID
         dateTime
+        home_country
         country
         city
         type
@@ -150,12 +163,16 @@ export const listPosts = /* GraphQL */ `
           current_city
           stripeURL
           avatar
+          avatarKey
+          avatarURL
           createdAt
           updatedAt
         }
         text
         link
         image
+        imageKey
+        imageURL
         createdAt
         updatedAt
       }
@@ -185,6 +202,7 @@ export const getAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -208,6 +226,8 @@ export const getAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -241,6 +261,7 @@ export const listAttendingUsers = /* GraphQL */ `
           description
           userIDs
           tellerID
+          tellerName
           stripeAccount
           createdAt
           updatedAt
@@ -258,6 +279,8 @@ export const listAttendingUsers = /* GraphQL */ `
           current_city
           stripeURL
           avatar
+          avatarKey
+          avatarURL
           createdAt
           updatedAt
         }
@@ -295,6 +318,7 @@ export const getReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -324,6 +348,7 @@ export const listReservations = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -368,6 +393,73 @@ export const getUserByEmail = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getAttendingUsersByReservationID = /* GraphQL */ `
+  query GetAttendingUsersByReservationID(
+    $reservationID: ID
+    $id: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelAttendingUsersFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    getAttendingUsersByReservationID(
+      reservationID: $reservationID
+      id: $id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        reservationID
+        userID
+        reservation {
+          id
+          startDateTime
+          duration
+          price
+          status
+          type
+          country
+          city
+          title
+          description
+          userIDs
+          tellerID
+          tellerName
+          stripeAccount
+          createdAt
+          updatedAt
+        }
+        user {
+          id
+          name
+          username
+          email
+          home_country
+          isTeller
+          price
+          stripeAccount
+          current_country
+          current_city
+          stripeURL
+          avatar
+          avatarKey
+          avatarURL
+          createdAt
+          updatedAt
+        }
+        seen
         createdAt
         updatedAt
       }

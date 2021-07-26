@@ -1,10 +1,7 @@
-/**
-* Use the CSS tab above to style your Element's container.
-*/
 import React from "react";
 import { CardElement } from "@stripe/react-stripe-js";
-
 import "./Styles.css";
+
 const CARD_ELEMENT_OPTIONS = {
 	style: {
 		base: {
@@ -22,6 +19,7 @@ const CARD_ELEMENT_OPTIONS = {
 		},
 	},
 };
+
 function CardSection () {
 	return (
 		<label>

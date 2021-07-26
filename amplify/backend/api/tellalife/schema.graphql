@@ -13,7 +13,9 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
 	current_country: String
 	current_city: String
 	stripeURL: String
-	avatar: String
+	avatar: String   # May not need anymore
+  avatarKey: String
+  avatarURL: String
 }
 
 # Post Table
@@ -22,6 +24,7 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 	title: String
 	userID: ID!
 	dateTime: String!
+  home_country: String!
 	country: String!
 	city: String!
 	type: String!
@@ -30,13 +33,16 @@ type Post @model @key(name: "byUser", fields: ["userID"]) {
 	# comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
 	text: String
 	link: String
-	image: String
+	image: String   # May not need anymore
+  imageKey: String
+  imageURL: String
 }
 
 type AttendingUsers
 	@model
 	# @key(name: "userIsAttending", fields: ["userID", "reservationID"])
 	# @key(name: "reservationAttendedBy", fields: ["reservationID", "userID"]) {
+  @key(name: "byReservationID", fields: ["reservationID", "id"], queryField: "getAttendingUsersByReservationID")
 	@key(name: "userIsAttending", fields: ["userID"])
 	@key(name: "reservationAttendedBy", fields: ["reservationID"]) {
 	id: ID!
@@ -61,8 +67,8 @@ type Reservation @model @key(name: "hasReservation", fields: ["userIDs"]) {
 	description: String
 	userIDs: ID
 	users: [AttendingUsers!]! @connection(keyName: "reservationAttendedBy", fields: ["id"])
-	# tellerID: ID!
 	tellerID: String!
+  tellerName: String #String! later 
 	stripeAccount: String
 }
 
@@ -74,6 +80,7 @@ input PaymentIntent {
 	currency: String!
 	application_fee_amount: Int!
 	stripeAccount: String!
+  # payment_method: String!
 }
 
 input VideoInput {
@@ -84,6 +91,7 @@ input VideoInput {
 
 input AccountType {
 	type: String!
+  homeURL: String!
 }
 
 input StripeAccount {
@@ -95,4 +103,10 @@ type Mutation {
 	createStripeAccount(input: AccountType!): String @function(name: "createStripeAccount-${env}")
 	processOrder(input: PaymentIntent!): String @function(name: "createPayment-${env}")
 	getStripeAccount(input: StripeAccount!): String @function(name: "getStripeAccount-${env}")
+}
+
+
+type Subscription {
+  onCreateAttending(userID: ID!): AttendingUsers
+    @aws_subscribe(mutations: ["createAttendingUsers"])
 }

@@ -1,12 +1,26 @@
-import React, { useState, useEffect } from "react";
-import Amplify, { API, graphqlOperation } from "aws-amplify";
+import React from "react";
+import { API } from "aws-amplify";
 import * as mutations from "../graphql/mutations";
-import { loadStripe } from "@stripe/stripe-js";
-
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-
 import CardSection from "./CardSection";
-import { LocalConvenienceStoreOutlined } from "@material-ui/icons";
+
+const CARD_ELEMENT_OPTIONS = {
+	style: {
+		base: {
+			color: "#32325d",
+			fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+			fontSmoothing: "antialiased",
+			fontSize: "16px",
+			"::placeholder": {
+				color: "#aab7c4",
+			},
+		},
+		invalid: {
+			color: "#fa755a",
+			iconColor: "#fa755a",
+		},
+	},
+};
 
 export default function CheckoutForm (props) {
 	const { 
@@ -18,87 +32,66 @@ export default function CheckoutForm (props) {
 	const elements = useElements();
 
 	const handleSubmit = async (event) => {
-		console.log(stripe.confirmCardPayment, " this is promise");
-
-		// We don't want to let default form submission happen here,
-		// which would refresh the page.
 		event.preventDefault();
 		if (!stripe || !elements) {
+      console.log("notloaded")
 			// Stripe.js has not yet loaded.
 			// Make sure to disable form submission until Stripe.js has loaded.
 			return;
 		}
-    console.log('before paymentIntentReturn')
-    console.log('user id')
-    console.log(reservation.stripeAccount)
-		const paymentIntentReturn = await API.graphql({
-			query: mutations.processOrder,
-			variables: {
-				input: {
-					id: user.id,
-					payment_method_type: [ "card" ],
+    try {
+      const paymentIntentClientSecret = await API.graphql({
+        query: mutations.processOrder,
+        variables: {
+          input: {
+            id: user.id,
+            payment_method_type: [ "card" ],
+            amount: reservation.price,
+            currency: "jpy",
+            application_fee_amount: 123,
+            stripeAccount: reservation.stripeAccount,
+          },
+        },
+      });
 
-					// need to change here
-					// amount: user.price,
-					amount: reservation.price,
-					currency: "JPY",
+      const result = await stripe.confirmCardPayment(paymentIntentClientSecret.data.processOrder, {
+        payment_method: {
+          card: elements.getElement(CardElement)
+        }
+      });
 
-					// need to change here
-					application_fee_amount: 123,
-
-					//this should be the destination account
-					stripeAccount: reservation.stripeAccount,
-				},
-			},
-		});
-
-		const secret = paymentIntentReturn.data.processOrder;
-
-    console.log("before confirmCardPayment")
-		const result = await stripe.confirmCardPayment(secret, {
-			payment_method: {
-				card: elements.getElement(CardElement),
-				billing_details: {
-					// need to change here
-					name: user.name,
-				},
-			},
-		});
-
-		console.log(result);
-    console.log("before conditional")
-		if (result.error) {
-			// we actually need to figure out how to set the test account payable
-			console.log(result.error);
-			console.log("payment is succeeded?");
-      // Delete when working
-      approvedToConfirmed(reservation.id)
-			return {
-				status: "succeeded",
-				//status:"failed"
-			};
-		} else {
-			// The payment has been processed!
-			if (result.paymentIntent.status === "succeeded") {
-				console.log("payment is succeeded");
-				// Show a success message to your customer
-				// There's a risk of the customer closing the window before callback
-				// execution. Set up a webhook or plugin to listen for the
-				// payment_intent.succeeded event that handles any business critical
-				// post-payment actions.
-        approvedToConfirmed(reservation.id)
-				return {
-					status: "succeeded",
-				};
-			}
-		}
+      if (result.error) {
+        console.log("payment has failed");
+        return {
+          status:"failed"
+        };
+      } else {
+        // The payment has been processed!
+        if (result.paymentIntent.status === "succeeded") {
+          console.log("payment has succeeded");
+          // Show a success message to your customer
+          // There's a risk of the customer closing the window before callback
+          // execution. Set up a webhook or plugin to listen for the
+          // payment_intent.succeeded event that handles any business critical
+          // post-payment actions.
+          approvedToConfirmed(reservation.id)
+          return {
+            status: "succeeded",
+          };
+        }
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
 	};
-
-	// handleSubmit()
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<CardSection />
+			{/* <CardSection /> */}
+      <label>
+			  Card details
+			  <CardElement options={CARD_ELEMENT_OPTIONS} />
+		  </label>
 			<button id="submit" disabled={!stripe} color="primary">
 				Confirm order
 			</button>

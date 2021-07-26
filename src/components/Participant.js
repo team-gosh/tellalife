@@ -7,11 +7,12 @@ const Participant = (props) => {
     userType,
     windowSize,
     tellerHeight,
-    listenerHeight
+    listenerHeight,
+    video
   } = props
 	const [ videoTracks, setVideoTracks ] = useState([]);
 	const [ audioTracks, setAudioTracks ] = useState([]);
-  const [ height, setHeight ] = useState(1)
+  const [ height, setHeight ] = useState(1) // testing for screen size
 
 	const videoRef = useRef();
 	const audioRef = useRef();
@@ -83,14 +84,6 @@ const Participant = (props) => {
 		},
 		[ audioTracks ]
 	);
-
-  // console.log('tellerHeight')
-  // console.log(tellerHeight)
-  // console.log('listenerHeight')
-  // console.log(listenerHeight);
-  // console.log('windowSize')
-  // console.log(windowSize)
-
 
 	return (
 		<div className="participant">

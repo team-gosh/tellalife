@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
@@ -12,6 +11,8 @@ const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(1),
 		minWidth: 120,
+		backgroundColor: "#0000A424",
+
 		[theme.breakpoints.up("md")]: {
 			minWidth: 200,
 		},
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Filter (props) {
-	const { countriesCitiesList, filter, setFilter } = props;
+	const { countriesCitiesList, setFilter } = props;
 
 	const classes = useStyles();
 	const [ homeCountryCondition, setHomeCountryCondition ] = useState("");

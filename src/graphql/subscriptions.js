@@ -1,6 +1,63 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateAttending = /* GraphQL */ `
+  subscription OnCreateAttending($userID: ID!) {
+    onCreateAttending(userID: $userID) {
+      id
+      reservationID
+      userID
+      reservation {
+        id
+        startDateTime
+        duration
+        price
+        status
+        type
+        country
+        city
+        title
+        description
+        userIDs
+        users {
+          nextToken
+        }
+        tellerID
+        tellerName
+        stripeAccount
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        name
+        username
+        email
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        isTeller
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatar
+        avatarKey
+        avatarURL
+        createdAt
+        updatedAt
+      }
+      seen
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
@@ -26,12 +83,15 @@ export const onCreateUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -44,6 +104,8 @@ export const onCreateUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -74,12 +136,15 @@ export const onUpdateUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -92,6 +157,8 @@ export const onUpdateUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -122,12 +189,15 @@ export const onDeleteUser = /* GraphQL */ `
           title
           userID
           dateTime
+          home_country
           country
           city
           type
           text
           link
           image
+          imageKey
+          imageURL
           createdAt
           updatedAt
         }
@@ -140,6 +210,8 @@ export const onDeleteUser = /* GraphQL */ `
       current_city
       stripeURL
       avatar
+      avatarKey
+      avatarURL
       createdAt
       updatedAt
     }
@@ -152,6 +224,7 @@ export const onCreatePost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type
@@ -174,12 +247,16 @@ export const onCreatePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -192,6 +269,7 @@ export const onUpdatePost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type
@@ -214,12 +292,16 @@ export const onUpdatePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -232,6 +314,7 @@ export const onDeletePost = /* GraphQL */ `
       title
       userID
       dateTime
+      home_country
       country
       city
       type
@@ -254,12 +337,16 @@ export const onDeletePost = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
       text
       link
       image
+      imageKey
+      imageURL
       createdAt
       updatedAt
     }
@@ -287,6 +374,7 @@ export const onCreateAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -310,6 +398,8 @@ export const onCreateAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -341,6 +431,7 @@ export const onUpdateAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -364,6 +455,8 @@ export const onUpdateAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -395,6 +488,7 @@ export const onDeleteAttendingUsers = /* GraphQL */ `
           nextToken
         }
         tellerID
+        tellerName
         stripeAccount
         createdAt
         updatedAt
@@ -418,6 +512,8 @@ export const onDeleteAttendingUsers = /* GraphQL */ `
         current_city
         stripeURL
         avatar
+        avatarKey
+        avatarURL
         createdAt
         updatedAt
       }
@@ -453,6 +549,7 @@ export const onCreateReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -485,6 +582,7 @@ export const onUpdateReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
@@ -517,6 +615,7 @@ export const onDeleteReservation = /* GraphQL */ `
         nextToken
       }
       tellerID
+      tellerName
       stripeAccount
       createdAt
       updatedAt
