@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(1),
 		minWidth: 120,
+		backgroundColor: "#0000A424",
+
 		[theme.breakpoints.up("md")]: {
 			minWidth: 200,
 		},
@@ -128,28 +130,25 @@ function Filter (props) {
 					value={currentCityCondition}
 					onChange={handleCurrentCityChange}
 				>
-					{currentCountryCondition 
-            ? ( 
-              countriesCitiesList.map((option) => {
-						    if (option.country === "Other") {
-						      return (
-							      <MenuItem key="other" value="Other">
-							  	    {option.cities}
-							      </MenuItem>
-						      );
-					      } else if (option.country === currentCountryCondition) {
-						      return option.cities.map((city, index) => (
-							      <MenuItem key={index} value={city}>
-								      {city}
-							      </MenuItem>
-						      ));
-					      }
-					    })
-					  ) 
-            : (
-					      <MenuItem />
-					  )
-          }
+					{currentCountryCondition ? (
+						countriesCitiesList.map((option) => {
+							if (option.country === "Other") {
+								return (
+									<MenuItem key="other" value="Other">
+										{option.cities}
+									</MenuItem>
+								);
+							} else if (option.country === currentCountryCondition) {
+								return option.cities.map((city, index) => (
+									<MenuItem key={index} value={city}>
+										{city}
+									</MenuItem>
+								));
+							}
+						})
+					) : (
+						<MenuItem />
+					)}
 				</Select>
 			</FormControl>
 			<Button
