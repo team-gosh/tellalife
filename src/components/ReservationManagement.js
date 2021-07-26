@@ -114,9 +114,7 @@ function ReservationManagement(props) {
       );
       setReservations(currentReservations);
 
-      console.log(currentReservations, 'this is reservation')
-
-
+      console.log(currentReservations, "this is reservation");
     } catch (error) {
       console.error(error.message);
     }
@@ -267,7 +265,7 @@ function ReservationManagement(props) {
   async function removeReservation(reservationID) {
     try {
       console.log("id of reservation to delete");
-      console.log(reservationID)
+      console.log(reservationID);
       // const attendingUsers = (
       //   await API.graphql({
       //     query: queries.listAttendingUsers,
@@ -284,15 +282,17 @@ function ReservationManagement(props) {
         })
       ).data.getAttendingUsersByReservationID.items;
 
-      console.log("attending users in removeReservation")
-      console.log(attendingUsers)
+      console.log("attending users in removeReservation");
+      console.log(attendingUsers);
 
-      await Promise.all(attendingUsers.forEach(async (e) => {
-        await API.graphql({
-          query: mutations.deleteAttendingUsers,
-          variables: { input: { id: e.id } }
-        });
-      }));
+      await Promise.all(
+        attendingUsers.forEach(async (e) => {
+          await API.graphql({
+            query: mutations.deleteAttendingUsers,
+            variables: { input: { id: e.id } }
+          });
+        })
+      );
 
       await API.graphql({
         query: mutations.deleteReservation,
@@ -491,10 +491,17 @@ function ReservationManagement(props) {
       //     query: queries.listReservations
       //   })
       // ).data.listReservations.items;
-      const allReservations = user.reservations.items.map(e => e.reservation);
+      const allReservations = user.reservations.items.map((e) => e.reservation);
       await Promise.all(
         allReservations.map(async (e) => {
-          if (e.status !== "finished" && e.startDateTime - new Date().getTime() < 0) {
+          // if (e.status !== "finished" && e.startDateTime - new Date().getTime() < 0) {
+          //   confirmedToFinished(e.id);
+          // }
+          const finishedTime = Number(e.startDateTime) + e.duration * 60000;
+          if (
+            e.status !== "finished" &&
+            finishedTime - new Date().getTime() < 0
+          ) {
             confirmedToFinished(e.id);
           }
         })
