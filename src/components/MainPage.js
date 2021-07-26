@@ -7,6 +7,7 @@ import * as queries from "../graphql/queries";
 import * as mutations from "../graphql/mutations";
 import * as customQueries from "../graphql/customQueries";
 import Feed from "./Feed";
+import Event from "./Event";
 import { Hub } from "aws-amplify";
 import Banner from "../banner.png";
 
@@ -24,6 +25,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import EventNoteRoundedIcon from "@material-ui/icons/EventNoteRounded";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles } from "@material-ui/core/styles";
@@ -176,9 +178,6 @@ function MainPage (props) {
 						},
 					})).data.getUser;
 
-					console.log("Full existing user data");
-					console.log(currentUser);
-
 					setUser(currentUser);
 				} else if (!user) {
 					// If user doesn't exist, then create new user in database
@@ -203,11 +202,11 @@ function MainPage (props) {
 					console.log(newUser);
 					setUser(newUser);
 				}
-				setLoading(false);
 			} catch (error) {
 				console.error(error.message);
 			}
 		}
+		setLoading(false);
 		// }
 	}, []);
 
