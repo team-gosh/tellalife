@@ -35,7 +35,7 @@
         },
         "createPayment": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",
-          "s3Key": "amplify-builds/createPayment-496e5630714f72474753-build.zip"
+          "s3Key": "amplify-builds/createPayment-574766464e6969413572-build.zip"
         },
         "createStripeAccount": {
           "deploymentBucketName": "amplify-tellalife-talback-120302-deployment",

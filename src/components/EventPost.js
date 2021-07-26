@@ -1,5 +1,5 @@
 import React from "react";
-import MakeReservation from "./MakeReservation";
+import MakeEvent from "./MakeEvent";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -57,7 +57,7 @@ function EventPost(props) {
                   aria-label="avatar"
                   src={postData.user.avatarURL}
                 ></Avatar>
-                <MakeReservation teller={postData.user} user={user} />
+                <MakeEvent teller={postData.user} user={user} />
               </div>
             )}
             <CardContent className={classes.container}>

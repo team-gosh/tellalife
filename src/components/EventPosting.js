@@ -6,6 +6,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import NativeSelect from "@material-ui/core/NativeSelect";
 import { makeStyles } from "@material-ui/core/styles";
 import { Storage } from "aws-amplify";
 
@@ -17,14 +20,25 @@ const useStyles = makeStyles((theme) => ({
   },
   dialog: {
     padding: 0
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  textField: {
+    // marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200
   }
 }));
 
 function EventPosting(props) {
   const { user, API, mutations } = props;
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState("");
+  const [duration, setDuration] = useState("");
   const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  const [contents, setContents] = useState("");
   const [disable, setDisable] = useState(true);
   const [image, setImage] = useState("");
   const [imageKey, setImageKey] = useState("");
@@ -47,7 +61,7 @@ function EventPosting(props) {
       userID: String(user.id),
       type: "post",
       title: title,
-      text: text,
+      // text: text,
       city: user.current_city,
       country: user.current_country,
       home_country: user.home_country,
@@ -57,7 +71,7 @@ function EventPosting(props) {
       imageURL: imageURL
     };
     setTitle("");
-    setText("");
+    // setText("");
     try {
       await API.graphql({
         query: mutations.createPost,
@@ -76,30 +90,35 @@ function EventPosting(props) {
         onClick={handleClickOpen}
         size="large"
       >
-        New Post
+        New Event
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Posting Screen</DialogTitle>
+        <DialogTitle id="form-dialog-title">Event Posting Screen</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter title and text here.
+            Please fill in the details of the event you will hold.
           </DialogContentText>
           <TextField
             id="filled-full-width-2"
             label="Title"
             placeholder="Title"
             fullWidth
-            margin="normal"
+            // margin="normal"
             InputLabelProps={{
               shrink: true
             }}
             onChange={(event) => {
               setTitle(event.target.value);
-              if (event.target.value.length > 0 && text.length > 0) {
+              if (
+                event.target.value.length > 0 &&
+                contents.length > 0 &&
+                date &&
+                duration.length > 0
+              ) {
                 setDisable(false);
               } else {
                 setDisable(true);
@@ -108,27 +127,102 @@ function EventPosting(props) {
           />
           <TextField
             id="filled-full-width"
-            label="Text"
+            label="Contents"
             multiline={true}
-            rows="2"
-            placeholder="Text"
+            rows="5"
+            placeholder="Contents"
             fullWidth
             margin="normal"
             InputLabelProps={{
               shrink: true
             }}
             onChange={(event) => {
-              setText(event.target.value);
-              if (title.length > 0 && event.target.value.length > 0) {
+              setContents(event.target.value);
+              if (
+                title.length > 0 &&
+                event.target.value.length > 0 &&
+                date &&
+                duration.length > 0
+              ) {
                 setDisable(false);
               } else {
                 setDisable(true);
               }
             }}
           />
+          <form className={classes.container} noValidate>
+            <TextField
+              id="datetime-local"
+              label="Start time"
+              type="datetime-local"
+              defaultValue=""
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true
+              }}
+              onChange={(event) => {
+                const millisecond = new Date(
+                  Number(event.target.value.slice(0, 4)),
+                  Number(event.target.value.slice(5, 7) - 1),
+                  Number(event.target.value.slice(8, 10)),
+                  Number(event.target.value.slice(11, 13)),
+                  Number(event.target.value.slice(14))
+                ).getTime();
+                if (millisecond - new Date().getTime() > 0) {
+                  setDate(millisecond);
+                  if (
+                    title.length > 0 &&
+                    contents.length > 0 &&
+                    duration.length > 0
+                  )
+                    setDisable(false);
+                } else {
+                  setDate("");
+                  setDisable(true);
+                }
+              }}
+            />
+            <FormControl className={classes.formControl}>
+              <InputLabel shrink htmlFor="duration">
+                Duration
+              </InputLabel>
+              <NativeSelect
+                // value={100000}
+                value={duration}
+                onChange={(event) => {
+                  console.log("title: ", title, title.length);
+                  console.log("text: ", contents, contents.length);
+                  console.log("date: ", date, String(date).length);
+                  console.log("duration: ", event.target.value);
+                  setDuration(event.target.value);
+                  if (
+                    title.length > 0 &&
+                    contents.length > 0 &&
+                    date &&
+                    duration.length > 0
+                  )
+                    setDisable(false);
+                }}
+                inputProps={{
+                  name: "duration",
+                  id: "duration"
+                }}
+              >
+                <option value="">None</option>
+                <option value={30}>30 min</option>
+                <option value={60}>60 min</option>
+                <option value={90}>90 min</option>
+                <option value={120}>120 min</option>
+                <option value={150}>150 min</option>
+                <option value={180}>180 min</option>
+                <option value={210}>210 min</option>
+                <option value={240}>240 min</option>
+              </NativeSelect>
+            </FormControl>
+          </form>
         </DialogContent>
         <DialogActions>
-          <input
+          {/* <input
             accept="image/*"
             className={classes.input}
             style={{ display: "none" }}
@@ -163,14 +257,16 @@ function EventPosting(props) {
             <Button color="primary" component="span">
               Upload Image
             </Button>
-          </label>
+          </label> */}
           <Button
             color="primary"
             onClick={() => {
               handleClose();
               setDisable(true);
               setTitle("");
-              setText("");
+              setContents("");
+              setDate("");
+              setDuration("");
             }}
           >
             Cancel
