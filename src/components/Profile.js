@@ -193,9 +193,21 @@ function Profile (props) {
 				if (userObj.charges_enabled === true) {
 					console.log("charges_enabled");
 					setCharges_enabled(true);
-					updateUser();
+
+					console.log(user, "user before update");
+					const newData = {
+						id: user.id,
+						isTeller: true,
+					};
+
+					const response = await API.graphql({
+						query: mutations.updateUser,
+						variables: { input: newData },
+					});
+
+					user.isTeller = true;
 				} else {
-					console.log("Processs has not finished yet");
+					console.log("Process has not finished yet");
 				}
 			} else {
 				console.log("No stripe account");
@@ -429,7 +441,7 @@ function Profile (props) {
 							className={classes.buttons}
 							disabled={true}
 						>
-							Register Stripe Account this
+							Register Stripe Account
 						</Button>
 					) : (
 						<Button
@@ -449,7 +461,7 @@ function Profile (props) {
 								)
 							}
 						>
-							Register Stripe Account this
+							Register Stripe Account
 						</Button>
 					)}
 
