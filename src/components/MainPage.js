@@ -33,7 +33,6 @@ import { useTheme } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const drawerWidth = 240;
-ß;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -86,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	appbar: {
 		width: "100%",
+		minWidth: "360px",
 		backgroundColor: "#28345A",
 		boxShadow: "none",
 		[theme.breakpoints.up("lg")]: {
