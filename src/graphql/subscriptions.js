@@ -108,6 +108,8 @@ export const onCreateUser = /* GraphQL */ `
           type
           startDateTime
           duration
+          reservationID
+          price
           title
           text
           link
@@ -178,6 +180,8 @@ export const onUpdateUser = /* GraphQL */ `
           type
           startDateTime
           duration
+          reservationID
+          price
           title
           text
           link
@@ -248,6 +252,8 @@ export const onDeleteUser = /* GraphQL */ `
           type
           startDateTime
           duration
+          reservationID
+          price
           title
           text
           link
@@ -416,6 +422,8 @@ export const onCreateEvent = /* GraphQL */ `
       type
       startDateTime
       duration
+      reservationID
+      price
       user {
         id
         name
@@ -463,6 +471,8 @@ export const onUpdateEvent = /* GraphQL */ `
       type
       startDateTime
       duration
+      reservationID
+      price
       user {
         id
         name
@@ -510,6 +520,8 @@ export const onDeleteEvent = /* GraphQL */ `
       type
       startDateTime
       duration
+      reservationID
+      price
       user {
         id
         name

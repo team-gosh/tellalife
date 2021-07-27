@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "./Post";
+import EventPost from "./EventPost";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,23 +14,23 @@ const useStyles = makeStyles((theme) => ({
 function EventPosts(props) {
   const classes = useStyles();
 
-  const { filter, posts, user } = props;
+  const { filter, events, user } = props;
 
   return (
     <div className={classes.container}>
-      {posts
-        .filter((postData) =>
-          filter.home ? filter.home === postData.user.home_country : true
+      {events
+        .filter((eventData) =>
+          filter.home ? filter.home === eventData.user.home_country : true
         )
-        .filter((postData) =>
+        .filter((eventData) =>
           filter.targetCountry
-            ? filter.targetCountry === postData.country
+            ? filter.targetCountry === eventData.country
             : true
         )
-        .filter((postData) =>
-          filter.targetCity ? filter.targetCity === postData.city : true
+        .filter((eventData) =>
+          filter.targetCity ? filter.targetCity === eventData.city : true
         )
-        .map((postData) => <Post postData={postData} user={user} />)
+        .map((eventData) => <EventPost eventData={eventData} user={user} />)
         .reverse()}
     </div>
   );

@@ -39,12 +39,15 @@ type Post @model @key(name: "postByUser", fields: ["userID"]) {
 type Event @model @key(name: "eventByUser", fields: ["userID"]) {
 	id: ID!
 	userID: ID!
+  # userName: String!
   home_country: String!
 	country: String!
 	city: String!
 	type: String!
   startDateTime: String!
   duration: String!
+  reservationID: ID!
+  price: Int!
 	user: User @connection(fields: ["userID"])
 	# comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
 	title: String!

@@ -49,6 +49,8 @@ export const getUser = /* GraphQL */ `
           type
           startDateTime
           duration
+          reservationID
+          price
           title
           text
           link
@@ -207,6 +209,8 @@ export const getEvent = /* GraphQL */ `
       type
       startDateTime
       duration
+      reservationID
+      price
       user {
         id
         name
@@ -259,6 +263,8 @@ export const listEvents = /* GraphQL */ `
         type
         startDateTime
         duration
+        reservationID
+        price
         user {
           id
           name

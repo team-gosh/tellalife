@@ -23,16 +23,16 @@ function Event(props) {
     targetCountry: "",
     targetCity: ""
   });
-  const [posts, setPosts] = useState([]);
+  const [events, setEvents] = useState([]);
 
   useEffect(async () => {
     try {
-      const allPosts = (
+      const allEvents = (
         await API.graphql({
-          query: queries.listPosts
+          query: queries.listEvents
         })
-      ).data.listPosts.items;
-      setPosts(allPosts);
+      ).data.listEvents.items;
+      setEvents(allEvents);
     } catch (error) {
       console.error(error.message);
     }
@@ -50,7 +50,7 @@ function Event(props) {
       ) : (
         <div />
       )}
-      <EventPosts filter={filter} posts={posts} user={user} />
+      <EventPosts filter={filter} events={events} user={user} />
     </div>
   );
 }

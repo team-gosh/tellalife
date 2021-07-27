@@ -7,6 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Storage } from "aws-amplify";
+import * as customQueries from "../graphql/customQueries";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -265,7 +266,15 @@ function Profile (props) {
 				variables: { input: newData },
 			});
 
-			setUser(response.data.updateUser);
+			const updatedUserData = (await API.graphql({
+				query: customQueries.getUser,
+				variables: {
+					id: response.data.updateUser.id,
+				},
+			})).data.getUser;
+			setUser(updatedUserData);
+
+			// setUser(response.data.updateUser);
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -292,7 +301,16 @@ function Profile (props) {
 				query: mutations.updateUser,
 				variables: { input: newData },
 			});
-			setUser(response.data.updateUser);
+
+			const updatedUserData = (await API.graphql({
+				query: customQueries.getUser,
+				variables: {
+					id: response.data.updateUser.id,
+				},
+			})).data.getUser;
+			setUser(updatedUserData);
+
+			// setUser(response.data.updateUser);
 		} catch (error) {
 			console.error(error.message);
 		}
