@@ -46,7 +46,7 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 export default function CheckoutForm (props) {
-	const { user, approvedToConfirmed, reservation } = props;
+	const { user, confirmReservation, reservation } = props;
 	const stripe = useStripe();
 	const elements = useElements();
 	const classes = useStyles();
@@ -70,6 +70,10 @@ export default function CheckoutForm (props) {
 			// Make sure to disable form submission until Stripe.js has loaded.
 			return;
 		}
+    console.log("data passed to stripe")
+    console.log(user.id)
+    console.log(reservation.price)
+    console.log(reservation.stripeAccount)
 		try {
 			const paymentIntentClientSecret = await API.graphql({
 				query: mutations.processOrder,
@@ -84,12 +88,18 @@ export default function CheckoutForm (props) {
 					},
 				},
 			});
-
+      console.log("payment intent");
+      console.log(paymentIntentClientSecret)
+      // console.log('CardElement')
+      // console.log(elements.getElement(CardElement))
+      
 			const result = await stripe.confirmCardPayment(paymentIntentClientSecret.data.processOrder, {
 				payment_method: {
 					card: elements.getElement(CardElement),
 				},
 			});
+      console.log("payment result")
+      console.log(result)
 
 			if (result.error) {
 				console.log("payment has failed");
@@ -107,7 +117,7 @@ export default function CheckoutForm (props) {
 					// execution. Set up a webhook or plugin to listen for the
 					// payment_intent.succeeded event that handles any business critical
 					// post-payment actions.
-					approvedToConfirmed(reservation.id);
+					confirmReservation(reservation.id);
 					setOpen(false);
 					return {
 						status: "succeeded",

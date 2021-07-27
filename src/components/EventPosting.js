@@ -59,29 +59,84 @@ function EventPosting(props) {
     setDisable(true);
     const eventData = {
       userID: String(user.id),
-      type: "event",
+      type: "tour",
       title: title,
       text: text,
       city: user.current_city,
       country: user.current_country,
       home_country: user.home_country,
-      startDateTime: date,
+      startDateTime: String(date),
       duration: duration
       // dateTime: String(new Date().getTime()),
       // image: image,
       // imageKey: imageKey,
       // imageURL: imageURL
     };
-    console.log(eventData);
     setTitle("");
     setText("");
     setDate("");
     setDuration("");
+    console.log('create event data')
+    console.log(eventData);
     try {
-      await API.graphql({
-        query: mutations.createEvent,
-        variables: { input: eventData }
+      const newReservation = (await API.graphql({
+        query: mutations.createReservation,
+        variables: {
+          input: {
+            duration: Number(duration),
+            price: (Number(duration) / 30 * Number(user.price)),
+            startDateTime: String(date),
+            status: "confirmed",
+            tellerID: user.id,
+            tellerName: user.name,
+            type: "tour"
+          }
+        }
+      })).data.createReservation;
+      console.log("new reservation data")
+      console.log(newReservation)
+      const newAttendingUser = await API.graphql({
+        query: mutations.createAttendingUsers,
+        variables: {
+          input: {
+            reservationID: newReservation.id,
+            userID: user.id,
+            seen: false
+          }
+        }
       });
+      console.log("new attending user data")
+      console.log(newAttendingUser)
+      const newEventData = (await API.graphql({
+        query: mutations.createEvent,
+        variables: {
+          input: {
+            userID: String(user.id),
+            type: "tour",
+            title: title,
+            text: text,
+            city: user.current_city,
+            country: user.current_country,
+            home_country: user.home_country,
+            startDateTime: String(date),
+            duration: duration,
+            reservationID: newReservation.id,
+            price: (Number(duration) / 30 * Number(user.price)),
+          }
+        }
+      })).data.createEvent;
+      console.log("new event data");
+      console.log(newEventData);
+      // console.log("current user data");
+      // console.log(user)
+      // const newAttendingUser = await API.graphql({
+      //   query: mutations.createAttendingUsers,
+      //   variables: {
+      //     input: {
+
+      //     }
+      //   }
+      // })
     } catch (error) {
       console.error(error.message);
     }
@@ -118,16 +173,17 @@ function EventPosting(props) {
             }}
             onChange={(event) => {
               setTitle(event.target.value);
-              if (
-                event.target.value.length > 0 &&
-                text.length > 0 &&
-                date &&
-                duration.length > 0
-              ) {
-                setDisable(false);
-              } else {
-                setDisable(true);
-              }
+              // if (
+              //   event.target.value.length > 0 &&
+              //   text.length > 0 &&
+              //   date &&
+              //   duration.length > 0
+              // ) {
+              //   setDisable(false);
+              // } else {
+              //   setDisable(true);
+              // }
+              setDisable(!(event.target.value && text && date && duration))
             }}
           />
           <TextField
@@ -143,16 +199,17 @@ function EventPosting(props) {
             }}
             onChange={(event) => {
               setText(event.target.value);
-              if (
-                title.length > 0 &&
-                event.target.value.length > 0 &&
-                date &&
-                duration.length > 0
-              ) {
-                setDisable(false);
-              } else {
-                setDisable(true);
-              }
+              // if (
+              //   title.length > 0 &&
+              //   event.target.value.length > 0 &&
+              //   date &&
+              //   duration.length > 0
+              // ) {
+              //   setDisable(false);
+              // } else {
+              //   setDisable(true);
+              // }
+              setDisable(!(title && event.target.value && date && duration))
             }}
           />
           <form className={classes.container} noValidate>
@@ -175,13 +232,14 @@ function EventPosting(props) {
                 ).getTime();
                 if (millisecond - new Date().getTime() > 0) {
                   setDate(millisecond);
-                  if (
-                    title.length > 0 &&
-                    text.length > 0 &&
-                    duration.length > 0
-                  )
-                    setDisable(false);
+                  // if (
+                  //   title.length > 0 &&
+                  //   text.length > 0 &&
+                  //   duration.length > 0
+                  // )
+                  setDisable(!(title && text && millisecond && duration));
                 } else {
+                  console.log("in else")
                   setDate("");
                   setDisable(true);
                 }
@@ -200,13 +258,14 @@ function EventPosting(props) {
                   console.log("date: ", date, String(date).length);
                   console.log("duration: ", event.target.value);
                   setDuration(event.target.value);
-                  if (
-                    title.length > 0 &&
-                    text.length > 0 &&
-                    date &&
-                    duration.length > 0
-                  )
-                    setDisable(false);
+                  // if (
+                  //   title.length > 0 &&
+                  //   text.length > 0 &&
+                  //   date &&
+                  //   duration.length > 0
+                  // )
+                  //   setDisable(false);
+                  setDisable(!(title && text && date && event.target.value))
                 }}
                 inputProps={{
                   name: "duration",

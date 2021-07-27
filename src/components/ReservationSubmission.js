@@ -46,7 +46,7 @@ export default function ReservationSubmission(props) {
       variables: { input: dataForNewReservation }
     });
     console.log(newReservation);
-    //newReservation.data.createReservatoin.id is new reservation id
+    //newReservation.data.createReservation.id is new reservation id
     const newAttendingListener = await API.graphql({
       query: mutations.createAttendingUsers,
       variables: {

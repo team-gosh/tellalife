@@ -229,6 +229,7 @@ function MainPage(props) {
       try {
         // Try to get user from database
         console.log("try to get user data");
+        console.log(userNameAndEmail)
         const currentUserData = (
           await API.graphql({
             query: queries.getUserByEmail,

@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function MakeEvent(props) {
-  const { teller, user } = props;
+function MakeEventReservation(props) {
+  const { teller, user, eventData } = props;
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState("");
   const [duration, setDuration] = useState("");
@@ -50,6 +50,13 @@ function MakeEvent(props) {
     setDuration("");
     setDisable(true);
   };
+
+  // React.useEffect(() => {
+  //   console.log("event data")
+  //   console.log(eventData)
+  //   console.log("user")
+  //   console.log(user)
+  // }, [])
 
   return (
     <div className={classes.reservation}>
@@ -138,4 +145,4 @@ function MakeEvent(props) {
   );
 }
 
-export default MakeEvent;
+export default MakeEventReservation;

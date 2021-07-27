@@ -153,7 +153,7 @@ function Reservation(props) {
                   <DialogContent>
                     <CheckoutForm
                       user={user}
-                      approvedToConfirmed={approvedToConfirmed}
+                      confirmReservation={approvedToConfirmed}
                       reservation={data}
                     />
                   </DialogContent>
