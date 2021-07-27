@@ -109,7 +109,7 @@ function EventPost(props) {
                 ></Avatar>
                   {/* // ? <MakeEventReservation teller={eventData.user} user={user} /> */}
                   {/* // ? <MakeEventReservation teller={eventData.user} user={user} eventData={eventData} /> */}
-                {user.id !== eventData.userID && Number(eventData.startDateTime) < new Date().getTime()
+                {user.id !== eventData.userID && Number(eventData.startDateTime) > new Date().getTime()
                   ? (
                     <div>
                       <CardActions>
