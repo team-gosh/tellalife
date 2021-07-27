@@ -31,6 +31,7 @@ export const createUser = /* GraphQL */ `
       name
       username
       email
+      isTeller
       home_country
       reservations {
         items {
@@ -46,16 +47,14 @@ export const createUser = /* GraphQL */ `
       posts {
         items {
           id
-          title
           userID
-          dateTime
           home_country
           country
           city
           type
+          title
           text
           link
-          image
           imageKey
           imageURL
           createdAt
@@ -63,13 +62,33 @@ export const createUser = /* GraphQL */ `
         }
         nextToken
       }
-      isTeller
+      events {
+        items {
+          id
+          userID
+          home_country
+          country
+          city
+          type
+          startDateTime
+          duration
+          reservationID
+          price
+          title
+          text
+          link
+          imageKey
+          imageURL
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       price
       stripeAccount
       current_country
       current_city
       stripeURL
-      avatar
       avatarKey
       avatarURL
       createdAt
@@ -87,6 +106,7 @@ export const updateUser = /* GraphQL */ `
       name
       username
       email
+      isTeller
       home_country
       reservations {
         items {
@@ -102,16 +122,14 @@ export const updateUser = /* GraphQL */ `
       posts {
         items {
           id
-          title
           userID
-          dateTime
           home_country
           country
           city
           type
+          title
           text
           link
-          image
           imageKey
           imageURL
           createdAt
@@ -119,13 +137,33 @@ export const updateUser = /* GraphQL */ `
         }
         nextToken
       }
-      isTeller
+      events {
+        items {
+          id
+          userID
+          home_country
+          country
+          city
+          type
+          startDateTime
+          duration
+          reservationID
+          price
+          title
+          text
+          link
+          imageKey
+          imageURL
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       price
       stripeAccount
       current_country
       current_city
       stripeURL
-      avatar
       avatarKey
       avatarURL
       createdAt
@@ -143,6 +181,7 @@ export const deleteUser = /* GraphQL */ `
       name
       username
       email
+      isTeller
       home_country
       reservations {
         items {
@@ -158,16 +197,14 @@ export const deleteUser = /* GraphQL */ `
       posts {
         items {
           id
-          title
           userID
-          dateTime
           home_country
           country
           city
           type
+          title
           text
           link
-          image
           imageKey
           imageURL
           createdAt
@@ -175,13 +212,33 @@ export const deleteUser = /* GraphQL */ `
         }
         nextToken
       }
-      isTeller
+      events {
+        items {
+          id
+          userID
+          home_country
+          country
+          city
+          type
+          startDateTime
+          duration
+          reservationID
+          price
+          title
+          text
+          link
+          imageKey
+          imageURL
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       price
       stripeAccount
       current_country
       current_city
       stripeURL
-      avatar
       avatarKey
       avatarURL
       createdAt
@@ -196,9 +253,7 @@ export const createPost = /* GraphQL */ `
   ) {
     createPost(input: $input, condition: $condition) {
       id
-      title
       userID
-      dateTime
       home_country
       country
       city
@@ -208,6 +263,7 @@ export const createPost = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -215,21 +271,22 @@ export const createPost = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
         updatedAt
       }
+      title
       text
       link
-      image
       imageKey
       imageURL
       createdAt
@@ -244,9 +301,7 @@ export const updatePost = /* GraphQL */ `
   ) {
     updatePost(input: $input, condition: $condition) {
       id
-      title
       userID
-      dateTime
       home_country
       country
       city
@@ -256,6 +311,7 @@ export const updatePost = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -263,21 +319,22 @@ export const updatePost = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
         updatedAt
       }
+      title
       text
       link
-      image
       imageKey
       imageURL
       createdAt
@@ -292,9 +349,7 @@ export const deletePost = /* GraphQL */ `
   ) {
     deletePost(input: $input, condition: $condition) {
       id
-      title
       userID
-      dateTime
       home_country
       country
       city
@@ -304,6 +359,7 @@ export const deletePost = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -311,21 +367,178 @@ export const deletePost = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
         updatedAt
       }
+      title
       text
       link
-      image
+      imageKey
+      imageURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    createEvent(input: $input, condition: $condition) {
+      id
+      userID
+      home_country
+      country
+      city
+      type
+      startDateTime
+      duration
+      reservationID
+      price
+      user {
+        id
+        name
+        username
+        email
+        isTeller
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        events {
+          nextToken
+        }
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatarKey
+        avatarURL
+        createdAt
+        updatedAt
+      }
+      title
+      text
+      link
+      imageKey
+      imageURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    updateEvent(input: $input, condition: $condition) {
+      id
+      userID
+      home_country
+      country
+      city
+      type
+      startDateTime
+      duration
+      reservationID
+      price
+      user {
+        id
+        name
+        username
+        email
+        isTeller
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        events {
+          nextToken
+        }
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatarKey
+        avatarURL
+        createdAt
+        updatedAt
+      }
+      title
+      text
+      link
+      imageKey
+      imageURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    deleteEvent(input: $input, condition: $condition) {
+      id
+      userID
+      home_country
+      country
+      city
+      type
+      startDateTime
+      duration
+      reservationID
+      price
+      user {
+        id
+        name
+        username
+        email
+        isTeller
+        home_country
+        reservations {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        events {
+          nextToken
+        }
+        price
+        stripeAccount
+        current_country
+        current_city
+        stripeURL
+        avatarKey
+        avatarURL
+        createdAt
+        updatedAt
+      }
+      title
+      text
+      link
       imageKey
       imageURL
       createdAt
@@ -368,6 +581,7 @@ export const createAttendingUsers = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -375,13 +589,14 @@ export const createAttendingUsers = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
@@ -428,6 +643,7 @@ export const updateAttendingUsers = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -435,13 +651,14 @@ export const updateAttendingUsers = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt
@@ -488,6 +705,7 @@ export const deleteAttendingUsers = /* GraphQL */ `
         name
         username
         email
+        isTeller
         home_country
         reservations {
           nextToken
@@ -495,13 +713,14 @@ export const deleteAttendingUsers = /* GraphQL */ `
         posts {
           nextToken
         }
-        isTeller
+        events {
+          nextToken
+        }
         price
         stripeAccount
         current_country
         current_city
         stripeURL
-        avatar
         avatarKey
         avatarURL
         createdAt

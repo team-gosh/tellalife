@@ -4,36 +4,55 @@ type User @model @key(name: "byUserName", fields: ["username", "id"], queryField
 	name: String!
 	username: String!
 	email: String!
+	isTeller: Boolean!
 	home_country: String
 	reservations: [AttendingUsers] @connection(keyName: "userIsAttending", fields: ["id"])
-	posts: [Post] @connection(keyName: "byUser", fields: ["id"])
-	isTeller: Boolean!
+	posts: [Post] @connection(keyName: "postByUser", fields: ["id"])
+  events: [Event] @connection(keyName: "eventByUser", fields: ["id"])
 	price: Int
 	stripeAccount: String
 	current_country: String
 	current_city: String
 	stripeURL: String
-	avatar: String   # May not need anymore
   avatarKey: String
   avatarURL: String
 }
 
 # Post Table
-type Post @model @key(name: "byUser", fields: ["userID"]) {
+type Post @model @key(name: "postByUser", fields: ["userID"]) {
 	id: ID!
-	title: String
 	userID: ID!
-	dateTime: String!
   home_country: String!
 	country: String!
 	city: String!
 	type: String!
-	# blog: Blog @connection(fields: ["blogID"])
 	user: User @connection(fields: ["userID"])
 	# comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+	title: String!
 	text: String
 	link: String
-	image: String   # May not need anymore
+  imageKey: String
+  imageURL: String
+}
+
+# Event Table
+type Event @model @key(name: "eventByUser", fields: ["userID"]) {
+	id: ID!
+	userID: ID!
+  # userName: String!
+  home_country: String!
+	country: String!
+	city: String!
+	type: String!
+  startDateTime: String!
+  duration: String!
+  reservationID: ID!
+  price: Int!
+	user: User @connection(fields: ["userID"])
+	# comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
+	title: String!
+	text: String
+	link: String
   imageKey: String
   imageURL: String
 }
@@ -51,6 +70,7 @@ type AttendingUsers
 	reservation: Reservation! @connection(fields: ["reservationID"])
 	user: User! @connection(fields: ["userID"])
 	seen: Boolean!
+  # status: String
 }
 
 # Reservation Table

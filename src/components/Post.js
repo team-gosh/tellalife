@@ -8,6 +8,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import moment from "moment";
 
@@ -91,6 +92,7 @@ function Post (props) {
 	const { postData, user } = props;
 	const [ uniHomeFlag, setUniHomeFlag ] = useState("");
 	const [ uniCountryFlag, setUniCountryFlag ] = useState("");
+	const [ isLoading, setLoading ] = useState(true);
 
 	useEffect(async () => {
 		// get flags
@@ -103,6 +105,7 @@ function Post (props) {
 		});
 		setUniHomeFlag(homeFlag.data.data.unicodeFlag);
 		setUniCountryFlag(currentFlag.data.data.unicodeFlag);
+		setLoading(false);
 	}, []);
 
 	return (
@@ -116,12 +119,16 @@ function Post (props) {
 							<span className={classes.date}>{moment(postData.createdAt).fromNow()}</span>
 						</div>
 					</div>
-					<div className={classes.flagContainer}>
-						<span className={classes.flag}>{uniHomeFlag} </span>
-						<span />
-						--- <img src={Airplane} className={classes.icon} /> -->
-						<span className={classes.flag}>{uniCountryFlag} </span>
-					</div>
+					{isLoading === true ? (
+						<CircularProgress size={20} className={classes.circle} />
+					) : (
+						<div className={classes.flagContainer}>
+							<span className={classes.flag}>{uniHomeFlag} </span>
+							<span />
+							--- <img src={Airplane} className={classes.icon} /> -->
+							<span className={classes.flag}>{uniCountryFlag} </span>
+						</div>
+					)}
 
 					<CardContent className={classes.container}>
 						<Typography gutterBottom variant="h5" component="h3" align="left">

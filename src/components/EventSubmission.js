@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function ReservationSubmission(props) {
+export default function EventSubmission(props) {
   const {
     setOpen,
     teller,
@@ -46,7 +46,7 @@ export default function ReservationSubmission(props) {
       variables: { input: dataForNewReservation }
     });
     console.log(newReservation);
-    //newReservation.data.createReservation.id is new reservation id
+    //newReservation.data.createReservatoin.id is new reservation id
     const newAttendingListener = await API.graphql({
       query: mutations.createAttendingUsers,
       variables: {

@@ -1,18 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+	remoteVideo: {
+		maxHeight: 250,
+		[theme.breakpoints.up("md")]: {
+			maxHeight: 600,
+		},
+	},
+	localVideo: {
+		maxHeight: 150,
+		[theme.breakpoints.up("md")]: {
+			maxHeight: 200,
+		},
+	},
+}));
 
 const Participant = (props) => {
-  const {
-    participant,
-    roomType,
-    userType,
-    windowSize,
-    tellerHeight,
-    listenerHeight,
-    video
-  } = props
+	const {
+		participant,
+		roomType,
+		userType,
+		windowSize,
+		// tellerHeight,
+		// listenerHeight,
+		video,
+	} = props;
 	const [ videoTracks, setVideoTracks ] = useState([]);
 	const [ audioTracks, setAudioTracks ] = useState([]);
-  const [ height, setHeight ] = useState(1) // testing for screen size
+	const [ height, setHeight ] = useState(1); // testing for screen size
+	const classes = useStyles();
 
 	const videoRef = useRef();
 	const audioRef = useRef();
@@ -20,9 +37,9 @@ const Participant = (props) => {
 	const trackpubsToTracks = (trackMap) =>
 		Array.from(trackMap.values()).map((publication) => publication.track).filter((track) => track !== null);
 
-  useEffect(() => {
-    setHeight(windowSize ? windowSize.height : 1)
-  }, [])
+	useEffect(() => {
+		setHeight(windowSize ? windowSize.height : 1);
+	}, []);
 
 	useEffect(
 		() => {
@@ -87,10 +104,14 @@ const Participant = (props) => {
 
 	return (
 		<div className="participant">
-      {/* look at line 20 profile.js for use of breakpoints in material ui */}
+			{/* look at line 20 profile.js for use of breakpoints in material ui */}
 			{/* <h5>{participant.identity}</h5> */}
 			{/* <video width={userType === "remote" ? "640" : "160"} height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} /> */}
-			<video height={userType === "remote" || video.type === "tour" ? "480" : "120"} ref={videoRef} autoPlay={true} />
+			<video
+				className={userType === "remote" || video.type === "tour" ? classes.remoteVideo : classes.localVideo}
+				ref={videoRef}
+				autoPlay={true}
+			/>
 			{/* <video height={userType === "remote" ? tellerHeight : listenerHeight} ref={videoRef} autoPlay={true} /> */}
 			{/* <video height={windowSize ? Math.floor(windowSize.height * (userType === "remote" ? .75 : .15)) : "120"} ref={videoRef} autoPlay={true} /> */}
 			{/* <video height={Math.floor(height * (userType === "remote" ? .75 : .15))} ref={videoRef} autoPlay={true} /> */}

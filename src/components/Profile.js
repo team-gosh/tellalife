@@ -7,6 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Storage } from "aws-amplify";
+import * as customQueries from "../graphql/customQueries";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -193,9 +194,21 @@ function Profile (props) {
 				if (userObj.charges_enabled === true) {
 					console.log("charges_enabled");
 					setCharges_enabled(true);
-					updateUser();
+
+					console.log(user, "user before update");
+					const newData = {
+						id: user.id,
+						isTeller: true,
+					};
+
+					const response = await API.graphql({
+						query: mutations.updateUser,
+						variables: { input: newData },
+					});
+
+					user.isTeller = true;
 				} else {
-					console.log("Processs has not finished yet");
+					console.log("Process has not finished yet");
 				}
 			} else {
 				console.log("No stripe account");
@@ -253,7 +266,15 @@ function Profile (props) {
 				variables: { input: newData },
 			});
 
-			setUser(response.data.updateUser);
+			const updatedUserData = (await API.graphql({
+				query: customQueries.getUser,
+				variables: {
+					id: response.data.updateUser.id,
+				},
+			})).data.getUser;
+			setUser(updatedUserData);
+
+			// setUser(response.data.updateUser);
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -272,7 +293,6 @@ function Profile (props) {
 				current_city: city,
 				price: Number(value),
 				stripeAccount: stripeObj.id,
-				isTeller: false,
 				stripeURL: stripeUrl,
 			};
 			// logic to handle to timeout!!!!
@@ -281,7 +301,16 @@ function Profile (props) {
 				query: mutations.updateUser,
 				variables: { input: newData },
 			});
-			setUser(response.data.updateUser);
+
+			const updatedUserData = (await API.graphql({
+				query: customQueries.getUser,
+				variables: {
+					id: response.data.updateUser.id,
+				},
+			})).data.getUser;
+			setUser(updatedUserData);
+
+			// setUser(response.data.updateUser);
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -429,7 +458,7 @@ function Profile (props) {
 							className={classes.buttons}
 							disabled={true}
 						>
-							Register Stripe Account this
+							Register Stripe Account
 						</Button>
 					) : (
 						<Button
@@ -449,7 +478,7 @@ function Profile (props) {
 								)
 							}
 						>
-							Register Stripe Account this
+							Register Stripe Account
 						</Button>
 					)}
 

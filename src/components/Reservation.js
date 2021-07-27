@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CheckoutForm from "./CheckoutForm";
+import { API } from "aws-amplify";
+import * as queries from "../graphql/queries";
 
 // material ui
 import Card from "@material-ui/core/Card";
@@ -72,6 +74,14 @@ function Reservation(props) {
   } = props;
 
   const [open, setOpen] = useState(false);
+  const [pairName, setPairName] = useState("");
+  const [tourTeller, setTourTeller] = useState("");
+  const [tourPeople, setTourPeople] = useState();
+
+  useEffect(() => {
+    getAttendingUserName(data.id);
+  }, [user, data, getAttendingUserName, pairName]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -79,17 +89,45 @@ function Reservation(props) {
     setOpen(false);
   };
 
+  async function getAttendingUserName(id) {
+    try {
+      const attendingUsers = (
+        await API.graphql({
+          query: queries.getAttendingUsersByReservationID,
+          variables: {
+            reservationID: id
+          }
+        })
+      ).data.getAttendingUsersByReservationID.items;
+      if (data.type === "pair") {
+        attendingUsers.forEach((e) => {
+          if (user.id !== e.user.id) setPairName(e.user.name);
+        });
+      } else {
+        attendingUsers.forEach((e) => {
+          if (data.tellerID === e.user.id) {
+            setTourTeller(e.user.name);
+            setTourPeople(attendingUsers.length);
+          }
+        });
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   return (
     <div className="Reservation" id={data.id}>
-      {/* listener view */}
-      {/* {console.log("--------------------------")} */}
-      {/* {console.log(data)} */}
-      {/* {console.log(user)} */}
       <Card className={classes.root}>
         <CardHeader
           title={
             <Typography variant="h5" gutterBottom>
-              {view === "listener" ? data.tellerName : user.name}
+              {data.type === "pair"
+                ? pairName
+                : tourTeller +
+                  "( " +
+                  tourPeople +
+                  (tourPeople === 1 ? " person )" : " people )")}
             </Typography>
           }
           subheader={new Date(Number(data.startDateTime)).toLocaleString()}
@@ -114,7 +152,7 @@ function Reservation(props) {
               <PersonOutlineOutlinedIcon color="action" fontSize="large" />
               {<Typography className={classes.cardContainerFont}></Typography>}
             </Badge>
-            {data.type === "pair" ? "Private Chat" : "Group Chat"}
+            {data.type === "pair" ? "Private Chat" : "Virtual Tour"}
           </div>
         </CardContent>
         {view === "listener" ? (
@@ -153,7 +191,7 @@ function Reservation(props) {
                   <DialogContent>
                     <CheckoutForm
                       user={user}
-                      approvedToConfirmed={approvedToConfirmed}
+                      confirmReservation={approvedToConfirmed}
                       reservation={data}
                     />
                   </DialogContent>
@@ -193,8 +231,8 @@ function Reservation(props) {
                       userID: user.id,
                       tellerID: data.tellerID
                     };
-                    console.log("new video")
-                    console.log(newVideo)
+                    console.log("new video");
+                    console.log(newVideo);
                     setVideo(newVideo);
                   }}
                 >
