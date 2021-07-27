@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import Video from "twilio/lib/rest/Video";
 import Participant from "./Participant";
 import { makeStyles } from "@material-ui/core/styles";
+import "../App.css";
 
 const useStyles = makeStyles((theme) => ({
 	room: {
 		display: "flex",
-		justifyContent: "center",
+		flexDirection: "column",
 		alignItems: "center",
+		width: "100%",
+		height: "100%",
 	},
 	button: {
 		background: "#28345a",
@@ -17,19 +20,25 @@ const useStyles = makeStyles((theme) => ({
 		height: 48,
 		marginTop: 5,
 	},
-	tellerVideoContainer: {
-		display: "flex",
-		justifyContent: "center",
-
-		width: "300px",
-		height: "300px",
+	remoteContainer: {
+		minWidth: "250",
+		minHeight: "250",
+		marginBottom: 50,
+		marginTop: 10,
+		[theme.breakpoints.up("md")]: {
+			minWidth: "500",
+			minHeight: "500",
+			marginBottom: 100,
+		},
 	},
-	listenerVideoContainer: {
-		display: "flex",
-		justifyContent: "center",
-
-		width: "300px",
-		height: "300px",
+	localContainer: {
+		maxWidth: "200",
+		maxHeight: "200",
+		marginBottom: 50,
+		[theme.breakpoints.up("md")]: {
+			minWidth: "200",
+			minHeight: "200",
+		},
 	},
 }));
 
@@ -84,6 +93,7 @@ const Room = (props) => {
 				roomType={video.type}
 				userType="remote"
 				video={video}
+				className={classes.remoteContainer}
 			/>
 		);
 	});
@@ -92,15 +102,9 @@ const Room = (props) => {
 	console.log(video.type);
 
 	return (
-		<div className="room">
-			{/* <h5>Remote Participants</h5> */}
-			{/* <div className="remote-participants" style={{height: '480px'}}>{remoteParticipants}</div> */}
-			<div className="remote-participants" className={classes.tellerVideoContainer}>
-				{remoteParticipants}
-			</div>
-			{/* <div className="local-participant" style={{height: '120px'}}> */}
-			<div className="local-participant" className={classes.tellerVideoContainer}>
-				{/* {room && (video.type !== "tour" || video.userID === video.tellerID) ? ( */}
+		<div className={classes.room}>
+			<div className={classes.remoteContainer}>{remoteParticipants}</div>
+			<div className={classes.localContainer}>
 				{room ? (
 					<Participant
 						key={room.localParticipant.sid}
@@ -108,14 +112,15 @@ const Room = (props) => {
 						roomType={video.type}
 						userType="local"
 						windowSize={windowSize}
-						tellerHeight={Math.floor(windowSize * 0.75)}
-						listenerHeight={Math.floor(windowSize * 0.15)}
+						// tellerHeight={Math.floor(windowSize * 0.75)}
+						// listenerHeight={Math.floor(windowSize * 0.3)}
 						video={video}
 					/>
 				) : (
 					""
 				)}
 			</div>
+
 			<button onClick={handleLogout} className={classes.button}>
 				Leave Room
 			</button>

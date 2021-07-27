@@ -2,6 +2,7 @@ html {
 	background-color: #d8f2ff;
 	font-family: 'Lato', sans-serif;
 	min-width: 360px;
+	height: 100%;
 }
 
 .App {
