@@ -76,7 +76,7 @@ function Reservation(props) {
   const [open, setOpen] = useState(false);
   const [pairName, setPairName] = useState("");
   const [tourTeller, setTourTeller] = useState("");
-  const [tourPeople, setTourPeople] = useState("");
+  const [tourPeople, setTourPeople] = useState();
 
   useEffect(() => {
     getAttendingUserName(data.id);
@@ -99,23 +99,15 @@ function Reservation(props) {
           }
         })
       ).data.getAttendingUsersByReservationID.items;
-      const attendingUsersInfo = attendingUsers.map((e) => {
-        return {
-          userID: e.user.id,
-          name: e.user.name,
-          isTeller: e.user.isTeller,
-          reservationID: e.reservationID
-        };
-      });
       if (data.type === "pair") {
-        attendingUsersInfo.forEach((e) => {
-          if (user.id !== e.userID) setPairName(e.name);
+        attendingUsers.forEach((e) => {
+          if (user.id !== e.user.id) setPairName(e.user.name);
         });
       } else {
-        attendingUsersInfo.forEach((e) => {
-          if (data.tellerID === e.userID && user.isTeller === true) {
-            setTourTeller(e.name);
-            setTourPeople(attendingUsersInfo.length);
+        attendingUsers.forEach((e) => {
+          if (data.tellerID === e.user.id) {
+            setTourTeller(e.user.name);
+            setTourPeople(attendingUsers.length);
           }
         });
       }
@@ -132,7 +124,10 @@ function Reservation(props) {
             <Typography variant="h5" gutterBottom>
               {data.type === "pair"
                 ? pairName
-                : tourTeller + "( " + { tourPeople } + " people )"}
+                : tourTeller +
+                  "( " +
+                  tourPeople +
+                  (tourPeople === 1 ? " person )" : " people )")}
             </Typography>
           }
           subheader={new Date(Number(data.startDateTime)).toLocaleString()}
