@@ -107,9 +107,9 @@ function EventPost(props) {
                   aria-label="avatar"
                   src={eventData.user.avatarURL}
                 ></Avatar>
-                {user.id !== eventData.userID
-                  // ? <MakeEventReservation teller={eventData.user} user={user} />
-                  // ? <MakeEventReservation teller={eventData.user} user={user} eventData={eventData} />
+                  {/* // ? <MakeEventReservation teller={eventData.user} user={user} /> */}
+                  {/* // ? <MakeEventReservation teller={eventData.user} user={user} eventData={eventData} /> */}
+                {user.id !== eventData.userID && Number(eventData.startDateTime) < new Date().getTime()
                   ? (
                     <div>
                       <CardActions>

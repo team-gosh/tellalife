@@ -51,13 +51,6 @@ function MakeEventReservation(props) {
     setDisable(true);
   };
 
-  // React.useEffect(() => {
-  //   console.log("event data")
-  //   console.log(eventData)
-  //   console.log("user")
-  //   console.log(user)
-  // }, [])
-
   return (
     <div className={classes.reservation}>
       <Button variant="contained" color="primary" onClick={handleClickOpen}>

@@ -32,6 +32,7 @@ function Event(props) {
           query: queries.listEvents
         })
       ).data.listEvents.items;
+      allEvents.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
       setEvents(allEvents);
     } catch (error) {
       console.error(error.message);
