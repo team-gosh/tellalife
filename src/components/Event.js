@@ -41,7 +41,6 @@ function Event(props) {
 
   return (
     <div className={classes.event}>
-      <div>This is Event Component</div>
       <EventFilter
         countriesCitiesList={countriesCitiesList}
         setFilter={setFilter}
