@@ -4,14 +4,26 @@ import EventPosts from "./EventPosts";
 import EventPosting from "./EventPosting";
 import EventFilter from "./EventFilter";
 import { makeStyles } from "@material-ui/core/styles";
+import EventText from "../eventText.png";
 
 const useStyles = makeStyles((theme) => ({
-  event: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    marginTop: 20
-  }
+	event: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 20,
+	},
+	eventText: {
+		marginTop: 50,
+
+		width: 100,
+		height: 50,
+		[theme.breakpoints.up("md")]: {
+			width: 300,
+			height: 80,
+		},
+	},
 }));
 
 function Event(props) {
