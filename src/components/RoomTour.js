@@ -12,6 +12,20 @@ const useStyles = makeStyles((theme) => ({
 		color: "white",
 		height: 48,
 		marginTop: 5,
+    marginLeft: 50,
+    marginRight: 50
+	},
+
+  cameraButton: {
+		background: "red",
+		border: 0,
+		borderRadius: "50%",
+		color: "white",
+		height: 48,
+    width: 48,
+		marginTop: 5,
+    marginLeft: 50,
+    marginRight: 50
 	},
 }));
 
@@ -24,6 +38,19 @@ const RoomTour = (props) => {
 	});
 
 	const classes = useStyles();
+
+  const takePicture = () => {
+    const videoFeed = document.getElementsByTagName('video')[0];
+    const canvas = document.createElement('canvas');
+    canvas.width = videoFeed.videoWidth;
+    canvas.height = videoFeed.videoHeight;
+    canvas.getContext('2d').drawImage(videoFeed, 0, 0, videoFeed.videoWidth, videoFeed.videoHeight);
+    const imgData = canvas.toDataURL()
+    const a = document.createElement('a');
+    a.href = imgData;
+    a.download = `TourPicture_${new Date().getTime()}`
+    a.click();
+  }
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -79,6 +106,8 @@ const RoomTour = (props) => {
 			);
 		} else {
 			console.log("this is a listener");
+      console.log("participants")
+      console.log(participants.length)
 			return participants.map((participant) => {
 				return (
 					<Participant
@@ -117,6 +146,10 @@ const RoomTour = (props) => {
 				<button onClick={handleLogout} className={classes.button}>
 					Leave Room
 				</button>
+        {video.type === "tour" 
+          ? <button onClick={takePicture} className={classes.cameraButton}>📷</button>
+          : <></>
+        }
 			</div>
 		</div>
 	);
