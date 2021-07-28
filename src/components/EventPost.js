@@ -211,11 +211,16 @@ function EventPost(props) {
 							<span />
 							--- <img src={Airplane} className={classes.icon} /> -->
 							<span className={classes.flag}>{uniCountryFlag} </span>
+
 						</div>
 					)}
+          <p className={classes.date}>¥{eventData.price.toLocaleString()}</p>
+
             <CardContent className={classes.container}>
               <Typography gutterBottom variant="h5" component="h3" align="left">
                 {eventData.title}
+
+             
               </Typography>
               {eventData.imageURL ? (
                 <CardMedia
@@ -246,6 +251,8 @@ function EventPost(props) {
                           variant="contained"color="primary"
                           onClick={handleClickOpen}
                         >
+                                          
+
                           Attend Event
                         </Button>
                         <Dialog
