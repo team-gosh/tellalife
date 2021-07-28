@@ -26,38 +26,45 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Event (props) {
-	const classes = useStyles();
+function Event(props) {
+  const classes = useStyles();
 
-	const { user, API, queries, mutations, countriesCitiesList } = props;
-	const [ filter, setFilter ] = useState({
-		home: "",
-		targetCountry: "",
-		targetCity: "",
-	});
-	const [ events, setEvents ] = useState([]);
+  const { user, API, queries, mutations, countriesCitiesList } = props;
+  const [filter, setFilter] = useState({
+    home: "",
+    targetCountry: "",
+    targetCity: ""
+  });
+  const [events, setEvents] = useState([]);
 
-	useEffect(async () => {
-		try {
-			const allEvents = (await API.graphql({
-				query: queries.listEvents,
-			})).data.listEvents.items;
+  useEffect(async () => {
+    try {
+      const allEvents = (
+        await API.graphql({
+          query: queries.listEvents
+        })
+      ).data.listEvents.items;
+      allEvents.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+      setEvents(allEvents);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }, []);
 
-			allEvents.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-			setEvents(allEvents);
-		} catch (error) {
-			console.error(error.message);
-		}
-	}, []);
-
-	return (
-		<div className={classes.event}>
-			<EventFilter countriesCitiesList={countriesCitiesList} setFilter={setFilter} />
-			{/* <img src={EventText} className={classes.eventText} /> */}
-			{user && user.isTeller ? <EventPosting user={user} API={API} mutations={mutations} /> : <div />}
-			<EventPosts filter={filter} events={events} user={user} />
-		</div>
-	);
+  return (
+    <div className={classes.event}>
+      <EventFilter
+        countriesCitiesList={countriesCitiesList}
+        setFilter={setFilter}
+      />
+      {user && user.isTeller ? (
+        <EventPosting user={user} API={API} mutations={mutations} />
+      ) : (
+        <div />
+      )}
+      <EventPosts filter={filter} events={events} user={user} />
+    </div>
+  );
 }
 
 export default Event;

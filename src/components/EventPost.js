@@ -236,7 +236,7 @@ function EventPost(props) {
                 {eventData.text}
               </Typography>
             </CardContent>
-            {user.id !== eventData.userID
+            {user.id !== eventData.userID && Number(eventData.startDateTime) > new Date().getTime()
                   // ? <MakeEventReservation teller={eventData.user} user={user} />
                   // ? <MakeEventReservation teller={eventData.user} user={user} eventData={eventData} />
                   ? (
