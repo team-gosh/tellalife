@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 		border: 0,
 		borderRadius: 3,
 		color: "white",
-		height: 48,
+		height: 40,
 		marginTop: 5,
 	},
 }));
@@ -46,23 +46,23 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 export default function CheckoutForm (props) {
-	const { user, confirmReservation, reservation } = props;
+	const { user, confirmReservation, reservation, setOpen } = props;
 	const stripe = useStripe();
 	const elements = useElements();
 	const classes = useStyles();
 
-	const [ open, setOpen ] = React.useState(false);
+	const [ open, setDropOpen ] = useState(false);
 
-	const handleClose = () => {
-		setOpen(false);
-	};
-	const handleToggle = () => {
-		setOpen(!open);
-	};
+	// const handleClose = () => {
+	// 	setOpen(false);
+	// };
+	// const handleToggle = () => {
+	// 	setOpen(!open);
+	// };
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		setOpen(!open);
+		setDropOpen(!open);
 
 		if (!stripe || !elements) {
 			console.log("notloaded");
@@ -70,10 +70,10 @@ export default function CheckoutForm (props) {
 			// Make sure to disable form submission until Stripe.js has loaded.
 			return;
 		}
-    console.log("data passed to stripe")
-    console.log(user.id)
-    console.log(reservation.price)
-    console.log(reservation.stripeAccount)
+		console.log("data passed to stripe");
+		console.log(user.id);
+		console.log(reservation.price);
+		console.log(reservation.stripeAccount);
 		try {
 			const paymentIntentClientSecret = await API.graphql({
 				query: mutations.processOrder,
@@ -88,22 +88,22 @@ export default function CheckoutForm (props) {
 					},
 				},
 			});
-      console.log("payment intent");
-      console.log(paymentIntentClientSecret)
-      // console.log('CardElement')
-      // console.log(elements.getElement(CardElement))
-      
+			console.log("payment intent");
+			console.log(paymentIntentClientSecret);
+			// console.log('CardElement')
+			// console.log(elements.getElement(CardElement))
+
 			const result = await stripe.confirmCardPayment(paymentIntentClientSecret.data.processOrder, {
 				payment_method: {
 					card: elements.getElement(CardElement),
 				},
 			});
-      console.log("payment result")
-      console.log(result)
+			console.log("payment result");
+			console.log(result);
 
 			if (result.error) {
 				console.log("payment has failed");
-				setOpen(false);
+				setDropOpen(false);
 
 				return {
 					status: "failed",
@@ -119,6 +119,8 @@ export default function CheckoutForm (props) {
 					// post-payment actions.
 					confirmReservation(reservation.id);
 					setOpen(false);
+					setDropOpen(false);
+
 					return {
 						status: "succeeded",
 					};
@@ -141,6 +143,7 @@ export default function CheckoutForm (props) {
 					Confirm order
 				</button>
 			</form>
+
 			<Backdrop className={classes.backdrop} open={open}>
 				<CircularProgress color="inherit" />
 			</Backdrop>
