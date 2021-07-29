@@ -237,19 +237,6 @@ function MainPage(props) {
         console.log(currentUserData);
 
         if (currentUserData.length) {
-          // const currentUser = (
-          //   await API.graphql({
-          //     query: customQueries.getUser,
-          //     variables: {
-          //       id: currentUserData[0].id
-          //     }
-          //   })
-          // ).data.getUser;
-
-          // console.log("Full existing user data");
-          // console.log(currentUser);
-
-          // setUser(currentUser);
           userID = currentUserData[0].id;
           getUserData();
         } else if (!user) {
@@ -265,17 +252,6 @@ function MainPage(props) {
             query: mutations.createUser,
             variables: { input: newUserRegistrationData },
           })).data.createUser.id;
-          // const newUser = (
-          //   await API.graphql({
-          //     query: customQueries.getUser,
-          //     variables: {
-          //       id: newUserId
-          //     }
-          //   })
-          // ).data.getUser;
-          // console.log("New user full data");
-          // console.log(newUser);
-          // setUser(newUser);
           userID = newUserId;
           getUserData();
         }
@@ -283,18 +259,7 @@ function MainPage(props) {
         console.error(error.message);
       }
     }
-    // }
-    // subscriptions
-    // reservationCreateSubscription = API.graphql(
-    //   graphqlOperation(subscriptions.onCreateReservation)
-    // ).subscribe({
-    //   next: (reservationData) => {
-    //     console.log('created reservation data');
-    //     console.log(reservationData);
-    //     getUserData();
-    //   }
-    // });
-
+    
     reservationUpdateSubscription = API.graphql(graphqlOperation(subscriptions.onUpdateReservation)).subscribe({
       next: (reservationData) => {
         console.log("updated reservation data");
@@ -320,19 +285,6 @@ function MainPage(props) {
         getUserData();
       },
     });
-
-    // API.graphql({
-    //   query: subscriptions.onCreateAttending,
-    //   variables: {
-    //     'userID': userID
-    //   }
-    // }).subscribe({
-    //   next: (attendingData) => {
-    //     console.log('created attending data');
-    //     console.log(attendingData);
-    //     getUserData();
-    //   }
-    // });
 
     // attendingUpdateSubscription = API.graphql(
     //   graphqlOperation(subscriptions.onUpdateAttendingUsers)

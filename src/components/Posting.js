@@ -129,15 +129,7 @@ function Posting (props) {
 						id="upload-image"
 						type="file"
 						onChange={async (e) => {
-							// const reader = new FileReader();
-
-							// reader.addEventListener("load", function () {
-							//   console.log(reader.result)
-							//   setImage(reader.result)
-							// }, false);
-
 							if (e.target.files[0]) {
-								// reader.readAsDataURL(e.target.files[0]);
                 setDisable(true);
 								const file = await e.target.files[0];
 								const fileName = `${user.id}_${new Date().getTime()}_${file.name}`;

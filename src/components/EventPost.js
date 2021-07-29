@@ -167,12 +167,6 @@ function EventPost(props) {
   console.log("event data")
   console.log(eventData)
 
-  // useEffect(() => {
-  //   reservationData.price = eventData.price;
-  //   reservationData.stripeAccount = eventData.user.stripeAccount;
-  //   reservationData.id = eventData.reservationID;
-  // }, []);
-
   return (
     <div className={classes.container}>
       <Card className={classes.post}>
@@ -215,6 +209,8 @@ function EventPost(props) {
 						</div>
 					)}
           <p className={classes.date}>¥{eventData.price.toLocaleString()}</p>
+          <p className={classes.date}>Starting From: {new Date(Number(eventData.startDateTime)).toLocaleString()}</p>
+          <p className={classes.date}>Duration: {eventData.duration}minutes</p>
 
             <CardContent className={classes.container}>
               <Typography gutterBottom variant="h5" component="h3" align="left">
@@ -242,8 +238,6 @@ function EventPost(props) {
               </Typography>
             </CardContent>
             {user.id !== eventData.userID && Number(eventData.startDateTime) > new Date().getTime()
-                  // ? <MakeEventReservation teller={eventData.user} user={user} />
-                  // ? <MakeEventReservation teller={eventData.user} user={user} eventData={eventData} />
                   ? (
                     <div className={classes.submitButton}>
                         <Button

@@ -331,9 +331,6 @@ function Profile (props) {
 			const jsonUser = JSON.parse(stripeUser);
 			console.log(stripeUser, jsonUser, "stripeUser & jsonUser ");
 
-			// setStripeObj(jsonUser);
-			// setUrl(jsonUser.url);
-
 			const newData = {
 				id: user.id,
 				name: nickName,

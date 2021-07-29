@@ -101,14 +101,6 @@ function ReservationManagement (props) {
 				// from intermediary table
 				const currentReservations = await Promise.all(
 					user.reservations.items.map(async (e) => {
-						// const reservation = (
-						//   await API.graphql({
-						//     query: queries.getReservation,
-						//     variables: {
-						//       id: e.reservationID
-						//     }
-						//   })
-						// ).data.getReservation;
 						const reservation = e.reservation;
 						return reservation;
 					})
@@ -124,11 +116,6 @@ function ReservationManagement (props) {
 	useEffect(
 		async () => {
 			try {
-				// const allAttendingUser = (
-				//   await API.graphql({
-				//     query: queries.listAttendingUsers
-				//   })
-				// ).data.listAttendingUsers.items;
 				const arrayOfSeenPendingListener = user.reservations.items
 					.filter((e) => e.userID === user.id)
 					.filter((e) => e.reservation.status === "pending")
@@ -268,12 +255,6 @@ function ReservationManagement (props) {
 		try {
 			console.log("id of reservation to delete");
 			console.log(reservationID);
-			// const attendingUsers = (
-			//   await API.graphql({
-			//     query: queries.listAttendingUsers,
-			//     filter: { reservationID: { eq: reservationID } }
-			//   })
-			// ).data.listAttendingUsers.items;
 
 			const attendingUsers = (await API.graphql({
 				query: queries.getAttendingUsersByReservationID,
@@ -413,14 +394,8 @@ function ReservationManagement (props) {
 
 	async function updateAttendingUsersForListener (status) {
 		try {
-			// const allAttendingUser = (
-			//   await API.graphql({
-			//     query: queries.listAttendingUsers
-			//   })
-			// ).data.listAttendingUsers.items;
 			const allAttendingUser = user.reservations.items;
 			const arrayOfSeen = allAttendingUser
-				// .filter((e) => e.userID === user.id)
 				.filter((e) => e.reservation.status === status)
 				.filter((e) => e.seen === false)
 				.filter((e) => e.userID !== e.reservation.tellerID);
@@ -445,13 +420,7 @@ function ReservationManagement (props) {
 
 	async function updateAttendingUsersForTeller (status) {
 		try {
-			// const allAttendingUser = (
-			//   await API.graphql({
-			//     query: queries.listAttendingUsers
-			//   })
-			// ).data.listAttendingUsers.items;
 			const arrayOfSeen = user.reservations.items
-				// .filter((e) => e.userID === user.id)
 				.filter((e) => e.reservation.status === status)
 				.filter((e) => e.seen === false)
 				.filter((e) => e.userID === e.reservation.tellerID);
@@ -476,17 +445,9 @@ function ReservationManagement (props) {
 
 	async function handleStatusChange () {
 		try {
-			// const allReservations = (
-			//   await API.graphql({
-			//     query: queries.listReservations
-			//   })
-			// ).data.listReservations.items;
 			const allReservations = user.reservations.items.map((e) => e.reservation);
 			await Promise.all(
 				allReservations.map(async (e) => {
-					// if (e.status !== "finished" && e.startDateTime - new Date().getTime() < 0) {
-					//   confirmedToFinished(e.id);
-					// }
 					const finishedTime = Number(e.startDateTime) + e.duration * 60000;
 					if (e.status !== "finished" && finishedTime - new Date().getTime() < 0) {
 						confirmedToFinished(e.id);

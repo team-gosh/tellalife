@@ -10,7 +10,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import { makeStyles } from "@material-ui/core/styles";
-import { Storage } from "aws-amplify";
+// import { Storage } from "aws-amplify";
 
 const drawerWidth = 240;
 
@@ -74,7 +74,6 @@ function EventPosting (props) {
 			home_country: user.home_country,
 			startDateTime: String(date),
 			duration: duration,
-			// dateTime: String(new Date().getTime()),
 			// image: image,
 			// imageKey: imageKey,
 			// imageURL: imageURL
@@ -134,16 +133,6 @@ function EventPosting (props) {
 			})).data.createEvent;
 			console.log("new event data");
 			console.log(newEventData);
-			// console.log("current user data");
-			// console.log(user)
-			// const newAttendingUser = await API.graphql({
-			//   query: mutations.createAttendingUsers,
-			//   variables: {
-			//     input: {
-
-			//     }
-			//   }
-			// })
 		} catch (error) {
 			console.error(error.message);
 		}
@@ -163,22 +152,11 @@ function EventPosting (props) {
 						label="Title"
 						placeholder="Title"
 						fullWidth
-						// margin="normal"
 						InputLabelProps={{
 							shrink: true,
 						}}
 						onChange={(event) => {
 							setTitle(event.target.value);
-							// if (
-							//   event.target.value.length > 0 &&
-							//   text.length > 0 &&
-							//   date &&
-							//   duration.length > 0
-							// ) {
-							//   setDisable(false);
-							// } else {
-							//   setDisable(true);
-							// }
 							setDisable(!(event.target.value && text && date && duration));
 						}}
 					/>
@@ -195,16 +173,6 @@ function EventPosting (props) {
 						}}
 						onChange={(event) => {
 							setText(event.target.value);
-							// if (
-							//   title.length > 0 &&
-							//   event.target.value.length > 0 &&
-							//   date &&
-							//   duration.length > 0
-							// ) {
-							//   setDisable(false);
-							// } else {
-							//   setDisable(true);
-							// }
 							setDisable(!(title && event.target.value && date && duration));
 						}}
 					/>
@@ -228,11 +196,6 @@ function EventPosting (props) {
 								).getTime();
 								if (millisecond - new Date().getTime() > 0) {
 									setDate(millisecond);
-									// if (
-									//   title.length > 0 &&
-									//   text.length > 0 &&
-									//   duration.length > 0
-									// )
 									setDisable(!(title && text && millisecond && duration));
 								} else {
 									console.log("in else");
@@ -246,7 +209,6 @@ function EventPosting (props) {
 								Duration
 							</InputLabel>
 							<NativeSelect
-								// value={100000}
 								value={duration}
 								onChange={(event) => {
 									console.log("title: ", title, title.length);
@@ -254,13 +216,6 @@ function EventPosting (props) {
 									console.log("date: ", date, String(date).length);
 									console.log("duration: ", event.target.value);
 									setDuration(event.target.value);
-									// if (
-									//   title.length > 0 &&
-									//   text.length > 0 &&
-									//   date &&
-									//   duration.length > 0
-									// )
-									//   setDisable(false);
 									setDisable(!(title && text && date && event.target.value));
 								}}
 								inputProps={{
@@ -332,7 +287,7 @@ function EventPosting (props) {
 						Cancel
 					</Button>
 					<Button color="primary" disabled={disable} onClick={uploadPost}>
-						Subscribe
+						Add Event
 					</Button>
 				</DialogActions>
 			</Dialog>

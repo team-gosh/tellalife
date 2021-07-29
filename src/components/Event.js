@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import EventPosts from "./EventPosts";
-// import Input from "./Input"; // Faker code
 import EventPosting from "./EventPosting";
 import EventFilter from "./EventFilter";
 import { makeStyles } from "@material-ui/core/styles";
-import EventText from "../eventText.png";
 
 const useStyles = makeStyles((theme) => ({
 	event: {

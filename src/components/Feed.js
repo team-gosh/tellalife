@@ -4,7 +4,6 @@ import Posts from "./Posts";
 import Posting from "./Posting";
 import Filter from "./Filter";
 import { makeStyles } from "@material-ui/core/styles";
-import PostText from "../postText.png";
 
 const useStyles = makeStyles((theme) => ({
 	feed: {
@@ -52,7 +51,6 @@ function Feed (props) {
 	return (
 		<div className={classes.feed}>
 			<Filter countriesCitiesList={countriesCitiesList} setFilter={setFilter} />
-			{/* <img src={PostText} className={classes.postText} /> */}
 			{user && user.isTeller ? <Posting user={user} API={API} mutations={mutations} /> : <div />}
 
 			<Posts filter={filter} posts={posts} user={user} />
