@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	inputLabel: {
-		fontSize: "0.7rem",
+		fontSize: "0.72rem",
 		[theme.breakpoints.up("md")]: {
-			fontSize: "1.2rem",
+			fontSize: "1.1rem",
 		},
 	},
 	selectEmpty: {
