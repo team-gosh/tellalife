@@ -138,7 +138,8 @@ function Posting (props) {
 
 							if (e.target.files[0]) {
 								// reader.readAsDataURL(e.target.files[0]);
-								const file = e.target.files[0];
+                setDisable(true);
+								const file = await e.target.files[0];
 								const fileName = `${user.id}_${new Date().getTime()}_${file.name}`;
 								const putResponse = await Storage.put(fileName, file);
 								console.log("putResponse from put");
@@ -148,6 +149,7 @@ function Posting (props) {
 								console.log(getResponse)
 								setImageKey(putResponse.key);
 								setImageURL(getResponse);
+                setDisable(false);
 							}
 						}}
 					/>
