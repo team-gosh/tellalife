@@ -141,11 +141,11 @@ function Posting (props) {
 								const file = e.target.files[0];
 								const fileName = `${user.id}_${new Date().getTime()}_${file.name}`;
 								const putResponse = await Storage.put(fileName, file);
-								// console.log("putResponse from put");
-								// console.log(putResponse)
+								console.log("putResponse from put");
+								console.log(putResponse)
 								const getResponse = await Storage.get(putResponse.key);
-								// console.log('getResponse');
-								// console.log(getResponse)
+								console.log('getResponse');
+								console.log(getResponse)
 								setImageKey(putResponse.key);
 								setImageURL(getResponse);
 							}
