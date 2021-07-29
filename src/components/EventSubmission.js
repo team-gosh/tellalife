@@ -37,7 +37,6 @@ export default function EventSubmission(props) {
       tellerID: teller.id,
       tellerName: teller.name, // TODO changed to unique username
       type: "pair"
-      // userIDs: user.id,
     };
     console.log("dataForNewReservation");
     console.log(dataForNewReservation);

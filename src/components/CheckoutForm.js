@@ -53,13 +53,6 @@ export default function CheckoutForm (props) {
 
 	const [ open, setDropOpen ] = useState(false);
 
-	// const handleClose = () => {
-	// 	setOpen(false);
-	// };
-	// const handleToggle = () => {
-	// 	setOpen(!open);
-	// };
-
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		setDropOpen(!open);
@@ -90,8 +83,6 @@ export default function CheckoutForm (props) {
 			});
 			console.log("payment intent");
 			console.log(paymentIntentClientSecret);
-			// console.log('CardElement')
-			// console.log(elements.getElement(CardElement))
 
 			const result = await stripe.confirmCardPayment(paymentIntentClientSecret.data.processOrder, {
 				payment_method: {
