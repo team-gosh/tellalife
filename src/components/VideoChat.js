@@ -106,13 +106,9 @@ const VideoChat = (props) => {
           },
         });
   
-        // console.log(response.data.generateVideoToken, " this is token");
-        
   
         Video.connect(response.data.generateVideoToken, {
           name: roomName,
-          // audio: true,
-          // video: true,
           audio: video.userID === video.tellerID || video.type !== "tour",
           video: video.userID === video.tellerID || video.type !== "tour",
         })
@@ -128,6 +124,11 @@ const VideoChat = (props) => {
 		},
 		[ room, handleLogout ]
 	);
+
+  // console.log("video in VideoChat");
+	// console.log(video);
+  // console.log("Media Devices in VideoChat")
+  // navigator.mediaDevices.enumerateDevices().then(gotDevices => console.log(gotDevices.filter(e => e.kind === "videoinput")))
 
   return room 
     ? video.type === "pair" 

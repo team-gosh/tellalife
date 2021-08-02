@@ -37,7 +37,7 @@ const Participant = (props) => {
 	const trackpubsToTracks = (trackMap) =>
 		Array.from(trackMap.values()).map((publication) => publication.track).filter((track) => track !== null);
 
-	useEffect(() => {
+  useEffect(() => {
 		setHeight(windowSize ? windowSize.height : 1);
 	}, []);
 
@@ -79,6 +79,10 @@ const Participant = (props) => {
 	useEffect(
 		() => {
 			const videoTrack = videoTracks[0];
+      console.log("Video Tracks")
+      console.log(videoTracks)
+      console.log("participant")
+      console.log(participant)
 			if (videoTrack) {
 				videoTrack.attach(videoRef.current);
 				return () => {
@@ -104,9 +108,6 @@ const Participant = (props) => {
 
 	return (
 		<div className="participant">
-			{/* look at line 20 profile.js for use of breakpoints in material ui */}
-			{/* <h5>{participant.identity}</h5> */}
-			{/* <video width={userType === "remote" ? "640" : "160"} height={userType === "remote" ? "480" : "120"} ref={videoRef} autoPlay={true} /> */}
 			{participant.videoTracks.size
         ? <video
 				  className={userType === "remote" || video.type === "tour" ? classes.remoteVideo : classes.localVideo}
@@ -115,9 +116,6 @@ const Participant = (props) => {
 			  />
         : <></>
       }
-      {/* <video height={userType === "remote" ? tellerHeight : listenerHeight} ref={videoRef} autoPlay={true} /> */}
-			{/* <video height={windowSize ? Math.floor(windowSize.height * (userType === "remote" ? .75 : .15)) : "120"} ref={videoRef} autoPlay={true} /> */}
-			{/* <video height={Math.floor(height * (userType === "remote" ? .75 : .15))} ref={videoRef} autoPlay={true} /> */}
 			<audio ref={audioRef} autoPlay={true} />
 		</div>
 	);
