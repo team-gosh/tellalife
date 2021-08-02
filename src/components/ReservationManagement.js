@@ -18,6 +18,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import HistoryIcon from "@material-ui/icons/History";
 import Badge from "@material-ui/core/Badge";
+import { ContactSupportOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -116,61 +117,35 @@ function ReservationManagement (props) {
 	useEffect(
 		async () => {
 			try {
-				const arrayOfSeenPendingListener = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "pending")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID !== e.reservation.tellerID);
-				setPendingListenerCounts(arrayOfSeenPendingListener.length);
-
-				const arrayOfSeenApprovedListener = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "approved")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID !== e.reservation.tellerID);
-				setApproveListenerCounts(arrayOfSeenApprovedListener.length);
-
-				const arrayOfSeenConfirmedListener = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "confirmed")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID !== e.reservation.tellerID);
-				setConfirmedListenerCounts(arrayOfSeenConfirmedListener.length);
-
-				const arrayOfSeenFinishedListener = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "finished")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID !== e.reservation.tellerID);
-				setFinishedListenerCounts(arrayOfSeenFinishedListener.length);
-
-				const arrayOfSeenPendingTeller = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "pending")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID === e.reservation.tellerID);
-				setPendingTellerCounts(arrayOfSeenPendingTeller.length);
-
-				const arrayOfSeenApprovedTeller = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "approved")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID === e.reservation.tellerID);
-				setApproveTellerCounts(arrayOfSeenApprovedTeller.length);
-
-				const arrayOfSeenConfirmedTeller = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "confirmed")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID === e.reservation.tellerID);
-				setConfirmedTellerCounts(arrayOfSeenConfirmedTeller.length);
-
-				const arrayOfSeenFinishedTeller = user.reservations.items
-					.filter((e) => e.userID === user.id)
-					.filter((e) => e.reservation.status === "finished")
-					.filter((e) => e.seen === false)
-					.filter((e) => e.userID === e.reservation.tellerID);
-				setFinishedTellerCounts(arrayOfSeenFinishedTeller.length);
+        const notSeenReservations = {
+          listener: {
+            pending: 0,
+            accepted: 0,
+            confirmed: 0,
+            finished: 0,
+          },
+          teller: {
+            pending: 0,
+            accepted: 0,
+            confirmed: 0,
+            finished: 0,
+          },
+        }
+        user.reservations.items.forEach(e => {
+          const isListenerOrTeller = e.userID === e.reservation.tellerID
+            ? "teller"
+            : "listener"
+            const status = e.reservation.status;
+          notSeenReservations[isListenerOrTeller][status] += e.seen ? 0 : 1;
+        });
+        setPendingListenerCounts(notSeenReservations.listener.pending);
+        setApproveListenerCounts(notSeenReservations.listener.accepted);
+        setConfirmedListenerCounts(notSeenReservations.listener.confirmed);
+        setFinishedListenerCounts(notSeenReservations.listener.finished);
+        setPendingTellerCounts(notSeenReservations.teller.pending);
+        setApproveTellerCounts(notSeenReservations.teller.accepted);
+        setConfirmedTellerCounts(notSeenReservations.teller.confirmed);
+        setFinishedTellerCounts(notSeenReservations.teller.finished);
 			} catch (error) {
 				console.error(error.message);
 			}
